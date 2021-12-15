@@ -1,12 +1,6 @@
 <template>
     <div class="index-box">
-        <div class="top-center-box">
-            <div class="center-head">
-                <img :src="userHead"/>
-            </div>
-            <span class="center-title-span">这次换你听歌の博客</span>
-        </div>
-        <div class="center-content-box"></div>
+        <div class="show-center"></div>
     </div>
 </template>
 <script>
@@ -33,52 +27,68 @@ export default {
 .index-box
 {
     width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    .top-center-box
+    align-items: center;
+    .show-center
     {
-        width: 100%;
-        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
-        align-content: center;
-        .center-head
+    }
+}
+@media screen and (min-width:1400px)
+{
+    .index-box
+    {
+        .show-center
         {
-            width: 100%;
-            height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            img
-            {
-                border-radius: 50%;
-                max-height: 5rem;
-            }
-        }
-        .center-title-span
-        {
-            width: auto;
-            height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            padding: 0.5rem 0.8rem 0.5rem 0.8rem;
-            border: solid 1px white;
-            margin-top: 4rem;
-            font-size: 1.5rem;
+
         }
     }
-    .center-content-box
+}
+@media screen and (max-width:1400px) and (min-width:1200px)
+{
+    .index-box
     {
-        width: 100%;
-        height: 10rem;
-        background-color: rgba(255, 255, 255, 0.25);
+        .show-center
+        {
+            
+        }
+    }
+}
+@media screen and (max-width:1200px) and (min-width:936px)
+{
+    .index-box
+    {
+        .show-center
+        {
+            
+        }
+    }
+}
+@media screen and (max-width:936px) and (min-width:767px)
+{
+}
+@media screen and (max-width:767px) and (min-width:676px)
+{
+    .index-box
+    {
+        .show-center
+        {
+            
+        }
+    }
+}
+@media screen and (max-width:676px)
+{
+    .index-box
+    {
+        .show-center
+        {
+            
+        }
     }
 }
 </style>
