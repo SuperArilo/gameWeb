@@ -22,15 +22,15 @@ const cdn = {
     },
     // cdn的css链接
     css: [
-        'https://unpkg.com/element-plus@1.2.0-beta.1/dist/index.css',,
+        '//unpkg.com/element-plus/dist/index.css',
         'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.min.css'
     ],
     // cdn的js链接
     js: [
-        'https://cdn.bootcdn.net/ajax/libs/vue/3.2.0-beta.7/vue.runtime.global.min.js',
-        'https://cdn.bootcdn.net/ajax/libs/vuex/4.0.2/vuex.global.prod.min.js',
-        'https://cdn.bootcdn.net/ajax/libs/element-plus/1.0.2-beta.65/index.full.min.js',
-        'https://cdn.bootcdn.net/ajax/libs/vue-router/4.0.10/vue-router.global.min.js',
+        '//unpkg.com/vue@next',
+        '//unpkg.com/vuex@next',
+        '//unpkg.com/element-plus',
+        '//unpkg.com/vue-router@next',
         'https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js',
     ]
 }
