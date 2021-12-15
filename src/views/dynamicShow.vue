@@ -270,20 +270,12 @@ export default {
         scrollHeight(n,o){
             if(n + document.body.clientHeight >= document.body.scrollHeight && this.isCountToPage){
                 this.showLoading = true
-                setTimeout(() =>{
-                    this.$axios.get('https://www.superarilo.online/api/album/get?page=0').then(resq => {
-                        console.log(resq.data)
-                    })
-                    // this.page++;
-                    // this.$axios.get('https://www.superarilo.online/api/album/get?page=' + this.page).then(resq => {
-                    //     if(resq.data.album.content.length === 0){
-                    //         this.isCountToPage = false
-                    //     } else {
-                    //         this.data = this.data.concat(resq.data.album.content)
-                    //     }
-                    // })
-                    this.showLoading = false
-                },2000)
+                // setTimeout(() =>{
+                //     this.$axios.get('https://www.superarilo.online/api/album/get?page=0').then(resq => {
+                //         console.log(resq.data)
+                //     })
+                //     this.showLoading = false
+                // },2000)
             }
         }
     }
