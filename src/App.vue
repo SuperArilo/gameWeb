@@ -41,45 +41,11 @@
             </el-collapse-transition>
         </nav>
         <div class="router-content">
-            <router-view v-slot="{ Component }">
-                <transition mode="out-in" name="router_animate">
+            <router-view v-slot="{ Component }" style="position: absolute;">
+                <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
                     <component :is="Component" />
                 </transition>
             </router-view>
-        </div>
-        <div class="footer-div">
-            <div class="top-div">
-                <img src="./icon/index/mmqrcod.png"/>
-                <div class="public-div">
-                    <span class="title-span">关于我</span>
-                    <div class="contant-div">
-                        <div class="sub-div">
-                            <img src="./icon/index/QQ.png"/>
-                            <span>72815258</span>
-                        </div>
-                        <div class="sub-div">
-                            <img src="./icon/index/wechat.png"/>
-                            <span>AriloWh</span>
-                        </div>
-                        <div class="sub-div">
-                            <img src="./icon/index/mail.png"/>
-                            <span>superarilo@189.cn</span>
-                        </div>
-                    </div>
-                    
-
-                </div>
-                <div class="public-div">
-                    <span class="title-span">友情链接</span>
-                </div>
-                <div class="public-div">
-                    <span class="title-span">博客简介</span>
-                </div>
-            </div>
-            <div class="bottom-link">
-                <span>Copyriht © SuperArilo 2021. All rights reserved</span>
-                <a href="https://beian.miit.gov.cn/" target="_blank">备案号：蜀ICP备2021010843号</a>
-            </div>
         </div>
         <el-drawer v-model="loginDrawer" :with-header="false">
             <span>我来啦!</span>
@@ -204,12 +170,6 @@ a
 #app
 {
     width: 100%;
-    height: auto;
-    background-repeat: no-repeat;
-    background-position: top;
-    background-attachment: fixed;
-    background-size: cover;
-    background-image:url('./icon/index/index_center.jpg');
 }
 .main-container
 {
@@ -454,112 +414,15 @@ a
     .router-content
     {
         width: 100%;
-        height: auto;
-        display: block;
-        margin-bottom: 0.5rem;
+        position: relative;
+        margin-top: 2.2rem;
         .router_animate-enter-active
         {
-            transition-delay: 0.8s !important;
-            animation: slideInLeft 0.8s;
+            animation: slideInLeft 0.6s;
         }
         .router_animate-leave-active
         {
-            animation: slideOutRight 0.8s;
-        }
-    }
-    .footer-div
-    {
-        width: 100%;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-content: space-between;
-        flex-wrap: wrap;
-        background-color: #545c64;
-        padding: 1rem;
-        .top-div
-        {
-            width: 100%;
-            height: auto;
-            display: flex;
-            img
-            {
-                width: auto;
-                height: 5rem;
-                max-height: 100%;
-            }
-            .public-div
-            {
-                width: 20%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                .title-span
-                {
-                    width: 100%;
-                    height: 2rem;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    color: white;
-                    font-weight: 600;
-                    font-size: 0.65rem;
-                    letter-spacing: 0.1rem;
-                }
-                .contant-div
-                {
-                    width: 100%;
-                    height: auto;
-                    display: flex;
-                    flex-direction: column;
-                    .sub-div
-                    {
-                        width: 100%;
-                        height: 1.5rem;
-                        display: flex;
-                        justify-content: flex-start;
-                        align-items: center;
-                        margin-bottom: 0.5rem;
-                        img
-                        {
-                            width: auto;
-                            height: 100%;
-                            max-height: 100%;
-                        }
-                        span
-                        {
-                            width: auto;
-                            height: 100%;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            font-size: 0.7rem;
-                            color: hsla(0,0%,100% , 0.5);
-                        }
-                    }
-                }
-            }
-        }
-        .bottom-link
-        {
-            width: 100%;
-            height: auto;
-            margin-top: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            a , span
-            {
-                text-decoration: none;
-                color: rgb(243, 243, 243);
-                font-size: 0.7rem;
-            }
-            a
-            {
-                margin-top: 0.3rem;
-            }
+            animation: slideOutRight 0.6s;
         }
     }
 }
@@ -570,10 +433,6 @@ a
         font-size: 24px;
         .main-container 
         {
-            .router-content
-            {
-                margin-top: 3.2rem;
-            }
             .footer-div .top-div
             {
                 justify-content: space-between;
@@ -594,10 +453,6 @@ a
         font-size: 24px;
         .main-container
         {
-            .router-content
-            {
-                margin-top: 3.2rem;
-            }
             .footer-div .top-div
             {
                 justify-content: space-between;
@@ -619,10 +474,6 @@ a
         font-size: 24px;
         .main-container 
         {
-            .router-content
-            {
-                margin-top: 3.2rem;
-            }
             .footer-div .top-div
             {
                 justify-content: space-between;
@@ -643,10 +494,6 @@ a
         font-size: 22px;
         .main-container
         {
-            .router-content
-            {
-                margin-top: 3.2rem;
-            }
             .footer-div .top-div
             {
                 flex-direction: column;
@@ -674,10 +521,6 @@ a
         font-size: 20px;
         .main-container
         {
-            .router-content
-            {
-                margin-top: 3.2rem;
-            }
             .footer-div .top-div
             {
                 flex-direction: column;
@@ -705,10 +548,6 @@ a
         font-size: 18px;
         .main-container
         {
-            .router-content
-            {
-                margin-top: 3.2rem;
-            }
             .footer-div .top-div
             {
                 flex-direction: column;

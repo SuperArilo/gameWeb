@@ -15,10 +15,13 @@
                 <span>联系方式</span>
             </div>
         </div>
+        <footer-bottom></footer-bottom>
     </div>
 </template>
 <script>
+import footerBottom from '@/components/footerBottom.vue'
 export default {
+  components: { footerBottom },
     data(){
         return{
             indexBg: require('@/icon/index/index_center.jpg'),
@@ -41,15 +44,21 @@ export default {
 .index-box
 {
     width: 100%;
-    height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    flex-wrap: wrap;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+    background-size: cover;
+    background-image:url('../icon/index/index_center.jpg');
     .show-center
     {
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         .head
         {
             width: 5rem;

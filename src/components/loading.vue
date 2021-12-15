@@ -20,6 +20,7 @@ export default {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     border-radius: 1rem;
+    margin: 1rem 0 1rem 0;
     span
     {
         width: 100%;

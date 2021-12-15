@@ -5,10 +5,15 @@
                 <component :is="Component" />
             </transition>
         </router-view>
+        <footer-bottom></footer-bottom>
     </div>
 </template>
 <script>
+import footerBottom from '@/components/footerBottom.vue'
 export default {
+    components:{
+        footerBottom
+    },
     data(){
         return{
         }
@@ -27,10 +32,16 @@ export default {
 .album-change-box
 {
     width: 100%;
-    height: auto;
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+    background-size: cover;
+    background-image:url('../icon/index/index_center.jpg');
     .album_animate-enter-active
     {
         transition-delay: 0.5s !important;

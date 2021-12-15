@@ -20,6 +20,10 @@ const routes = [
             }
         ]
     },
+    {
+        path: '/versaillestown',
+        component: () => import('@/views/versaillesTown.vue'),
+    }
 ]
 
 const router = createRouter({
