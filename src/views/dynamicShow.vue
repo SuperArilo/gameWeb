@@ -15,8 +15,6 @@
                         <div class="image" v-for="(itemSub,indexSub) in item.image" :key="indexSub">
                             <img :src="itemSub.url"/>
                         </div>
-                        <div class="repace"></div>
-                        <div class="repace"></div>
                     </div>
                     <div class="dynamic-data">
                         <div class="top-div">
@@ -104,6 +102,22 @@ export default {
                     time: '2021-10-30  18:06',
                     content: '如果您需要手动触发砖石布局重绘（例如，如果您的磁贴元素量或内容已更改），您现在可以使用方法。截至0.11.8，您可以通过要触发重绘的方块的 ID。',
                     image:[
+                        {
+                            id: 0,
+                            url: require('@/icon/index/index_center.jpg')
+                        },
+                        {
+                            id: 0,
+                            url: require('@/icon/index/index_center.jpg')
+                        },
+                        {
+                            id: 0,
+                            url: require('@/icon/index/index_center.jpg')
+                        },
+                        {
+                            id: 0,
+                            url: require('@/icon/index/index_center.jpg')
+                        },
                         {
                             id: 0,
                             url: require('@/icon/index/index_center.jpg')
@@ -360,32 +374,26 @@ export default {
             .user-image-box
             {
                 width: 100%;
-                height: auto;
-                display: flex;
-                align-items: flex-start;
-                flex-wrap: wrap;
-                align-content: flex-start;
-                margin-top: 0.5rem;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, 6.25rem);
+                grid-row-gap: 0.5rem;
+                grid-column-gap: 0.5rem;
+                padding: 0.5rem 0 0.5rem 0;
                 .image
                 {
                     width: 6.25rem;
                     height: 6.25rem;
                     overflow: hidden;
-                    margin: 0 0.2rem 0.5rem 0.2rem;
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    border-radius: 0.3rem;
                     img
                     {
-                        max-width: none !important;
-                        display: inline-block;
-                        vertical-align: middle;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
                     }
-                }
-                .repace
-                {
-                    width: 6.25rem;
-                    margin: 0 0.2rem 0.5rem 0.2rem;
                 }
             }
             .dynamic-data
@@ -633,11 +641,12 @@ export default {
                     margin-bottom: 0.5rem;
                     position: relative;
                     z-index: 100;
+                    border: dashed darkgray 0.05rem;
                     img
                     {
                         width: 100%;
                         height: 100%;
-                        object-fit:cover;
+                        object-fit: cover;
                     }
                     .close-div
                     {
