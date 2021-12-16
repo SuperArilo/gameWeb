@@ -65,7 +65,7 @@
                     <div class="bottom-upload-image">
                         <div class="image" v-for="(item,index) in imageList" :key="(index)">
                             <div class="close-div" @click="removeUploadImage(index)">
-                                <el-icon><close /></el-icon>
+                                <el-icon><close-bold /></el-icon>
                             </div>
                             <img :src="item"/>
                         </div>
@@ -83,14 +83,13 @@
     </div>
 </template>
 <script>
-import { CloseBold , UploadFilled , Close } from '@element-plus/icons'
+import { CloseBold , UploadFilled } from '@element-plus/icons'
 import loading from '@/components/loading.vue'
 export default {
     components:{
         loading,
         CloseBold,
-        UploadFilled,
-        Close
+        UploadFilled
     },
     data(){
         return{
@@ -235,7 +234,6 @@ export default {
             this.$router.push({path: '/dynamic/comment', query:{id:id}})
         },
         selectFile(e){
-            console.log(e.target.files)
             if(e.target.files[0] != undefined){
                 this.getBase64(e.target.files[0]).then(resq => {
                     this.imageList.push(resq)
@@ -585,8 +583,10 @@ export default {
                 display: grid;
                 grid-row-gap: 1rem;
                 grid-column-gap: 1rem;
+                grid-template-columns: repeat(auto-fill, 4rem);
                 overflow-y: scroll;
                 overflow-x: hidden;
+                padding: 0 1rem 0 1rem;
                 label
                 {
                     width: 4rem;
