@@ -2,7 +2,7 @@
     <div class="init-box">
         <div class="comment">
             <div class="set-comment">
-                <el-page-header title="返回" icon="el-icon-arrow-left" @back="backTo"></el-page-header>
+                <el-page-header title="返回" @back="backTo"></el-page-header>
                 <textarea placeholder="写下你的评论吧！"></textarea>
                 <div class="bottom-div">
                     <span class="button-clear">清空</span>

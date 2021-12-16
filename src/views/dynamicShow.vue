@@ -54,7 +54,7 @@
                         <span>发表动态</span>
                     </div>
                     <div class="right-close">
-                        <i class="el-icon-close" @click="showWriteBox = false"></i>
+                        <el-icon @click="showWriteBox = false"><close-bold /></el-icon>
                     </div>
                 </div>
                 <div class="content">
@@ -65,18 +65,14 @@
                     <div class="bottom-upload-image">
                         <div class="image" v-for="(item,index) in imageList" :key="(index)">
                             <div class="close-div" @click="removeUploadImage(index)">
-                                <i class="el-icon-close"></i>
+                                <el-icon><close /></el-icon>
                             </div>
-                                <img :src="item"/>
-                            </div>
-                            <label for="file-input">
-                                <i class="el-icon-plus"></i>
-                                <input type="file" @change="selectFile" title="">
-                            </label>
-                            <div class="repace"></div>
-                            <div class="repace"></div>
-                            <div class="repace" v-if="!this.$store.getters.isPhoneGet"></div>
-                            <div class="repace" v-if="!this.$store.getters.isPhoneGet"></div>
+                            <img :src="item"/>
+                        </div>
+                        <label for="file-input">
+                            <el-icon><upload-filled /></el-icon>
+                            <input type="file" @change="selectFile" ref="fileInput">
+                        </label>
                     </div>
                 </div>
                 <div class="buttom-box">
@@ -87,10 +83,14 @@
     </div>
 </template>
 <script>
+import { CloseBold , UploadFilled , Close } from '@element-plus/icons'
 import loading from '@/components/loading.vue'
 export default {
     components:{
-        loading
+        loading,
+        CloseBold,
+        UploadFilled,
+        Close
     },
     data(){
         return{
@@ -235,9 +235,11 @@ export default {
             this.$router.push({path: '/dynamic/comment', query:{id:id}})
         },
         selectFile(e){
+            console.log(e.target.files)
             if(e.target.files[0] != undefined){
                 this.getBase64(e.target.files[0]).then(resq => {
                     this.imageList.push(resq)
+                    this.$refs.fileInput.value =''
                 })
             }
         },
@@ -580,12 +582,9 @@ export default {
             {
                 width: 100%;
                 height: 6rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                align-content: space-between;
-                flex-wrap: wrap;
-                padding: 0.5rem;
+                display: grid;
+                grid-row-gap: 1rem;
+                grid-column-gap: 1rem;
                 overflow-y: scroll;
                 overflow-x: hidden;
                 label
@@ -634,13 +633,11 @@ export default {
                     margin-bottom: 0.5rem;
                     position: relative;
                     z-index: 100;
-                    border: none;
                     img
                     {
-                        max-width: none !important;
-                        display: inline-block;
-                        vertical-align: middle;
-                        border: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit:cover;
                     }
                     .close-div
                     {
@@ -669,11 +666,6 @@ export default {
                             color: #409EFF;
                         }
                     }
-                }
-                .repace
-                {
-                    width: 4rem;
-                    margin-bottom: 0.5rem;
                 }
             }
         }
