@@ -1,3 +1,7 @@
+
+const webpack = require('webpack')
+const jquery = require('jquery')
+ 
 // 是否为生产环境
 const isProduction = process.env.NODE_ENV !== 'development';
 
@@ -19,6 +23,7 @@ const cdn = {
         "element-plus": "ElementPlus",
         'vue-router': 'VueRouter',
         axios: 'axios',
+        jquery: '$'
     },
     // cdn的css链接
     css: [
@@ -29,6 +34,7 @@ const cdn = {
     js: [
         '//unpkg.com/vue@next',
         '//unpkg.com/vuex@next',
+        'https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js',
         '//unpkg.com/element-plus',
         '//unpkg.com/vue-router@next',
         'https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js',
@@ -46,7 +52,6 @@ module.exports = {
             if (isProduction || devNeedCdn) args[0].cdn = cdn
             return args
         })
-        // ============注入cdn start============
     },
     configureWebpack: config => {
         // 用cdn方式引入，则构建时要忽略相关资源
