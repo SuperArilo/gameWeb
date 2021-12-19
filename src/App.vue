@@ -7,7 +7,7 @@
                 <el-col class="el-row-style" :xs="13" :sm="13" :md="13" :lg="13" :xl="13">
                     <div class="menu-div">
                         <div v-for="(item,index) in navMenuList" :key="index" @click="menuFunc(item.id,item.path)" :class="item.id === navMenuIndex ? 'menu-active':''">
-                            <img  :src="item.icon"/>  
+                            <img  :src="item.icon"/>
                             <span>{{item.title}}</span>
                         </div>
                     </div>
