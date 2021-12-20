@@ -46,7 +46,6 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),routes
 })
 router.beforeEach((to, from, next) => {
-    console.log(to)
     window.document.title = to.meta.title == undefined ? '博客' : to.meta.title
     document.body.scrollTop = 0
     next()
