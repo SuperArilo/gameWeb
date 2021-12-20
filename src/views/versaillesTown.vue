@@ -90,8 +90,8 @@
             </div>
             <div class="play-content-div-left-right">
                 <div class="left">
-                    <span>这是标题</span>
-                    <span>这是内容</span>
+                    <span>基于原版生存</span>
+                    <span>在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！</span>
                 </div>
                 <div class="right">
                     <img :src="indexImage"/>
@@ -102,8 +102,17 @@
                     <img :src="indexImage"/>
                 </div>
                 <div class="right">
-                    <span>这是标题</span>
-                    <span>这是内容</span>
+                    <span>RPG等级玩法</span>
+                    <span>服务器提供RPG升级和技能系统，在这里可以升级刷怪、快速开采、高效种植、和好朋友一起PVP！</span>
+                </div>
+            </div>
+            <div class="play-content-div-left-right">
+                <div class="left">
+                    <span>宠物玩法</span>
+                    <span>服务器提供宠物功能，此插件来源于开源社区的MyPet插件！在这里可以捕捉到宠物，进行升级、培养、选择技能树等等。甚至可以在商店购买！</span>
+                </div>
+                <div class="right">
+                    <img :src="indexImage"/>
                 </div>
             </div>
             <div class="title-item">
@@ -157,7 +166,7 @@ export default {
     },
     data(){
         return{
-            indexImage: require('@/icon/index/townIndex1.png'),
+            indexImage: require('@/icon/index/versaillestown/townIndex1.jpg'),
             netWorkShow: require('@/icon/index/versaillestown/netWork.png'),
             bbs: require('@/icon/index/versaillestown/bbs.png'),
             safe: require('@/icon/index/versaillestown/safe.png'),
@@ -168,19 +177,19 @@ export default {
             testPicture:[
                 {
                     id: 0,
-                    image: require('@/icon/index/townIndex1.png')
+                    image: require('@/icon/index/versaillestown/townIndex1.jpg')
                 },
                 {
                     id: 1,
-                    image: require('@/icon/index/townIndex2.png')
+                    image: require('@/icon/index/versaillestown/townIndex2.jpg')
                 },
                 {
                     id: 2,
-                    image: require('@/icon/index/townIndex3.png')
+                    image: require('@/icon/index/versaillestown/townIndex3.jpg')
                 },
                 {
                     id: 3,
-                    image: require('@/icon/index/townIndex4.png')
+                    image: require('@/icon/index/versaillestown/townIndex4.jpg')
                 }
             ]
         }   
@@ -382,11 +391,34 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                align-content: flex-start;
+                flex-wrap: wrap;
                 img
                 {
                     height: 100%;
                     border-radius: 0.3rem;
                     object-fit: cover;
+                }
+                span
+                {
+                    display: flex;
+                    align-items: flex-start;
+                }
+                span:nth-child(1)
+                {
+                    justify-content: center;
+                    font-size: 1rem;
+                }
+                span:nth-child(2)
+                {
+                    justify-content: flex-start;
+                    font-size: 0.65rem;
+                    text-align: left;
+                    color: #4b4b4b;
+                    letter-spacing: 0.08rem;
+                    margin-top: 0.5rem;
+                    word-break: break-all;
+                    word-wrap: break-word;
                 }
             }
         }
@@ -439,6 +471,10 @@ export default {
             {
                 width: 45%;
                 height: 14rem;
+                span
+                {
+                    width: 80%;
+                }
             }
         }
     }
@@ -455,6 +491,10 @@ export default {
             {
                 width: 45%;
                 height: 14rem;
+                span
+                {
+                    width: 80%;
+                }
             }
         }
     }
@@ -468,6 +508,13 @@ export default {
             width: 100%;
             flex-direction: column;
             flex-wrap: wrap;
+            .left , .right
+            {
+                span
+                {
+                    width: 100%;
+                }
+            }
         }
         .play-content-div-left-right
         {

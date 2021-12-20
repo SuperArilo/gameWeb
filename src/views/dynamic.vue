@@ -1,5 +1,5 @@
 <template>
-    <div class="album-change-box">
+    <div class="album-change-box" :style="{backgroundImage:`url(${indexBg})`}">
         <router-view v-slot="{ Component }">
             <transition mode="out-in" name="album_animate">
                 <component :is="Component" />
@@ -16,6 +16,7 @@ export default {
     },
     data(){
         return{
+            indexBg: require('@/icon/index/index_center.jpg'),
         }
     },
     created(){
@@ -32,6 +33,7 @@ export default {
 .album-change-box
 {
     width: 100%;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -41,7 +43,6 @@ export default {
     background-position: top;
     background-attachment: fixed;
     background-size: cover;
-    background-image:url('../icon/index/index_center.jpg');
     .album_animate-enter-active
     {
         transition-delay: 0.5s !important;

@@ -1,5 +1,5 @@
 <template>
-    <div class="index-box">
+    <div class="index-box" :style="{backgroundImage:`url(${indexBg})`}">
         <div class="show-center">
             <img :src="userHead" class="head"/>
             <span class="v-line"></span>
@@ -51,7 +51,6 @@ export default {
     background-position: top;
     background-attachment: fixed;
     background-size: cover;
-    background-image:url('../icon/index/index_center.jpg');
     .show-center
     {
         height: 100vh;
@@ -87,7 +86,6 @@ export default {
             {
                 margin: 0;
                 color: #000000c9;
-                background-color: #ffffff88;
                 padding: 0.1rem 0.3rem;
             }
             .intor
