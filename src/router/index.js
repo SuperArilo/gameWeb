@@ -33,6 +33,15 @@ const routes = [
         ]
     },
     {
+        path: '/message',
+        name: 'message',
+        component: () => import('@/views/message.vue'),
+        meta:{
+            path: '/message',
+            title: '留言'
+        }
+    },
+    {
         path: '/versaillestown',
         component: () => import('@/views/versaillesTown.vue'),
         meta:{

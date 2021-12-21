@@ -381,8 +381,8 @@ export default {
                 padding: 0.5rem 0 0.5rem 0;
                 .image
                 {
-                    width: 6.25rem;
-                    height: 6.25rem;
+                    width: 6.2rem;
+                    height: 6.2rem;
                     overflow: hidden;
                     display: flex;
                     justify-content: center;
