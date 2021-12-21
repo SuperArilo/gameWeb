@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 // import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+// import 'element-plus/dist/index.css'
 // import 'animate.css'
 // import axios from 'axios'
 import mitt from 'mitt'
@@ -14,7 +14,6 @@ import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
 import VMdEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
-// highlightjs
 import hljs from 'highlight.js';
 VMdPreview.use(githubTheme, { Hljs: hljs});
 VMdEditor.use(githubTheme, {Hljs: hljs,});

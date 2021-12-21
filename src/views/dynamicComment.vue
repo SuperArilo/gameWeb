@@ -20,15 +20,14 @@
                                         <span class="user-name">SuperArilo</span>
                                         <span class="before-time">3天前</span>
                                     </div>
-                                    
                                     <span class="show-content">这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容</span>
                                     <div class="data-show">
                                         <div>
-                                            <img :src="thumbs"/>
+                                            <i class="fa fa-thumbs-o-up"></i>
                                             <span>11</span>
                                         </div>
                                         <div>
-                                            <img :src="step"/>
+                                            <i class="fa fa-thumbs-o-down"></i>
                                             <span>11</span>
                                         </div>
                                     </div>
@@ -55,10 +54,6 @@ export default {
             showLoading: false,
             isCountToPage: true,
             userDynamic: require('@/icon/head/stranger1.jpg'),
-            thumbs: require('@/icon/index/thumbs.png'),
-            thumbsActive: require('@/icon/index/thumbsActive.png'),
-            step: require('@/icon/index/step.png'),
-            stepActive: require('@/icon/index/stepActive.png'),
             count: 4,
         }
     },
@@ -256,11 +251,9 @@ export default {
                             justify-content: center;
                             align-items: center;
                             margin-right: 0.5rem;
-                            img
+                            i
                             {
-                                width: 1rem;
-                                height: 1rem;
-                                max-width: 1rem;
+                                font-size: 0.8rem;
                                 cursor: pointer;
                             }
                             span
@@ -317,21 +310,7 @@ export default {
         width: 30rem;
     }
 }
-@media screen and (max-width:936px) and (min-width:767px)
-{
-    .init-box .comment
-    {
-        width: 80%;
-    }
-}
-@media screen and (max-width:767px) and (min-width:676px)
-{
-    .init-box .comment
-    {
-        width: 80%;
-    }
-}
-@media screen and (max-width:676px)
+@media screen and (max-width:936px)
 {
     .init-box .comment
     {

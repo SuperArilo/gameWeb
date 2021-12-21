@@ -6,15 +6,15 @@
                 <span class="title-span">关于我</span>
                 <div class="contant-div">
                     <div class="sub-div">
-                        <img src="../icon/index/QQ.png"/>
+                        <i class="fa fa-qq"></i>
                         <span>72815258</span>
                     </div>
                     <div class="sub-div">
-                        <img src="../icon/index/wechat.png"/>
+                        <i class="fa fa-wechat"></i>
                         <span>AriloWh</span>
                     </div>
                     <div class="sub-div">
-                        <img src="../icon/index/mail.png"/>
+                        <i class="fa fa-envelope-o"></i>
                         <span>superarilo@189.cn</span>
                     </div>
                 </div>
@@ -88,11 +88,9 @@ export default {
                     display: flex;
                     justify-content: flex-start;
                     align-items: center;
-                    margin-bottom: 0.5rem;
-                    img
+                    i
                     {
-                        height: 100%;
-                        max-height: 100%;
+                        font-size: 0.9rem;
                     }
                     span
                     {
@@ -103,6 +101,18 @@ export default {
                         font-size: 0.7rem;
                         color: hsla(0,0%,100% , 0.5);
                     }
+                }
+                .sub-div:nth-child(1) i
+                {
+                    color: royalblue;
+                }
+                .sub-div:nth-child(2) i
+                {
+                    color: rgb(41, 197, 36);
+                }
+                .sub-div:nth-child(3) i
+                {
+                    color: rgb(179, 165, 41);
                 }
             }
         }

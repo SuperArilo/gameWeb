@@ -36,74 +36,11 @@
                             </span>
                             <div class="show-who">
                                 <div>
-                                    <img :src="whoComment"/>
+                                    <i class="fa fa-rocket"></i>
                                     <span>腐竹 留言</span>
                                 </div>
                                 <div>
-                                    <img :src="whoData"/>
-                                    <span>2021-12-21</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sub-message-item">
-                        <div class="left-head">
-                            <img src="../icon/head/stranger8.jpg"/>
-                        </div>
-                        <div class="right-content">
-                            <span class="message-title">这是标题</span>
-                            <span class="show-content">
-                                这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容
-                            </span>
-                            <div class="show-who">
-                                <div>
-                                    <img :src="whoComment"/>
-                                    <span>腐竹 留言</span>
-                                </div>
-                                <div>
-                                    <img :src="whoData"/>
-                                    <span>2021-12-21</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sub-message-item">
-                        <div class="left-head">
-                            <img src="../icon/head/stranger8.jpg"/>
-                        </div>
-                        <div class="right-content">
-                            <span class="message-title">这是标题</span>
-                            <span class="show-content">
-                                这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容
-                            </span>
-                            <div class="show-who">
-                                <div>
-                                    <img :src="whoComment"/>
-                                    <span>腐竹 留言</span>
-                                </div>
-                                <div>
-                                    <img :src="whoData"/>
-                                    <span>2021-12-21</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sub-message-item">
-                        <div class="left-head">
-                            <img src="../icon/head/stranger8.jpg"/>
-                        </div>
-                        <div class="right-content">
-                            <span class="message-title">这是标题</span>
-                            <span class="show-content">
-                                这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容
-                            </span>
-                            <div class="show-who">
-                                <div>
-                                    <img :src="whoComment"/>
-                                    <span>腐竹 留言</span>
-                                </div>
-                                <div>
-                                    <img :src="whoData"/>
+                                    <i class="fa fa-calendar"></i>
                                     <span>2021-12-21</span>
                                 </div>
                             </div>
@@ -137,8 +74,6 @@ export default {
                 },
             ],
             text: '**Markdown**是一种简单的文本格式语言，以简单的键盘字符编写文档，转换成html后就能显示复杂的页面效果。',
-            whoComment: require('@/icon/index/whoComment.png'),
-            whoData: require('@/icon/index/whoData.png')
         }
     }
 }
@@ -396,7 +331,7 @@ export default {
                         .show-who
                         {
                             width: 100%;
-                            height: 0.8rem;
+                            height: 1rem;
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
@@ -408,9 +343,13 @@ export default {
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
-                                img
+                                i
                                 {
-                                    max-height: 80%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    height: 100%;
+                                    font-size: 0.8rem;
                                     margin: 0 0.3rem 0 0.3rem;
                                 }
                                 span

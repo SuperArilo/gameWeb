@@ -19,15 +19,15 @@
                     <div class="dynamic-data">
                         <div class="top-div">
                             <div>
-                                <img src="../icon/index/unLike.png"/>
+                                <i class="fa fa-heart-o"></i>
                                 <span>11</span>
                             </div>
                             <div>
-                                <img src="../icon/index/albumCommnet.png" @click="albumFuc(item.id)"/>
+                                <i class="fa fa-comments-o" @click="albumFuc(item.id)"></i>
                                 <span>22</span>
                             </div>
                             <div>
-                                <img src="../icon/index/watch.png"/>
+                                <i class="fa fa-eye"></i>
                                 <span>33</span>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
             <loading v-show="showLoading"></loading>
         </transition>
         <div class="release-img" @click="showWriteBox =! showWriteBox">
-            <img :src="releasePng"/>
+            <i class="fa fa-pencil"></i>
         </div>
         <transition name="el-zoom-in-bottom">
             <div class="write-box" v-if="showWriteBox">
@@ -52,7 +52,7 @@
                         <span>发表动态</span>
                     </div>
                     <div class="right-close">
-                        <el-icon @click="showWriteBox = false"><close-bold /></el-icon>
+                        <i class="fa fa-close" @click="showWriteBox = false"></i>
                     </div>
                 </div>
                 <div class="content">
@@ -63,12 +63,12 @@
                     <div class="bottom-upload-image">
                         <div class="image" v-for="(item,index) in imageList" :key="(index)">
                             <div class="close-div" @click="removeUploadImage(index)">
-                                <el-icon><close-bold /></el-icon>
+                                <i class="fa fa-close"></i>
                             </div>
                             <img :src="item"/>
                         </div>
                         <label for="file-input">
-                            <el-icon><upload-filled /></el-icon>
+                            <i class="fa fa-cloud-upload"></i>
                             <input type="file" @change="selectFile" ref="fileInput">
                         </label>
                     </div>
@@ -81,13 +81,10 @@
     </div>
 </template>
 <script>
-import { CloseBold , UploadFilled } from '@element-plus/icons'
 import loading from '@/components/loading.vue'
 export default {
     components:{
-        loading,
-        CloseBold,
-        UploadFilled
+        loading
     },
     data(){
         return{
@@ -233,7 +230,6 @@ export default {
                     ]
                 }
             ],
-            releasePng: require('@/icon/index/release.png'),
             showWriteBox: false,
             imageList: [],
             userDynamic: require('@/icon/index/user_dynamic.png')
@@ -420,17 +416,32 @@ export default {
                         align-items: center;
                         span
                         {
-                            font-size: 0.62rem;
-                            font-weight: 600;
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 0.6rem;
                             margin: 0 0.5rem 0 0.5rem;
-                            letter-spacing: 0.08rem;
+                            letter-spacing: 0.03rem;
                             color: rgb(77, 77, 77);
                         }
-                        img
+                        i
                         {
-                            max-height: 60%;
+                            font-size: 0.8rem;
                             cursor: pointer;
                         }
+                    }
+                    div:nth-child(1) i
+                    {
+                        color: red;
+                    }
+                    div:nth-child(2) i
+                    {
+                        color: rgb(226, 137, 36);
+                    }
+                    div:nth-child(3) i
+                    {
+                        color: rgb(22, 145, 29);
                     }
                 }
                 .bottom-div
@@ -474,9 +485,10 @@ export default {
         left: 0;
         bottom: 0;
         margin: 0 0 1rem 2rem;
-        img
+        i
         {
-            max-height: 40%;
+            font-size: 1rem;
+            color: rgb(24, 94, 224);
         }
     }
     .release-img:hover

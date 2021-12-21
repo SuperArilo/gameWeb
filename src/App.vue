@@ -20,16 +20,14 @@
                 </el-col>
                 <el-col class="el-row-style" :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
                     <div class="button-box">
-                        <span>
-                            <img src="./icon/index/LoginIcon.png" @click="loginDrawer = true"/>
-                        </span>
+                        <i class="fa fa-sign-in" @click="loginDrawer = true"></i>
                     </div>
                 </el-col>
             </el-row>
         </nav>
         <nav class="nav-top-phone" v-if="this.$store.getters.isPhoneGet" ref="topPhone">
             <div class="top-user-inf">
-                <img class="left-menu" @click="navPhoneListShow =! navPhoneListShow" src="./icon/index/menu.png"/>
+                <i class="fa fa-bars left-menu" @click="navPhoneListShow =! navPhoneListShow"></i>
             </div>
             <el-collapse-transition>
                 <div class="menu-list-line" v-show="navPhoneListShow">
@@ -324,26 +322,22 @@ a
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            span
+            i
             {
-                img
-                {
-                    max-height: 70%;
-                }
-                width: 4rem;
+                width: 3rem;
                 height: 100%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background-color: rgb(0, 130, 216);
+                font-size: 2rem;
                 cursor: pointer;
                 transition: all 0.3s;
-
-            }
-            span:hover
-            {
                 color: rgb(231, 231, 231);
-                background-color: rgb(0, 107, 179);
+            }
+            i:hover
+            {
+                
+                color: rgb(8, 128, 209);
             }
         }
     }
@@ -371,9 +365,8 @@ a
             padding: 0 0.5rem 0 0.5rem;
             .left-menu
             {
-                width: auto;
-                height: 50%;
-                max-height: 50%;
+                color: #ffffff;
+                font-size: 1.5rem;
             }
         }
         .menu-list-line
