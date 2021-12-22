@@ -13,7 +13,32 @@
                         </transition>
                     </router-view>
                 </div>
-                <div class="right-user"></div>
+                <div class="right-user">
+                    <div class="user-inf-box">
+                        <div class="user-bacground">
+                            <img :src="indexBg"/>
+                        </div>
+                        <div class="user-head">
+                            <img src="../icon/head/stranger10.jpg"/>
+                        </div>
+                        <span class="user-name">这次换你听歌</span>
+                        <span class="user-introduction">这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句</span>
+                    </div>
+                    <div class="tag-box">
+                        <span class="title-span">分类标签</span>
+                        <div class="tag-content">
+                            <span class="tag-sub-item">杰哥</span>
+                            <span class="tag-sub-item">Van♂</span>
+                            <span class="tag-sub-item">Deep Dark Fansty</span>
+                            <span class="tag-sub-item">That's Good ♂</span>
+                            <span class="tag-sub-item">单身狗</span>
+                            <span class="tag-sub-item">情头一盒</span>
+                            <span class="tag-sub-item">不要做舔狗</span>
+                            <span class="tag-sub-item">萝卜</span>
+                            <span class="tag-sub-item">菜菜</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="release-img" @click="showWriteBox =! showWriteBox">
@@ -53,14 +78,16 @@
                 </div>
             </div>
         </transition>
+        <footer-bottom/>
     </div>
 </template>
 <script>
 import loading from '@/components/loading.vue'
+import FooterBottom from '../components/footerBottom.vue'
 export default {
     components:{
         loading,
-        indexBg: require('@/icon/index/index_center.jpg')
+        FooterBottom
     },
     data(){
         return{
@@ -257,12 +284,15 @@ export default {
 .index-box
 {
     width: 100%;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: hidden;
     padding-top: 2rem;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+    background-size: cover;
     .center-box
     {
         width: 60rem;
@@ -272,6 +302,7 @@ export default {
         flex-wrap: wrap;
         align-content: flex-start;
         transition: width 0.3s;
+        margin-bottom: 2rem;
         .top-tips
         {
             width: 100%;
@@ -310,7 +341,7 @@ export default {
             display: flex;
             .left-router , .right-user
             {
-                border-radius: 0.1rem;
+                border-radius: 0.2rem;
                 overflow: hidden;
             }
             .left-router
@@ -326,8 +357,124 @@ export default {
             }
             .right-user
             {
-                height: 12rem;
-                background-color: orange;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex-wrap: wrap;
+                padding-bottom: 0.3rem;
+                .user-inf-box
+                {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    background-color: #ffffff;
+                    padding-bottom: 1rem;
+                    .user-bacground
+                    {
+                        width: 100%;
+                        height: 6rem;
+                        overflow: hidden;
+                        position: relative;
+                        z-index: 5;
+                        img
+                        {
+                            width: 100%;
+                            object-fit: cover;
+                            filter: blur(0.05rem);
+                        }
+                    }
+                    .user-head
+                    {
+                        width: 3rem;
+                        height: 3rem;
+                        margin-top: -1.5rem;
+                        overflow: hidden;
+                        border-radius: 50%;
+                        position: relative;
+                        z-index: 10;
+                        img
+                        {
+                            width: 100%;
+                            object-fit: cover;
+                        }
+                    }
+                    .user-name
+                    {
+                        width: 100%;
+                        display: flex;
+                        justify-content: center;
+                        font-size: 0.65rem;
+                        margin: 0.5rem 0 0.5rem 0;
+                    }
+                    .user-introduction
+                    {
+                        width: 75%;
+                        text-align: center;
+                        font-size: 0.55rem;
+                        color: rgb(100, 100, 100);
+                    }
+                }
+                .tag-box
+                {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-start;
+                    flex-wrap: wrap;
+                    align-content: flex-start;
+                    background-color: #ffffff;
+                    margin-top: 1rem;
+                    .title-span
+                    {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        font-size: 0.75rem;
+                        padding: 0.5rem;
+                        font-weight: bold;
+                    }
+                    .title-span::after
+                    {
+                        content: "";
+                        width: 2rem;
+                        height: 0.2rem;
+                        background-color: #3773f3;
+                        border-radius: 0.3rem;
+                    }
+                    .tag-content
+                    {
+                        width: 100%;
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        flex-wrap: wrap;
+                        padding: 0.5rem;
+                        .tag-sub-item
+                        {
+                            height: 1.5rem;
+                            min-height: 1.5rem;
+                            margin: 0.3rem;
+                            padding: 0.3rem 0.5rem;
+                            font-size: 0.6rem;
+                            border-radius: 0.3rem;
+                            border: solid 0.05rem #dfdfdf;
+                            text-align: left;
+                            letter-spacing: 0.04rem;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        }
+                        .tag-sub-item:hover
+                        {
+                            color: #ffffff;
+                            background-color: #3773f3;
+                        }
+                    }
+                }
             }
         }
     }
