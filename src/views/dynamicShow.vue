@@ -1,17 +1,22 @@
 <template>
     <div class="content-box">
-        <div class="top-menu">
-            <el-dropdown class="dropdown-menu">
-                <span>{{dropdownMenuTitle}}
-                    <i class="fa fa-chevron-down"/>
-                </span>
-                <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title)">{{item.title}}</el-dropdown-item>
-                </el-dropdown-menu>
-                </template>
-            </el-dropdown>
-            <i class="fa fa-refresh refresh"/>
+        <div class="top-menu" v-loading="menuLoading">
+            <div class="left-menu">
+                <el-dropdown class="dropdown-menu">
+                    <span>{{dropdownMenuTitle}}
+                        <i class="fa fa-chevron-down"/>
+                    </span>
+                    <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title)">{{item.title}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+                <i class="fa fa-refresh refresh" @click="refreshFunc()"/>
+            </div>
+            <div class="right-menu">
+                <i class="fa fa-edit edit-icon" @click="editRouter()"/>
+            </div>
         </div>
         <div class="dy-content">
             <div class="sub-item" v-for="(item,index) in 6" :key="index">
@@ -51,9 +56,13 @@
                 </div>
             </div>
         </div>
+        <div class="dy-change-page">
+            <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+        </div>
     </div>
 </template>
 <script>
+import { ElMessage } from 'element-plus'
 export default {
     data(){
         return{
@@ -75,12 +84,28 @@ export default {
                     id: 0,
                     title: '发布时间正序'
                 }
-            ]
+            ],
+            menuLoading: false
         }
     },
     methods:{
         dropdownMenuFunc(id,title){
             this.dropdownMenuTitle = title
+        },
+        refreshFunc(){
+            this.menuLoading = true
+            setTimeout(() => {
+                this.menuLoading = false
+                ElMessage({
+                    message: '刷新成功，共更新了5条动态！',
+                    type: 'success',
+                    center: true
+                })
+                this.dropdownMenuTitle = this.dropdownMenu[0].title
+            },3000)
+        },
+        editRouter(){
+            this.$router.push('/dynamic/edit')
         }
     }
 }
@@ -94,69 +119,94 @@ export default {
     align-items: flex-start;
     flex-wrap: wrap;
     align-content: flex-start;
-    background-color: rgb(240, 240, 240);
     .top-menu
     {
         width: 100%;
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
         background-color: #ffffff;
         padding: 0.3rem 0.5rem;
         box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.288);
-        .dropdown-menu
+        .left-menu , .right-menu
         {
-            min-width: 5rem;
             height: 1.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 1rem;
-            transition: all 0.3s;
-            span
+            .dropdown-menu
             {
-                font-size: 0.64rem;
-                height: 100%;
+                min-width: 5rem;
+                height: 1.5rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                cursor: pointer;
-                i
+                border-radius: 1rem;
+                transition: all 0.3s;
+                span
                 {
-                    color: #3773f3;
-                    margin-left: 0.3rem;
+                    font-size: 0.64rem;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    i
+                    {
+                        color: #3773f3;
+                        margin-left: 0.3rem;
+                    }
                 }
             }
-        }
-        .refresh
-        {
-            width: 1.5rem;
-            height: 1.5rem;
-            border-radius: 50%;
-            color: #a5a5a5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        .refresh:hover
-        {
-            color: #3773f3;
-            transform: rotate(180deg);
-        }
-        .dropdown-menu:active , .refresh:active
-        {
-            background-color: rgb(221, 221, 221);
+            .refresh
+            {
+                width: 1.5rem;
+                height: 1.5rem;
+                border-radius: 50%;
+                color: #a5a5a5;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.3s;
+                margin-left: 0.2rem;
+            }
+            .refresh:hover
+            {
+                color: #3773f3;
+                transform: rotate(180deg);
+            }
+            .dropdown-menu:active , .refresh:active
+            {
+                background-color: rgb(221, 221, 221);
+            }
+            .edit-icon
+            {
+                width: 1.5rem;
+                height: 1.5rem;
+                border-radius: 50%;
+                color: #a5a5a5;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.3s;
+                cursor: pointer;
+            }
+            .edit-icon:hover
+            {
+                color: rgb(1, 134, 83);
+            }
         }
     }
     .dy-content
     {
         width: 100%;
-        margin-top: 1rem;
+        padding-top: 1rem;
         padding: 0.5rem 0.3rem;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        background-color: rgb(240, 240, 240);
+        border-radius:0 0 0.2rem 0.2rem;
         .sub-item
         {
             width: 100%;
@@ -262,6 +312,25 @@ export default {
         {
             transform: translateY(-0.2rem);
             box-shadow: 0 0.3rem 0.3rem darkgray;
+        }
+    }
+    .dy-change-page
+    {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem 0 0.5rem 0;
+        padding: 0.5rem;
+        background-color: rgb(240, 240, 240);
+        border-radius: 0.2rem;
+        :deep(.el-pager li)
+        {
+            background-color: #ffffff;
+        }
+        :deep(.active)
+        {
+            background-color: #3773f3 !important;
         }
     }
 }

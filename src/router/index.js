@@ -23,6 +23,14 @@ const routes = [
                 component: () => import('@/views/dynamicShow.vue')
             },
             {
+                path: 'edit',
+                component: () => import('@/views/dynamicEdit.vue'),
+                meta:{
+                    path: '/dynamic/edit',
+                    title: '新建动态'
+                }
+            },
+            {
                 path: 'comment',
                 component: () => import('@/views/dynamicComment.vue'),
                 meta:{

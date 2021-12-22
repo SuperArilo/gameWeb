@@ -8,7 +8,7 @@
             <div class="center-content-box">
                 <div class="left-router">
                     <router-view v-slot="{ Component }">
-                        <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
+                        <transition mode="out-in" name="router_animate">
                             <component :is="Component" />
                         </transition>
                     </router-view>
@@ -32,52 +32,21 @@
                             <span class="tag-sub-item">Deep Dark Fansty</span>
                             <span class="tag-sub-item">That's Good ♂</span>
                             <span class="tag-sub-item">单身狗</span>
-                            <span class="tag-sub-item">情头一盒</span>
+                            <span class="tag-sub-item">情投一盒</span>
                             <span class="tag-sub-item">不要做舔狗</span>
                             <span class="tag-sub-item">萝卜</span>
                             <span class="tag-sub-item">菜菜</span>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="release-img" @click="showWriteBox =! showWriteBox">
-            <i class="fa fa-pencil"></i>
-        </div>
-        <transition name="el-zoom-in-bottom">
-            <div class="write-box" v-if="showWriteBox">
-                <div class="title">
-                    <div class="left-title-inf">
-                        <img :src="userDynamic"/>
-                        <span>发表动态</span>
-                    </div>
-                    <div class="right-close">
-                        <i class="fa fa-close" @click="showWriteBox = false"></i>
-                    </div>
-                </div>
-                <div class="content">
-                    <div class="top-user-head-and-input">
-                        <img class="left-user-head" src="../icon/head/stranger10.jpg"/>
-                        <textarea placeholder="说点什么吧..."></textarea>
-                    </div>
-                    <div class="bottom-upload-image">
-                        <div class="image" v-for="(item,index) in imageList" :key="(index)">
-                            <div class="close-div" @click="removeUploadImage(index)">
-                                <i class="fa fa-close"></i>
-                            </div>
-                            <img :src="item"/>
+                    <div class="dy-lately-box">
+                        <span class="title-span">最近发布</span>
+                        <div class="lately-content">
+                            <span class="lately-item" v-for="(item,index) in 4" :key="index">这是最新的动态</span>
                         </div>
-                        <label for="file-input">
-                            <i class="fa fa-cloud-upload"></i>
-                            <input type="file" @change="selectFile" ref="fileInput">
-                        </label>
                     </div>
                 </div>
-                <div class="buttom-box">
-                    <span class="button">发布</span>
-                </div>
             </div>
-        </transition>
+        </div>
         <footer-bottom/>
     </div>
 </template>
@@ -232,7 +201,6 @@ export default {
                     ]
                 }
             ],
-            showWriteBox: false,
             imageList: [],
             userDynamic: require('@/icon/index/user_dynamic.png'),
             indexBg: require('@/icon/index/index_center.jpg'),
@@ -348,11 +316,11 @@ export default {
             {
                 .router_animate-enter-active
                 {
-                    animation: bounceInLeft 0.4s;
+                    animation: fadeInLeft 0.6s;
                 }
                 .router_animate-leave-active
                 {
-                    animation: bounceOutRight 0.4s;
+                    animation: fadeOutRight 0.6s;
                 }
             }
             .right-user
@@ -416,7 +384,7 @@ export default {
                         color: rgb(100, 100, 100);
                     }
                 }
-                .tag-box
+                .tag-box , .dy-lately-box
                 {
                     width: 100%;
                     display: flex;
@@ -443,6 +411,9 @@ export default {
                         background-color: #3773f3;
                         border-radius: 0.3rem;
                     }
+                }
+                .tag-box
+                {
                     .tag-content
                     {
                         width: 100%;
@@ -472,6 +443,34 @@ export default {
                         {
                             color: #ffffff;
                             background-color: #3773f3;
+                        }
+                    }
+                }
+                .dy-lately-box
+                {
+                    .lately-content
+                    {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        flex-wrap: wrap;
+                        padding: 0.25rem 0.8rem;
+                        .lately-item
+                        {
+                            width: 100%;
+                            display: flex;
+                            justify-content: flex-start;
+                            text-align: left;
+                            font-size: 0.58rem;
+                            letter-spacing: 0.03rem;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            margin-bottom: 0.5rem;
+                        }
+                        .lately-item:hover
+                        {
+                            color: darkslateblue;
+                            text-decoration:underline;
                         }
                     }
                 }
@@ -513,232 +512,6 @@ export default {
     {
         transform: scale(1.2);
     }
-    .write-box
-    {
-        height: 15.5rem;
-        background-color: white;
-        border-radius: 0.3rem 0.3rem 0 0;
-        position: fixed;
-        bottom: 0;
-        box-shadow: 0 0 0.3rem rgb(37, 37, 37);
-        padding: 0 1rem 0 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        align-content: center;
-        .title
-        {
-            width: 100%;
-            height: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            .left-title-inf
-            {
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                span
-                {
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 0.75rem;
-                    letter-spacing: 0.3rem;
-                    font-weight: 600;
-                    color: rgb(48, 90, 92);
-                    margin-left: 0.5rem;
-                }
-                img
-                {
-                    height: 80%;
-                    max-height: 80%;
-                }
-            }
-            .right-close
-            {
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                i
-                {
-                    cursor: pointer;
-                    transition: all 0.3s;
-                }
-                i:hover
-                {
-                    color: #409EFF;
-                }
-            }
-        }
-        .content
-        {
-            width: 100%;
-            height: 11rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            align-content: center;
-            flex-wrap: wrap;
-            .top-user-head-and-input
-            {
-                width: 100%;
-                height: 5rem;
-                display: flex;
-                justify-content: space-around;
-                align-items: flex-start;
-                .left-user-head
-                {
-                    height: 3rem;
-                    max-height: 3rem;
-                    border-radius: 50%;
-                    margin: 0 1rem 0 0;
-                }
-                textarea
-                {
-                    outline: none;
-                    resize: none;
-                    width: 100%;
-                    height: 100%;
-                    letter-spacing: 0.06rem;
-                    font-size: 0.65rem;
-                    font-family: Microsoft YaHei;
-                    line-height: 1.1rem;
-                    border: none;
-                    white-space:normal;
-                    word-break:break-all;
-                    word-wrap:break-word;
-                }
-            }
-            .bottom-upload-image
-            {
-                width: 100%;
-                height: 6rem;
-                display: grid;
-                grid-row-gap: 1rem;
-                grid-column-gap: 1rem;
-                grid-template-columns: repeat(auto-fill, 4rem);
-                overflow-y: scroll;
-                overflow-x: hidden;
-                padding: 0 1rem 0 1rem;
-                label
-                {
-                    width: 4rem;
-                    height: 4rem;
-                    border: dashed darkgray 0.1rem;
-                    border-radius: 1rem;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                    position: relative;
-                    margin: 0;
-                    margin-bottom: 0.5rem;
-                    i
-                    {
-                        transition: all 0.3s;
-                    }
-                    input
-                    {
-                        opacity: 0;
-                        width: 100%;
-                        height: 100%;
-                        position: absolute;
-                        filter: alpha(opacity=0);
-                    }
-                }
-                label:hover
-                {
-                    i
-                    {
-                        color: #409EFF;
-                    }
-                }
-                .image
-                {
-                    width: 4rem;
-                    height: 4rem;
-                    overflow: hidden;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 1rem;
-                    margin-bottom: 0.5rem;
-                    position: relative;
-                    z-index: 100;
-                    border: dashed darkgray 0.05rem;
-                    img
-                    {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                    .close-div
-                    {
-                        width: 1.5rem;
-                        height: 1.5rem;
-                        background-color: white;
-                        position: absolute;
-                        right: 0;
-                        top: 0;
-                        border-radius: 0 0 0 1rem;
-                        z-index: 111;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        cursor: pointer;
-                        i
-                        {
-                            transition: all 0.3s;
-                            font-size: 0.7rem;
-                        }
-                    }
-                    .close-div:hover
-                    {
-                        i
-                        {
-                            color: #409EFF;
-                        }
-                    }
-                }
-            }
-        }
-        .buttom-box
-        {
-            width: 100%;
-            height: 2.5rem;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            .button
-            {
-                width: 4rem;
-                height: 1.5rem;
-                background-color: #b3d8ff;
-                margin-right: 1rem;
-                font-size: 0.65rem;
-                letter-spacing: 0.08rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                color: #409eff;
-                transition: all 0.3s;
-                border: solid 0.05rem #409eff;
-            }
-            .button:hover
-            {
-                color: white;
-                background-color: #409eff;
-            }
-        }
-    }
 }
 @media screen and (min-width:1400px)
 {
@@ -760,10 +533,6 @@ export default {
                     width: 18rem;
                 }
             }
-        }
-        .write-box
-        {
-            width: 30rem;
         }
     }
 }
@@ -787,10 +556,6 @@ export default {
                     width: 15rem;
                 }
             }
-        }
-        .write-box
-        {
-            width: 30rem;
         }
     }
 }
@@ -816,10 +581,6 @@ export default {
                 }
             }
         }
-        .write-box
-        {
-            width: 30rem;
-        }
     }
 }
 @media screen and (max-width:936px)
@@ -843,10 +604,6 @@ export default {
                     margin-top: 1rem;
                 }
             }
-        }
-        .write-box
-        {
-            width: 90%;
         }
     }
 }
