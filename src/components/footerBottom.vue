@@ -6,15 +6,15 @@
                 <span class="title-span">关于我</span>
                 <div class="contant-div">
                     <div class="sub-div">
-                        <i class="fa fa-qq"></i>
+                        <i class="fab fa-qq"></i>
                         <span>72815258</span>
                     </div>
                     <div class="sub-div">
-                        <i class="fa fa-wechat"></i>
+                        <i class="fab fa-weixin"></i>
                         <span>AriloWh</span>
                     </div>
                     <div class="sub-div">
-                        <i class="fa fa-envelope-o"></i>
+                        <i class="fas fa-envelope"></i>
                         <span>superarilo@189.cn</span>
                     </div>
                 </div>

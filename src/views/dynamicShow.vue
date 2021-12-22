@@ -12,10 +12,10 @@
                     </el-dropdown-menu>
                     </template>
                 </el-dropdown>
-                <i class="fa fa-refresh refresh" @click="refreshFunc()"/>
+                <i class="fas fa-redo refresh" @click="refreshFunc()"/>
             </div>
             <div class="right-menu">
-                <i class="fa fa-edit edit-icon" @click="editRouter()"/>
+                <i class="far fa-edit edit-icon" @click="editRouter()"/>
             </div>
         </div>
         <div class="dy-content">
@@ -28,23 +28,23 @@
                 </div>
                 <div class="dy-inf-show">
                     <div class="dy-sub-item">
-                        <i class="fa fa-calendar"/>
+                        <i class="far fa-calendar-alt"/>
                         <span>2021-12-22 19:13</span>
                     </div>
                     <div class="dy-sub-item">
-                        <i class="fa fa-rocket"/>
+                        <i class="fas fa-rocket"/>
                         <span>这次换你听歌</span>
                     </div>
                     <div class="dy-sub-item">
-                        <i class="fa fa-commenting-o"/>
+                        <i class="far fa-comment-dots"/>
                         <span>0 条评论</span>
                     </div>
                     <div class="dy-sub-item">
-                        <i class="fa fa-tags"/>
+                        <i class="fas fa-tag"/>
                         <span>其他</span>
                     </div>
                     <div class="dy-sub-item">
-                        <i class="fa fa-eye"/>
+                        <i class="fas fa-eye"/>
                         <span>0 浏览</span>
                     </div>
                 </div>

@@ -20,14 +20,14 @@
                 </el-col>
                 <el-col class="el-row-style" :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
                     <div class="button-box">
-                        <i class="fa fa-sign-in" @click="loginDrawer = true"></i>
+                        <i class="fas fa-sign-in-alt" @click="loginDrawer = true"></i>
                     </div>
                 </el-col>
             </el-row>
         </nav>
         <nav class="nav-top-phone" v-if="this.$store.getters.isPhoneGet" ref="topPhone">
             <div class="top-user-inf">
-                <i class="fa fa-bars left-menu" @click="navPhoneListShow =! navPhoneListShow"></i>
+                <i class="fas fa-bars left-menu" @click="navPhoneListShow =! navPhoneListShow"></i>
             </div>
             <el-collapse-transition>
                 <div class="menu-list-line" v-show="navPhoneListShow">

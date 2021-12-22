@@ -25,7 +25,7 @@ const cdn = {
     css: [
         'https://unpkg.com/element-plus@1.2.0-beta.6/dist/index.css',
         'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
+        'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.3/css/all.min.css'
     ],
     // cdn的js链接
     js: [
