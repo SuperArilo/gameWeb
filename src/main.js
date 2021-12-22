@@ -6,8 +6,6 @@ import store from './store'
 // import 'element-plus/dist/index.css'
 // import 'animate.css'
 // import axios from 'axios'
-import mitt from 'mitt'
-import { VueMasonryPlugin } from "vue-masonry/src/masonry-vue3.plugin"
 import VMdPreview from '@kangc/v-md-editor/lib/preview';
 import '@kangc/v-md-editor/lib/style/preview.css';
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
@@ -19,9 +17,6 @@ VMdPreview.use(githubTheme, { Hljs: hljs});
 VMdEditor.use(githubTheme, {Hljs: hljs,});
 
 const app = createApp(App)
-const emitter = mitt()
-app.config.globalProperties.emitter = emitter
-app.use(VueMasonryPlugin)
 app.use(ElementPlus)
 app.use(store)
 app.use(router)

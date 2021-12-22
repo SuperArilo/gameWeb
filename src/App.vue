@@ -424,7 +424,7 @@ a
 {
     html
     {
-        font-size: 24px;
+        font-size: 24px !important;
         .main-container 
         {
             .footer-div .top-div
@@ -444,7 +444,7 @@ a
 {
     html
     {
-        font-size: 24px;
+        font-size: 24px !important;
         .main-container
         {
             .footer-div .top-div
@@ -465,7 +465,7 @@ a
 {
     html
     {
-        font-size: 24px;
+        font-size: 24px !important;
         .main-container 
         {
             .footer-div .top-div
@@ -485,7 +485,7 @@ a
 {
     html
     {
-        font-size: 22px;
+        font-size: 22px !important;
         .main-container
         {
             .footer-div .top-div
@@ -512,7 +512,7 @@ a
 {
     html
     {
-        font-size: 20px;
+        font-size: 20px !important;
         .main-container
         {
             .footer-div .top-div
@@ -539,7 +539,7 @@ a
 {
     html
     {
-        font-size: 18px;
+        font-size: 18px !important;
         .main-container
         {
             .footer-div .top-div

@@ -13,14 +13,14 @@ const routes = [
         path: '/dynamic',
         name: 'dynamic',
         component: () => import('@/views/dynamic.vue'),
+        meta:{
+            path: '/dynamic',
+            title: '动态'
+        },
         children:[
             {
                 path: '',
-                component: () => import('@/views/dynamicShow.vue'),
-                meta:{
-                    path: '/dynamic',
-                    title: '动态'
-                }
+                component: () => import('@/views/dynamicShow.vue')
             },
             {
                 path: 'comment',
