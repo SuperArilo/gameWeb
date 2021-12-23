@@ -8,14 +8,14 @@ export default createStore({
         dyTagList:[],
         //动态标签的id
         dyIdTagList:[],
-        //动态标签冷却
-        dyIsClick: false
+        //动态页面检测活动冷却标识
+        dyAllLoading: false,
     },
     getters:{
         isPhoneGet:state => state.isPhone,
         windowScrollValueGet:state => state.windowScrollValue,
         dyTagListGet:state => state.dyTagList,
-        dyIsClickGet:state => state.dyIsClick
+        dyAllLoadingGet:state => state.dyAllLoading,
     },
     mutations:{
         isPhoneSet(state,value){
@@ -25,22 +25,40 @@ export default createStore({
             state.windowScrollValue = value
         },
         dyTagListSet(state,value){
-            if(state.dyIdTagList.length !== 0){
-                if(state.dyIdTagList.indexOf(value.id) === -1){
-                    state.dyTagList.unshift(value)
-                    state.dyIdTagList.unshift(value.id)
-                } else if(state.dyIdTagList.length > 2) {
+            let length = state.dyIdTagList.length
+            if(length === 0){
+                state.dyIdTagList.unshift(value.id)
+                state.dyTagList.unshift(value)
+                state.dyAllLoading = true
+                setTimeout(() => {
                     ElMessage({
-                        message:'标签不能添加了！',
+                        message: '加载了4篇内容',
+                        type: 'success'
                     })
-                } else if (state.dyIdTagList.indexOf(value.id) === 0) {
+                    state.dyAllLoading = false
+                },2000)
+            } else if (length > 2){
+                ElMessage({
+                    message: '最高支持筛选3个标签！',
+                })
+            } else {
+                let isHave = state.dyIdTagList.indexOf(value.id)
+                if(isHave === -1){
+                    state.dyIdTagList.unshift(value.id)
+                    state.dyTagList.unshift(value)
+                    state.dyAllLoading = true
+                    setTimeout(() => {
+                        ElMessage({
+                            message: '加载了4篇内容',
+                            type: 'success'
+                        })
+                        state.dyAllLoading = false
+                    },2000)
+                } else if (isHave === 0){
                     ElMessage({
                         message: value.title + '标签 已经添加了哦！',
                     })
                 }
-            } else {
-                state.dyTagList.unshift(value)
-                state.dyIdTagList.unshift(value.id)
             }
         },
         dyTagListDel(state,value){
@@ -48,9 +66,9 @@ export default createStore({
             state.dyTagList.splice(index,1)
             state.dyIdTagList.splice(index,1)
         },
-        dyIsClickSet(state,value){
-            state.dyIsClick = value
-        }
+        dyAllLoadingSet(state,value){
+            state.dyAllLoading = value
+        },
     },
     actions:{
     }

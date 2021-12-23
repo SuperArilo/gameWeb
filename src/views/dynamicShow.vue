@@ -13,21 +13,21 @@
                         </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                    <i class="fas fa-redo refresh" @click="refreshFunc()" :disabled="refreshLoading"/>
+                    <i class="fas fa-redo refresh" @click="refreshFunc()"/>
                 </div>
                 <div class="right-menu">
                     <i class="far fa-edit edit-icon" @click="editRouter()"/>
                 </div>
             </div>
-            <div class="tag-show" v-loading="this.$store.getters.dyIsClickGet">
-                <span class="tag-sub-item" v-for="(item,index) in this.$store.getters.dyTagListGet" :key="index" @click="this.$store.commit('dyTagListDel',item.id)">
+            <div class="tag-show">
+                <span class="tag-sub-item" v-for="(item,index) in this.$store.getters.dyTagListGet" :key="index">
                     {{item.title}}
-                    <i class="fas fa-trash-alt"/>
+                    <i class="fas fa-trash-alt" @click="delTag(item.id)"/>
                 </span>
             </div>
         </div>
-        <div class="dy-content" v-loading="changeSort">
-            <i class="fas fa-sync-alt refresh-div" :class="refreshLoading ? 'refresh-div-is-loaded fa-spin':''"/>
+        <div class="dy-content">
+            <i class="fas fa-sync-alt refresh-div" :class="this.$store.getters.dyAllLoadingGet ? 'refresh-div-is-loaded fa-spin':''"/>
             <div class="sub-item" v-for="(item,index) in 6" :key="index">
                 <div class="title-and-user-head">
                     <span class="title">这是标题这是标题</span>
@@ -75,7 +75,6 @@ import { ElMessage } from 'element-plus'
 export default {
     data(){
         return{
-            dropdownMenuTitle: '最新',
             dropdownMenu:[
                 {
                     id: 0,
@@ -95,32 +94,32 @@ export default {
                 }
             ],
             refreshLoading: false,
-            changeSort: false
+            dropdownMenuTitle: '最新'
         }
     },
     methods:{
         dropdownMenuFunc(id,title){
-            if(!this.changeSort){
+            if(!this.$store.getters.dyAllLoadingGet){
                 this.dropdownMenuTitle = title
-                this.changeSort = true
+                this.$store.commit('dyAllLoadingSet',true)
                 setTimeout(() => {
                     ElMessage({
                         message: '切换成功！',
                         type: 'success'
                     })
-                    this.changeSort = false
+                    this.$store.commit('dyAllLoadingSet',false)
                 },2000)
             }
         },
         refreshFunc(){
-            if(!this.refreshLoading){
-                this.refreshLoading = true
+            if(!this.$store.getters.dyAllLoadingGet){
+                this.$store.commit('dyAllLoadingSet',true)
                 setTimeout(() => {
-                    this.refreshLoading = false
+                    this.$store.commit('dyAllLoadingSet',false)
                     ElMessage({
                         message: '刷新成功，共更新了5条动态！',
                         type: 'success',
-                        center: true
+                        center: false
                     })
                     this.dropdownMenuTitle = this.dropdownMenu[0].title
                 },3000)
@@ -128,6 +127,15 @@ export default {
         },
         editRouter(){
             this.$router.push('/dynamic/edit')
+        },
+        delTag(id){
+            if(!this.$store.getters.dyAllLoadingGet){
+                this.$store.commit('dyTagListDel',id)
+                this.$store.commit('dyAllLoadingSet',true)
+                setTimeout(() => {
+                    this.$store.commit('dyAllLoadingSet',false)
+                },2000)
+            }
         }
     }
 }
@@ -173,7 +181,7 @@ export default {
                     transition: all 0.3s;
                     span
                     {
-                        font-size: 0.64rem;
+                        font-size: 0.6rem;
                         height: 100%;
                         display: flex;
                         justify-content: center;
@@ -349,7 +357,7 @@ export default {
                     margin: 0 0.3rem 0 0.3rem;
                     span , i
                     {
-                        font-size: 0.52rem;
+                        font-size: 0.6rem;
                     }
                     span
                     {
@@ -365,9 +373,9 @@ export default {
                 align-items: flex-start;
                 text-align: left;
                 word-break: break-all;
-                font-size: 0.6rem;
+                font-size: 0.65rem;
                 padding: 0.5rem;
-                letter-spacing: 0.03;
+                letter-spacing: 0.01rem;
             }
             .bottom-buttom
             {

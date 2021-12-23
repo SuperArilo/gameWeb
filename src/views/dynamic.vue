@@ -232,6 +232,26 @@ export default {
                 {
                     id: 8,
                     title: '菜菜'
+                },
+                {
+                    id: 9,
+                    title: '腐竹通知'
+                },
+                {
+                    id: 10,
+                    title: 'Epic被刺'
+                },
+                {
+                    id: 11,
+                    title: 'Steam宣布破产'
+                },
+                {
+                    id: 12,
+                    title: '服务器维护'
+                },
+                {
+                    id:13,
+                    title: '群主太帅了'
                 }
             ]
         }
@@ -266,15 +286,15 @@ export default {
             })
         },
         tagFunc(id,title){
-            if(!(this.$store.getters.dyIsClick)){
+            if(!this.$store.getters.dyAllLoadingGet){
+                if(this.$store.getters.isPhoneGet){
+                    setTimeout(() => {
+                        document.body.scrollTop = 0
+                    },300)
+                }
                 let object = {id: id,title: title}
                 this.$store.commit('dyTagListSet',object)
-                this.$store.commit('dyIsClickSet',true)
-                setTimeout(() => {
-                    this.$store.commit('dyIsClickSet',false)
-                },2000)
             }
-            
         }
     },
     computed:{

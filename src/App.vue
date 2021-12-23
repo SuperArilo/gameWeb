@@ -485,7 +485,7 @@ a
 {
     html
     {
-        font-size: 22px !important;
+        font-size: 24px !important;
         .main-container
         {
             .footer-div .top-div
@@ -512,7 +512,7 @@ a
 {
     html
     {
-        font-size: 20px !important;
+        font-size: 22px !important;
         .main-container
         {
             .footer-div .top-div
@@ -539,7 +539,7 @@ a
 {
     html
     {
-        font-size: 18px !important;
+        font-size: 20px !important;
         .main-container
         {
             .footer-div .top-div
