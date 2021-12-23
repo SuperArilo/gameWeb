@@ -61,7 +61,7 @@
                     这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介
                 </span>
                 <div class="bottom-buttom">
-                    <span class="buttom">跃迁</span>
+                    <span class="buttom" @click="detailsRouterfunc(index)">跃迁</span>
                 </div>
             </div>
         </div>
@@ -136,6 +136,9 @@ export default {
                     this.$store.commit('dyAllLoadingSet',false)
                 },2000)
             }
+        },
+        detailsRouterfunc(id){
+            this.$router.push({path: '/dynamic/details',query: { id: id }})
         }
     }
 }
@@ -395,6 +398,7 @@ export default {
                     font-size: 0.65rem;
                     cursor: pointer;
                     transition: all 0.3s;
+                    text-align: center;
                 }
                 .buttom:hover
                 {

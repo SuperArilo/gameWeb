@@ -19,7 +19,7 @@
                             <img :src="indexBg"/>
                         </div>
                         <div class="user-head">
-                            <img src="../icon/head/stranger10.jpg"/>
+                            <img src="../views/icon/head/stranger10.jpg"/>
                         </div>
                         <span class="user-name">这次换你听歌</span>
                         <span class="user-introduction">这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句</span>
@@ -55,147 +55,9 @@ export default {
             page: 0,
             data:[],
             isCountToPage: true,
-            test:[
-                {
-                    id: 0,
-                    name: 'SuperArilo1111',
-                    time: '2021-10-30  18:06',
-                    content: '如果您需要手动触发砖石布局重绘（例如，如果您的磁贴元素量或内容已更改），您现在可以使用方法。截至0.11.8，您可以通过要触发重绘的方块的 ID。',
-                    image:[
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        }
-                    ]
-                },
-                {
-                    id: 0,
-                    name: '弔人',
-                    time: '2021-10-30  18:06',
-                    content: '如果您需要手动触发砖石布局重绘（例如，如果您的磁贴元素量或内容已更改），您现在可以使用方法。截至0.11.8，您可以通过要触发重绘的方块的 ID。',
-                    image:[
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                    ]
-                },
-                {
-                    id: 0,
-                    name: 'SuperArilo',
-                    time: '2021-10-30  18:06',
-                    content: '如果您需要手动触发砖石布局重绘（例如，如果您的磁贴元素量或内容已更改），您现在可以使用方法。截至0.11.8，您可以通过要触发重绘的方块的 ID。',
-                    image:[
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        }
-                    ]
-                },
-                {
-                    id: 0,
-                    name: 'SuperArilo',
-                    time: '2021-10-30  18:06',
-                    content: '如果您需要手动触发砖石布局重绘（例如，如果您的磁贴元素量或内容已更改），您现在可以使用方法。截至0.11.8，您可以通过要触发重绘的方块的 ID。',
-                    image:[
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        }
-                    ]
-                },
-                {
-                    id: 0,
-                    name: 'SuperArilo',
-                    time: '2021-10-30  18:06',
-                    content: '如果您需要手动触发砖石布局重绘（例如，如果您的磁贴元素量或内容已更改），您现在可以使用方法。截至0.11.8，您可以通过要触发重绘的方块的 ID。',
-                    image:[
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        },
-                        {
-                            id: 0,
-                            url: require('@/icon/index/index_center.jpg')
-                        }
-                    ]
-                }
-            ],
             imageList: [],
-            userDynamic: require('@/icon/index/user_dynamic.png'),
-            indexBg: require('@/icon/index/index_center.jpg'),
+            userDynamic: require('@/views/icon/index/user_dynamic.png'),
+            indexBg: require('@/views/icon/index/index_center.jpg'),
             tagList:[
                 {
                     id: 0,
@@ -338,7 +200,7 @@ export default {
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
-            background-image: url('../icon/index/index_center.jpg');
+            background-image: url('../views/icon/index/index_center.jpg');
             padding: 1rem;
             span
             {

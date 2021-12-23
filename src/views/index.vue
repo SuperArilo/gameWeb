@@ -24,8 +24,8 @@ export default {
   components: { footerBottom },
     data(){
         return{
-            indexBg: require('@/icon/index/index_center.jpg'),
-            userHead: require('@/icon/head/UserHead.png'),
+            indexBg: require('@/views/icon/index/index_center.jpg'),
+            userHead: require('@/views/icon/head/UserHead.png'),
             value:''
         }
     },

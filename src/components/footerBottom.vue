@@ -1,7 +1,7 @@
 <template>
     <div class="footer-div">
         <div class="top-div">
-            <img src="../icon/index/mmqrcod.png"/>
+            <img src="../views/icon/index/mmqrcod.png"/>
             <div class="public-div">
                 <span class="title-span">关于我</span>
                 <div class="contant-div">

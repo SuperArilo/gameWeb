@@ -61,31 +61,31 @@ export default {
                 {
                     id: 0,
                     title: '首页',
-                    icon: require('@/icon/index/home.png'),
+                    icon: require('@/views/icon/index/home.png'),
                     path: ''
                 },
                 {
                     id: 1,
                     title: '动态',
-                    icon: require('@/icon/index/dynamic.png'),
+                    icon: require('@/views/icon/index/dynamic.png'),
                     path: 'dynamic'
                 },
                 {
                     id: 2,
                     title: '留言',
-                    icon: require('@/icon/index/iMessage.png'),
+                    icon: require('@/views/icon/index/iMessage.png'),
                     path: 'message'
                 },
                 {
                     id: 3,
                     title: '随笔',
-                    icon: require('@/icon/index/note.png'),
+                    icon: require('@/views/icon/index/note.png'),
                     path: 'note'
                 },
                 {
                     id: 4,
                     title: '凡尔赛小镇',
-                    icon: require('@/icon/index/frs.png'),
+                    icon: require('@/views/icon/index/frs.png'),
                     path: 'versaillestown'
                 }
             ],

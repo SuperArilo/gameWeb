@@ -166,30 +166,30 @@ export default {
     },
     data(){
         return{
-            indexImage: require('@/icon/index/versaillestown/townIndex1.jpg'),
-            netWorkShow: require('@/icon/index/versaillestown/netWork.png'),
-            bbs: require('@/icon/index/versaillestown/bbs.png'),
-            safe: require('@/icon/index/versaillestown/safe.png'),
-            activity: require('@/icon/index/versaillestown/activity.png'),
-            publicWelfare: require('@/icon/index/versaillestown/publicWelfare.png'),
-            server: require('@/icon/index/versaillestown/server.png'),
-            mcbaike: require('@/icon/index/versaillestown/mcbaike.gif'),
+            indexImage: require('@/views/icon/index/versaillestown/townIndex1.jpg'),
+            netWorkShow: require('@/views/icon/index/versaillestown/netWork.png'),
+            bbs: require('@/views/icon/index/versaillestown/bbs.png'),
+            safe: require('@/views/icon/index/versaillestown/safe.png'),
+            activity: require('@/views/icon/index/versaillestown/activity.png'),
+            publicWelfare: require('@/views/icon/index/versaillestown/publicWelfare.png'),
+            server: require('@/views/icon/index/versaillestown/server.png'),
+            mcbaike: require('@/views/icon/index/versaillestown/mcbaike.gif'),
             testPicture:[
                 {
                     id: 0,
-                    image: require('@/icon/index/versaillestown/townIndex1.jpg')
+                    image: require('@/views/icon/index/versaillestown/townIndex1.jpg')
                 },
                 {
                     id: 1,
-                    image: require('@/icon/index/versaillestown/townIndex2.jpg')
+                    image: require('@/views/icon/index/versaillestown/townIndex2.jpg')
                 },
                 {
                     id: 2,
-                    image: require('@/icon/index/versaillestown/townIndex3.jpg')
+                    image: require('@/views/icon/index/versaillestown/townIndex3.jpg')
                 },
                 {
                     id: 3,
-                    image: require('@/icon/index/versaillestown/townIndex4.jpg')
+                    image: require('@/views/icon/index/versaillestown/townIndex4.jpg')
                 }
             ]
         }   

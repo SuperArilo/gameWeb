@@ -20,22 +20,22 @@ const routes = [
         children:[
             {
                 path: '',
-                component: () => import('@/views/dynamicShow.vue')
+                component: () => import('@/views/dynamic/dynamicShow.vue')
             },
             {
                 path: 'edit',
-                component: () => import('@/views/dynamicEdit.vue'),
+                component: () => import('@/views/dynamic/dynamicEdit.vue'),
                 meta:{
                     path: '/dynamic/edit',
                     title: '新建动态'
                 }
             },
             {
-                path: 'comment',
-                component: () => import('@/views/dynamicComment.vue'),
+                path: 'details',
+                component: () => import('@/views/dynamic/dynamicInf.vue'),
                 meta:{
-                    path: '/dynamic/comment',
-                    title: '评论'
+                    path: '/dynamic/details',
+                    title: '动态详情'
                 }
             }
         ]

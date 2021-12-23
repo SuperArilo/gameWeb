@@ -27,7 +27,7 @@
                 <div class="message-content">
                     <div class="sub-message-item">
                         <div class="left-head">
-                            <img src="../icon/head/stranger8.jpg"/>
+                            <img src="../views/icon/head/stranger8.jpg"/>
                         </div>
                         <div class="right-content">
                             <span class="message-title">这是标题</span>
@@ -58,7 +58,7 @@ export default {
   components: { footerBottom },
     data(){
         return{
-            indexBg: require('@/icon/index/index_center.jpg'),
+            indexBg: require('@/views/icon/index/index_center.jpg'),
             titleMdList:[
                 {
                     id: 0,

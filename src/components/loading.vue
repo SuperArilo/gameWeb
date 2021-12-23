@@ -16,7 +16,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url("../icon/index/loading.gif");
+    background-image: url("../views/icon/index/loading.gif");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     border-radius: 1rem;
