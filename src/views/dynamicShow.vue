@@ -1,24 +1,33 @@
 <template>
     <div class="content-box">
-        <div class="top-menu" v-loading="menuLoading">
-            <div class="left-menu">
-                <el-dropdown class="dropdown-menu">
-                    <span>{{dropdownMenuTitle}}
-                        <i class="fa fa-chevron-down"/>
-                    </span>
-                    <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title)">{{item.title}}</el-dropdown-item>
-                    </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-                <i class="fas fa-redo refresh" @click="refreshFunc()"/>
+        <div class="top-menu">
+            <div class="user-func-div">
+                <div class="left-menu">
+                    <el-dropdown class="dropdown-menu">
+                        <span>{{dropdownMenuTitle}}
+                            <i class="fa fa-chevron-down"/>
+                        </span>
+                        <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title)">{{item.title}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                    <i class="fas fa-redo refresh" @click="refreshFunc()" :disabled="refreshLoading"/>
+                </div>
+                <div class="right-menu">
+                    <i class="far fa-edit edit-icon" @click="editRouter()"/>
+                </div>
             </div>
-            <div class="right-menu">
-                <i class="far fa-edit edit-icon" @click="editRouter()"/>
+            <div class="tag-show" v-loading="this.$store.getters.dyIsClickGet">
+                <span class="tag-sub-item" v-for="(item,index) in this.$store.getters.dyTagListGet" :key="index" @click="this.$store.commit('dyTagListDel',item.id)">
+                    {{item.title}}
+                    <i class="fas fa-trash-alt"/>
+                </span>
             </div>
         </div>
-        <div class="dy-content">
+        <div class="dy-content" v-loading="changeSort">
+            <i class="fas fa-sync-alt refresh-div" :class="refreshLoading ? 'refresh-div-is-loaded fa-spin':''"/>
             <div class="sub-item" v-for="(item,index) in 6" :key="index">
                 <div class="title-and-user-head">
                     <span class="title">这是标题这是标题</span>
@@ -85,24 +94,37 @@ export default {
                     title: '发布时间正序'
                 }
             ],
-            menuLoading: false
+            refreshLoading: false,
+            changeSort: false
         }
     },
     methods:{
         dropdownMenuFunc(id,title){
-            this.dropdownMenuTitle = title
+            if(!this.changeSort){
+                this.dropdownMenuTitle = title
+                this.changeSort = true
+                setTimeout(() => {
+                    ElMessage({
+                        message: '切换成功！',
+                        type: 'success'
+                    })
+                    this.changeSort = false
+                },2000)
+            }
         },
         refreshFunc(){
-            this.menuLoading = true
-            setTimeout(() => {
-                this.menuLoading = false
-                ElMessage({
-                    message: '刷新成功，共更新了5条动态！',
-                    type: 'success',
-                    center: true
-                })
-                this.dropdownMenuTitle = this.dropdownMenu[0].title
-            },3000)
+            if(!this.refreshLoading){
+                this.refreshLoading = true
+                setTimeout(() => {
+                    this.refreshLoading = false
+                    ElMessage({
+                        message: '刷新成功，共更新了5条动态！',
+                        type: 'success',
+                        center: true
+                    })
+                    this.dropdownMenuTitle = this.dropdownMenu[0].title
+                },3000)
+            }
         },
         editRouter(){
             this.$router.push('/dynamic/edit')
@@ -123,77 +145,126 @@ export default {
     {
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        flex-wrap: wrap;
         background-color: #ffffff;
         padding: 0.3rem 0.5rem;
         box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.288);
-        .left-menu , .right-menu
+        .user-func-div
         {
-            height: 1.5rem;
+            width: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            .dropdown-menu
+            .left-menu , .right-menu
             {
-                min-width: 5rem;
                 height: 1.5rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                border-radius: 1rem;
-                transition: all 0.3s;
-                span
+                .dropdown-menu
                 {
-                    font-size: 0.64rem;
-                    height: 100%;
+                    min-width: 5rem;
+                    height: 1.5rem;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    cursor: pointer;
-                    i
+                    border-radius: 1rem;
+                    transition: all 0.3s;
+                    span
                     {
-                        color: #3773f3;
-                        margin-left: 0.3rem;
+                        font-size: 0.64rem;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                        i
+                        {
+                            color: #3773f3;
+                            margin-left: 0.3rem;
+                        }
                     }
                 }
+                .refresh
+                {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    border-radius: 50%;
+                    color: #a5a5a5;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.3s;
+                    margin-left: 0.2rem;
+                }
+                .refresh:hover
+                {
+                    color: #3773f3;
+                    transform: rotate(180deg);
+                }
+                .dropdown-menu:active , .refresh:active
+                {
+                    background-color: rgb(221, 221, 221);
+                }
+                .edit-icon
+                {
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    border-radius: 50%;
+                    color: #a5a5a5;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.3s;
+                    cursor: pointer;
+                }
+                .edit-icon:hover
+                {
+                    color: rgb(1, 134, 83);
+                }
             }
-            .refresh
+        }
+        .tag-show
+        {
+            width: 100%;
+            margin-top: 0.3rem;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            border-top: solid 0.05rem darkgrey;
+            .tag-sub-item
             {
-                width: 1.5rem;
-                height: 1.5rem;
-                border-radius: 50%;
-                color: #a5a5a5;
+                height: 1.8rem;
+                min-height: 1.8rem;
+                margin: 0.3rem;
+                padding: 0.3rem 0.5rem;
+                font-size: 0.6rem;
+                border-radius: 0.3rem;
+                border: solid 0.05rem #dfdfdf;
+                letter-spacing: 0.03rem;
                 display: flex;
-                justify-content: center;
+                justify-content: space-between;
                 align-items: center;
-                transition: all 0.3s;
-                margin-left: 0.2rem;
-            }
-            .refresh:hover
-            {
-                color: #3773f3;
-                transform: rotate(180deg);
-            }
-            .dropdown-menu:active , .refresh:active
-            {
-                background-color: rgb(221, 221, 221);
-            }
-            .edit-icon
-            {
-                width: 1.5rem;
-                height: 1.5rem;
-                border-radius: 50%;
-                color: #a5a5a5;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                transition: all 0.3s;
                 cursor: pointer;
+                transition: all 0.3s;
+                i
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    margin-left: 0.5rem;
+                    transition: all 0.3s;
+                }
+                i:hover
+                {
+                    color: red;
+                }
             }
-            .edit-icon:hover
+            .tag-sub-item:hover
             {
-                color: rgb(1, 134, 83);
+                box-shadow: 0 0 0.3rem rgba(66, 66, 66, 0.288);
             }
         }
     }
@@ -207,6 +278,22 @@ export default {
         flex-wrap: wrap;
         background-color: rgb(240, 240, 240);
         border-radius:0 0 0.2rem 0.2rem;
+        overflow: hidden;
+        .refresh-div
+        {
+            width: 100%;
+            height: 3rem;
+            margin-top: -3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #3773f3;
+            transition: all 0.3s;
+        }
+        .refresh-div-is-loaded
+        {
+            margin-top: -0.5rem;
+        }
         .sub-item
         {
             width: 100%;
@@ -262,7 +349,7 @@ export default {
                     margin: 0 0.3rem 0 0.3rem;
                     span , i
                     {
-                        font-size: 0.45rem;
+                        font-size: 0.52rem;
                     }
                     span
                     {

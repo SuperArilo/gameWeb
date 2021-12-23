@@ -25,17 +25,9 @@
                         <span class="user-introduction">这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句这是你的简介语句</span>
                     </div>
                     <div class="tag-box">
-                        <span class="title-span">分类标签</span>
+                        <span class="title-span">热门标签</span>
                         <div class="tag-content">
-                            <span class="tag-sub-item">杰哥</span>
-                            <span class="tag-sub-item">Van♂</span>
-                            <span class="tag-sub-item">Deep Dark Fansty</span>
-                            <span class="tag-sub-item">That's Good ♂</span>
-                            <span class="tag-sub-item">单身狗</span>
-                            <span class="tag-sub-item">情投一盒</span>
-                            <span class="tag-sub-item">不要做舔狗</span>
-                            <span class="tag-sub-item">萝卜</span>
-                            <span class="tag-sub-item">菜菜</span>
+                            <span class="tag-sub-item" v-for="(item,index) in tagList" :key="index" @click="tagFunc(item.id,item.title)">{{item.title}}</span>
                         </div>
                     </div>
                     <div class="dy-lately-box">
@@ -204,6 +196,44 @@ export default {
             imageList: [],
             userDynamic: require('@/icon/index/user_dynamic.png'),
             indexBg: require('@/icon/index/index_center.jpg'),
+            tagList:[
+                {
+                    id: 0,
+                    title: '杰哥'
+                },
+                {
+                    id: 1,
+                    title: 'Van♂'
+                },
+                {
+                    id: 2,
+                    title: 'Deep Dark Fansty'
+                },
+                {
+                    id: 3,
+                    title: "That's Good ♂"
+                },
+                {
+                    id: 4,
+                    title: '单身狗'
+                },
+                {
+                    id: 5,
+                    title: '情投一盒'
+                },
+                {
+                    id: 6,
+                    title: '不要做舔狗'
+                },
+                {
+                    id: 7,
+                    title: '萝卜'
+                },
+                {
+                    id: 8,
+                    title: '菜菜'
+                }
+            ]
         }
     },
     created(){
@@ -211,9 +241,6 @@ export default {
     mounted(){
     },
     methods:{
-        albumFuc(id){
-            this.$router.push({path: '/dynamic/comment', query:{id:id}})
-        },
         selectFile(e){
             if(e.target.files[0] != undefined){
                 this.getBase64(e.target.files[0]).then(resq => {
@@ -221,9 +248,6 @@ export default {
                     this.$refs.fileInput.value =''
                 })
             }
-        },
-        removeUploadImage(id){
-            this.imageList.splice(id,1)
         },
         getBase64(file) {
             return new Promise((resolve, reject) => {
@@ -240,6 +264,17 @@ export default {
                     resolve(fileResult)
                 }
             })
+        },
+        tagFunc(id,title){
+            if(!(this.$store.getters.dyIsClick)){
+                let object = {id: id,title: title}
+                this.$store.commit('dyTagListSet',object)
+                this.$store.commit('dyIsClickSet',true)
+                setTimeout(() => {
+                    this.$store.commit('dyIsClickSet',false)
+                },2000)
+            }
+            
         }
     },
     computed:{
