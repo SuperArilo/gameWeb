@@ -1,5 +1,9 @@
 <template>
     <div class="details-box">
+        <div class="dy-back-div" @click="backRouter()">
+            <i class="fas fa-chevron-left"/>
+            <span>Back</span>
+        </div>
         <div class="dy-top-content">
             <div class="title-span">这是标题</div>
             <div class="data-show">
@@ -33,28 +37,63 @@
                 <i class="far fa-comment-alt"/>
                 说点什么
             </span>
-            <div class="head-write-box">
-                <div class="user-head">
-                    <img src="../icon/head/stranger12.jpg"/>
-                </div>
-                <textarea placeholder="发表你的看法吧"></textarea>
-            </div>
-            <div class="dy-buttom">
-                <span class="button-clear">清空</span>
-                <span class="button-confirm">提交</span>
-            </div>
+            <dynamic-detail-comment></dynamic-detail-comment>
         </div>
         <div class="dy-comment-content">
             <span class="title-span">
                 <i class="far fa-comments"/>
                 评论区
             </span>
+            <div class="content">
+                <div class="sub-comment-item" v-for="item in 6" :key="item.id">
+                    <div class="top-user-box">
+                        <div class="left-user-head">
+                            <img src="../icon/head/stranger14.jpg"/>
+                        </div>
+                        <div class="right-user-content">
+                            <div class="user-name-div">
+                                <span class="user-name">这次换你听歌</span>
+                                <span class="user-tag">腐竹</span>
+                            </div>
+                            <span class="user-say">
+                                服务器关机维护通知服务器关机维护通知服务器关机维护通知
+                            </span>
+                            <div class="user-when">
+                                <div class="sub-item">
+                                    <i class="far fa-clock"/>
+                                    <span>发表于：2021-12-24 10:40</span>
+                                </div>
+                                <div class="sub-item" @click="isOpenBackComment = ! isOpenBackComment">
+                                    <i class="fas fa-location-arrow"/>
+                                    <span>回复</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <el-collapse-transition>
+                        <dynamic-detail-comment v-if="isOpenBackComment"></dynamic-detail-comment>
+                    </el-collapse-transition>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
 export default {
-    
+    components:{
+        dynamicDetailComment
+    },
+    data(){
+        return{
+            isOpenBackComment: false,
+        }
+    },
+    methods:{
+        backRouter(){
+            this.$router.push('/dynamic')
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -62,11 +101,42 @@ export default {
 {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-content: flex-start;
     flex-wrap: wrap;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 1rem 0.3rem;
+    .dy-back-div
+    {
+        height: 1.5rem;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 0.5rem;
+        transition: all 0.3s;
+        border-radius: 0.2rem;
+        cursor: pointer;
+        span
+        {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 0.65rem;
+            margin-left: 0.5rem;
+        }
+        i
+        {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            color: #3773f3;
+        }
+    }
+    .dy-back-div:hover
+    {
+        background-color: rgba(180, 180, 180, 0.555);
+    }
     .dy-top-content
     {
         width: 100%;
@@ -142,84 +212,6 @@ export default {
         flex-wrap: wrap;
         margin-top: 1rem;
         padding: 0 1rem;
-        .head-write-box
-        {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            .user-head
-            {
-                overflow: hidden;
-                box-shadow: 0 0 0.2rem rgb(105, 105, 105);
-                img
-                {
-                    width: 100%;
-                    object-fit: cover;
-                }
-            }
-            textarea
-            {
-                width: 100%;
-                border-radius: 0.1rem;
-                min-height: 4rem;
-                outline: none;
-                margin-left: 0.5rem;
-                resize: none;
-                transition: all 0.3s;
-                padding: 0.5rem;
-                font-size: 0.7rem;
-                font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-                letter-spacing: 0.06rem;
-            }
-            textarea:focus
-            {
-                box-shadow: 0 0 0.2rem rgb(68, 112, 148);
-            }
-        }
-        .dy-buttom
-        {
-            width: 100%;
-            margin-top: 0.5rem;
-            display: flex;
-            justify-content: flex-end;
-            span
-            {
-                height: 1.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 0.6rem;
-                width: 4rem;
-                transition: all 0.3s;
-                border-radius: 0.2rem;
-                cursor: pointer;
-            }
-            .button-clear
-            {
-                background-color: #fdf6ec;
-                color:  #e6a23c;
-                border: solid 0.05rem #f5dab1;
-            }
-            .button-clear:hover
-            {
-                color: white;
-                background-color:  #e6a23c;
-            }
-            .button-confirm
-            {
-                margin-left: 1rem;
-                background-color: #b3d8ff;
-                color: #3399ff;
-                border: solid 0.05rem #409eff;
-            }
-            .button-confirm:hover
-            {
-                color: white;
-                background-color: #409eff;
-            }
-        }
     }
     .dy-comment-content
     {
@@ -229,60 +221,195 @@ export default {
         flex-wrap: wrap;
         align-content: flex-start;
         padding: 0 1rem;
+        .content
+        {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            margin-top: 1rem;
+            .sub-comment-item
+            {
+                width: 100%;
+                display: flex;
+                align-content: flex-start;
+                flex-wrap: wrap;
+                margin-bottom: 1rem;
+                .top-user-box
+                {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    .left-user-head
+                    {
+                        
+                        box-shadow: 0 0 0.2rem rgb(105, 105, 105);
+                        img
+                        {
+                            width: 100%;
+                            object-fit: cover;
+                        }
+                    }
+                    .right-user-content
+                    {
+                        width: 100%;
+                        margin-left: 1rem;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-content: flex-start;
+                        .user-name-div
+                        {
+                            width: 100%;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            .user-name
+                            {
+                                font-size: 0.7rem;
+                                color: rgb(24, 24, 24);
+                            }
+                            .user-tag
+                            {
+                                padding: 0.15rem 0.35rem;
+                                font-size: 0.45rem;
+                                border-radius: 0.3rem;
+                                background-color: #3773f3;
+                                color: #ffffff;
+                                box-shadow: 0 0 0.05rem black;
+                                margin-left: 0.5rem;
+                            }
+                        }
+                        .user-say
+                        {
+                            width: 100%;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: flex-start;
+                            text-align: left;
+                            word-break: break-all;
+                            word-spacing: normal;
+                            font-size: 0.6rem;
+                            color: rgb(68, 68, 68);
+                            letter-spacing: 0.03rem;
+                            margin: 0.5rem 0 0.5rem 0;
+                        }
+                        .user-when
+                        {
+                            width: 100%;
+                            display: flex;
+                            justify-content: space-between;
+                            flex-wrap: wrap;
+                            height: 1rem;
+                            .sub-item
+                            {
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                i
+                                {
+                                    height: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    font-size: 0.55rem;
+                                    transition: all 0.3s;
+                                }
+                                span
+                                {
+                                    height: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    font-size: 0.55rem;
+                                    margin-left: 0.2rem;
+                                }
+                            }
+                            .sub-item:nth-child(2)
+                            {
+                                cursor: pointer;
+                            }
+                            .sub-item:nth-child(2):hover
+                            {
+                                i
+                                {
+                                    color: #3773f3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 @media screen and (min-width:1400px)
 {
-    .details-box .dy-write-comment .head-write-box .user-head
+    .details-box
     {
-        width: 4rem;
-        min-width: 4rem;
-        height: 4rem;
+        .dy-comment-content .content .sub-comment-item .top-user-box .left-user-head
+        {
+            width: 4rem;
+            min-width: 4rem;
+            height: 4rem;
+        }
     }
 }
 @media screen and (max-width:1400px) and (min-width:1200px)
 {
-    .details-box .dy-write-comment .head-write-box .user-head
+    .details-box
     {
-        width: 4rem;
-        min-width: 4rem;
-        height: 4rem;
+        .dy-comment-content .content .sub-comment-item .top-user-box .left-user-head
+        {
+            width: 4rem;
+            min-width: 4rem;
+            height: 4rem;
+        }
     }
 }
 @media screen and (max-width:1200px) and (min-width:936px)
 {
-    .details-box .dy-write-comment .head-write-box .user-head
+    .details-box
     {
-        width: 3.5rem;
-        min-width: 3.5rem;
-        height: 3.5rem;
+        .dy-comment-content .content .sub-comment-item .top-user-box .left-user-head
+        {
+            width: 3.5rem;
+            min-width: 3.5rem;
+            height: 3.5rem;
+        }
     }
 }
 @media screen and (max-width:936px) and (min-width:767px)
 {
-    .details-box .dy-write-comment .head-write-box .user-head
+    .details-box
     {
-        width: 3rem;
-        min-width: 3rem;
-        height: 3rem;
+        .dy-comment-content .content .sub-comment-item .top-user-box .left-user-head
+        {
+            width: 3rem;
+            min-width: 3rem;
+            height: 3rem;
+        }
     }
 }
 @media screen and (max-width:767px) and (min-width:676px)
 {
-    .details-box .dy-write-comment .head-write-box .user-head
+    .details-box
     {
-        width: 3rem;
-        min-width: 3rem;
-        height: 3rem;
+        .dy-comment-content .content .sub-comment-item .top-user-box .left-user-head
+        {
+            width: 3rem;
+            min-width: 3rem;
+            height: 3rem;
+        }
     }
 }
 @media screen and (max-width:676px)
 {
-    .details-box .dy-write-comment .head-write-box .user-head
+    .details-box
     {
-        width: 3rem;
-        min-width: 3rem;
-        height: 3rem;
+        .dy-comment-content .content .sub-comment-item .top-user-box .left-user-head
+        {
+            width: 3rem;
+            min-width: 3rem;
+            height: 3rem;
+        }
     }
 }
 </style>

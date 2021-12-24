@@ -324,7 +324,7 @@ export default {
                 {
                     padding: 0.5rem 0 0 0.5rem;
                     text-align: left;
-                    font-size: 0.7rem;
+                    font-size: 0.75rem;
                     letter-spacing: 0.05rem;
                     transition: all 0.3s;
                     cursor: pointer;
@@ -360,7 +360,7 @@ export default {
                     margin: 0 0.3rem 0 0.3rem;
                     span , i
                     {
-                        font-size: 0.6rem;
+                        font-size: 0.58rem;
                     }
                     span
                     {
@@ -376,7 +376,7 @@ export default {
                 align-items: flex-start;
                 text-align: left;
                 word-break: break-all;
-                font-size: 0.65rem;
+                font-size: 0.62rem;
                 padding: 0.5rem;
                 letter-spacing: 0.01rem;
             }
