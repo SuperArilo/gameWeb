@@ -32,7 +32,7 @@ const routes = [
             },
             {
                 path: 'details',
-                component: () => import('@/views/dynamic/dynamicInf.vue'),
+                component: () => import('@/views/dynamic/dynamicDetail.vue'),
                 meta:{
                     path: '/dynamic/details',
                     title: '动态详情'

@@ -162,7 +162,7 @@ export default {
             textarea
             {
                 width: 100%;
-                border-radius: 0.3rem;
+                border-radius: 0.1rem;
                 min-height: 4rem;
                 outline: none;
                 margin-left: 0.5rem;
