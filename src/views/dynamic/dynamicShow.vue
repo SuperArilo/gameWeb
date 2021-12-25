@@ -28,37 +28,37 @@
         </div>
         <div class="dy-content">
             <i class="fas fa-sync-alt refresh-div" :class="this.$store.getters.dyAllLoadingGet ? 'refresh-div-is-loaded fa-spin':''"/>
-            <div class="sub-item" v-for="(item,index) in 6" :key="index">
+            <div class="sub-item" v-for="(item,index) in dyContent" :key="index" :class="item.class === 1 ? 'server-own-border': item.class === 2 ? 'admin-border':item.class === 3 ? 'player-border':item.class === 4 ? 'builder-border':item.class === 5 ? 'vip-border':''">
                 <div class="title-and-user-head">
-                    <span class="title">这是标题这是标题</span>
+                    <span class="title">{{item.title}}</span>
                     <div class="user-head">
-                        <img src="../icon/head/stranger10.jpg"/>
+                        <img :src="item.userHead"/>
                     </div>
                 </div>
                 <div class="dy-inf-show">
                     <div class="dy-sub-item">
                         <i class="far fa-calendar-alt"/>
-                        <span>2021-12-22 19:13</span>
+                        <span>{{item.time}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="fas fa-rocket"/>
-                        <span>这次换你听歌</span>
+                        <span>{{item.name}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="far fa-comment-dots"/>
-                        <span>0 条评论</span>
+                        <span>{{item.commentSum}} 条评论</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="fas fa-tag"/>
-                        <span>其他</span>
+                        <span v-for="(itemSub,indexSub) in item.tags" :key="indexSub">{{itemSub}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="fas fa-eye"/>
-                        <span>0 浏览</span>
+                        <span>{{item.watchSum}} 浏览</span>
                     </div>
                 </div>
                 <span class="dy-introduction">
-                    这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介这是简介
+                    {{item.inf}}
                 </span>
                 <div class="bottom-buttom">
                     <span class="buttom" @click="detailsRouterfunc(index)">跃迁</span>
@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="dy-change-page">
-            <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
+            <el-pagination background layout="prev, pager, next" :total="10" :page-size="6"></el-pagination>
         </div>
     </div>
 </template>
@@ -94,7 +94,45 @@ export default {
                 }
             ],
             refreshLoading: false,
-            dropdownMenuTitle: '最新'
+            dropdownMenuTitle: '最新',
+            dyContent:[
+                {
+                    id: 0,
+                    class: 1,
+                    userHead: require('@/views/icon/head/stranger16.jpg'),
+                    title: '腐竹发给所有玩家的通知',
+                    inf: '关于最近java爆发严重的安全漏洞修复说明',
+                    time: '2021-12-25 16:03',
+                    name: '这次换你听歌',
+                    commentSum: 100,
+                    tags:["安全","服务器","Minecraft"],
+                    watchSum: 1405,
+                },
+                {
+                    id: 1,
+                    class: 2,
+                    userHead: require('@/views/icon/head/stranger12.jpg'),
+                    title: '打gogo白给',
+                    inf: '来个黄金段位的组队排位',
+                    time: '2021-12-23 16:03',
+                    name: 'single_290',
+                    commentSum: 10,
+                    tags:["CSGO","Steam"],
+                    watchSum: 157,
+                },
+                {
+                    id: 2,
+                    class: 3,
+                    userHead: require('@/views/icon/head/stranger7.jpg'),
+                    title: '明日方舟更新计划',
+                    inf: '明日方舟决定与2022年1月1日关闭服务器，删除所有玩家的记录，请玩家不要抱有官方会赔偿的想法',
+                    time: '2021-12-23 16:03',
+                    name: '萝卜',
+                    commentSum: 10221,
+                    tags:["明日方舟","垃圾游戏"],
+                    watchSum: 190797,
+                }
+            ]
         }
     },
     methods:{
@@ -121,7 +159,6 @@ export default {
                         type: 'success',
                         center: false
                     })
-                    this.dropdownMenuTitle = this.dropdownMenu[0].title
                 },3000)
             }
         },
@@ -314,6 +351,7 @@ export default {
             padding: 0.5rem 0.5rem;
             transition: all 0.3s;
             margin-bottom: 1rem;
+            border-radius: 0.2rem;
             .title-and-user-head
             {
                 width: 100%;
@@ -366,6 +404,10 @@ export default {
                     {
                         margin-left: 0.3rem;
                     }
+                }
+                .dy-sub-item:nth-child(4) span
+                {
+                    text-decoration: underline;
                 }
             }
             .dy-introduction

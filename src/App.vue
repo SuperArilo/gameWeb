@@ -135,6 +135,46 @@ export default {
 }
 </script>
 <style lang="scss">
+.server-own-border
+{
+    border: solid 0.12rem #3773f3;
+}
+.server-own-b-color
+{
+    background-color: #3773f3;
+}
+.admin-border
+{
+    border: solid 0.12rem #4c8f20;
+}
+.admin-b-color
+{
+    background-color: #4c8f20;
+}
+.player-border
+{
+    border: solid 0.12rem #7d208f;
+}
+.player-b-color
+{
+    background-color: #7d208f;
+}
+.builder-border
+{
+    border: solid 0.1rem #8f8820;
+}
+.builder-b-color
+{
+    background-color: #8f8820;
+}
+.vip-border
+{
+    border: solid 0.1rem #a52525;
+}
+.vip-b-color
+{
+    background-color: #a52525;
+}
 img
 {
     -webkit-user-drag: none;

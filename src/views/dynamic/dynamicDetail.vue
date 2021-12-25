@@ -45,7 +45,7 @@
                 评论区
             </span>
             <div class="content">
-                <div class="sub-comment-item" v-for="item in testComment" :key="item.id">
+                <div class="sub-comment-item" v-for="(item,index) in testComment" :key="index">
                     <div class="top-user-box">
                         <div class="left-user-head">
                             <img :src="item.userHead"/>
@@ -53,7 +53,7 @@
                         <div class="right-user-content">
                             <div class="user-name-div">
                                 <span class="user-name">{{item.userName}}</span>
-                                <span class="user-tag">{{item.className}}</span>
+                                <span class="user-tag" :class="item.class === 1 ? 'server-own-b-color': item.class === 2 ? 'admin-b-color':item.class === 3 ? 'player-b-color':item.class === 4 ? 'builder-b-color':item.class === 5 ? 'vip-b-color':''">{{item.className}}</span>
                             </div>
                             <span class="user-say">{{item.inf}}</span>
                             <div class="user-when">
@@ -68,8 +68,11 @@
                             </div>
                         </div>
                     </div>
+                    <el-collapse-transition>
+                        <dynamic-detail-comment style="padding:0 0.3rem 0 0.3rem;" v-if="isOpenBackComment === item.id"></dynamic-detail-comment>
+                    </el-collapse-transition>
                     <div class="other-user-comment">
-                        <div class="sub-other-user-item" v-for="itemSub in item.commentBack" :key="itemSub">
+                        <div class="sub-other-user-item" v-for="(itemSub,indexSub) in item.commentBack" :key="indexSub">
                             <div class="left-user-head"></div>
                             <div class="right-other-user-comment">
                                 <div class="other-user-head">
@@ -78,7 +81,7 @@
                                 <div class="other-user-comment-content">
                                     <div class="other-user-name-div">
                                         <span class="user-name">{{itemSub.userName}}</span>
-                                        <span class="user-tag">{{itemSub.className}}</span>
+                                        <span class="user-tag" :class="itemSub.class === 1 ? 'server-own-b-color': itemSub.class === 2 ? 'admin-b-color':itemSub.class === 3 ? 'player-b-color':itemSub.class === 4 ? 'builder-b-color':itemSub.class === 5 ? 'vip-b-color':''">{{itemSub.className}}</span>
                                     </div>
                                     <span class="other-user-inf">{{itemSub.inf}}</span>
                                     <div class="other-user-when">
@@ -91,9 +94,6 @@
                             </div>
                         </div>
                     </div>
-                    <el-collapse-transition>
-                        <dynamic-detail-comment style="padding:0 0.3rem 0 0.3rem;" v-if="isOpenBackComment === item.id"></dynamic-detail-comment>
-                    </el-collapse-transition>
                 </div>
             </div>
         </div>
@@ -119,30 +119,39 @@ export default {
                     commentBack:[
                         {
                             id: 0,
-                            userHead: require('@/views/icon/head/stranger14.jpg'),
+                            userHead: require('@/views/icon/head/stranger6.jpg'),
                             userName: '弔人',
-                            class: 1,
-                            className: '帅哥',
+                            class: 3,
+                            className: '玩家',
                             inf: '单身狗不单身了。',
+                            time: '2021-12-24 10:40',
+                        },
+                        {
+                            id: 1,
+                            userHead: require('@/views/icon/head/stranger9.jpg'),
+                            userName: '有钱人',
+                            class: 5,
+                            className: 'vip',
+                            inf: 'RTX 3090Ti 带不动Minecraft',
                             time: '2021-12-24 10:40',
                         }
                     ]
                 },
                 {
                     id: 1,
-                    userHead: require('@/views/icon/head/stranger14.jpg'),
-                    userName: '这次换你听歌',
-                    class: 1,
-                    className: '腐竹',
+                    userHead: require('@/views/icon/head/stranger5.jpg'),
+                    userName: '单身狗',
+                    class: 2,
+                    className: '管理员',
                     inf: '服务器关机维护通知服务器关机维护通知服务器关机维护通知',
                     time: '2021-12-24 10:40',
                     commentBack:[
                         {
-                            id: 1,
-                            userHead: require('@/views/icon/head/stranger14.jpg'),
+                            id: 0,
+                            userHead: require('@/views/icon/head/stranger18.jpg'),
                             userName: '弔人',
-                            class: 1,
-                            className: '帅哥',
+                            class: 4,
+                            className: '建筑师',
                             inf: '单身狗不单身了。',
                             time: '2021-12-24 10:40',
                         }
@@ -150,19 +159,19 @@ export default {
                 },
                 {
                     id: 2,
-                    userHead: require('@/views/icon/head/stranger14.jpg'),
-                    userName: '这次换你听歌',
-                    class: 1,
-                    className: '腐竹',
+                    userHead: require('@/views/icon/head/stranger7.jpg'),
+                    userName: '萝卜',
+                    class: 3,
+                    className: '玩家',
                     inf: '服务器关机维护通知服务器关机维护通知服务器关机维护通知',
                     time: '2021-12-24 10:40',
                     commentBack:[
                         {
-                            id: 2,
-                            userHead: require('@/views/icon/head/stranger14.jpg'),
+                            id: 0,
+                            userHead: require('@/views/icon/head/stranger6.jpg'),
                             userName: '弔人',
-                            class: 1,
-                            className: '帅哥',
+                            class: 3,
+                            className: '玩家',
                             inf: '单身狗不单身了。',
                             time: '2021-12-24 10:40',
                         }
@@ -358,7 +367,6 @@ export default {
                                 padding: 0.15rem 0.35rem;
                                 font-size: 0.45rem;
                                 border-radius: 0.3rem;
-                                background-color: #3773f3;
                                 color: #ffffff;
                                 box-shadow: 0 0 0.05rem black;
                                 margin-left: 0.5rem;
@@ -475,7 +483,6 @@ export default {
                                         padding: 0.1rem 0.3rem;
                                         font-size: 0.45rem;
                                         border-radius: 0.3rem;
-                                        background-color: #3773f3;
                                         color: #ffffff;
                                         box-shadow: 0 0 0.05rem black;
                                         margin-left: 0.5rem;

@@ -36,6 +36,18 @@
                             <span class="lately-item" v-for="(item,index) in 4" :key="index">这是最新的动态</span>
                         </div>
                     </div>
+                    <div class="notice-div">
+                        <span class="title-span">最新公告</span>
+                        <div class="notice-content">
+                            <div class="notice-sub-item" v-for="(item,index) in 6" :key="index">
+                                <div class="left-div">
+                                    <span>{{index + 1}}. </span>
+                                    <span>服务器维护公告</span>
+                                </div>
+                                <i class="fas fa-lightbulb"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,7 +56,7 @@
 </template>
 <script>
 import loading from '@/components/loading.vue'
-import FooterBottom from '../components/footerBottom.vue'
+import FooterBottom from '@/components/footerBottom.vue'
 export default {
     components:{
         loading,
@@ -301,7 +313,7 @@ export default {
                         color: rgb(100, 100, 100);
                     }
                 }
-                .tag-box , .dy-lately-box
+                .tag-box , .dy-lately-box ,.notice-div
                 {
                     width: 100%;
                     display: flex;
@@ -388,6 +400,51 @@ export default {
                         {
                             color: darkslateblue;
                             text-decoration:underline;
+                        }
+                    }
+                }
+                .notice-div
+                {
+                    .notice-content
+                    {
+                        width: 100%;
+                        display: flex;
+                        align-content: flex-start;
+                        flex-wrap: wrap;
+                        padding: 0.25rem 0.8rem;
+                        .notice-sub-item
+                        {
+                            width: 100%;
+                            display: flex;
+                            justify-content: space-between;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            margin-bottom: 0.5rem;
+                            .left-div
+                            {
+                                span
+                                {
+                                    text-align: left;
+                                    font-size: 0.64rem;
+                                    letter-spacing: 0.03rem;
+                                }
+                                span:nth-child(2)
+                                {
+                                    color: rgb(63, 36, 0);
+                                }
+                            }
+                            .left-div:hover
+                            {
+                                span:nth-child(2)
+                                {
+                                    color: rgb(31, 0, 117);
+                                }
+                            }
+                            i
+                            {
+                                font-size: 0.8rem;
+                                color: rgb(192, 111, 5);
+                            }
                         }
                     }
                 }
