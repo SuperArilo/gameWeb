@@ -188,6 +188,7 @@ body, html
     min-height: 100%;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     overflow-x: hidden;
+    padding-right: 0 !important;
 }
 *
 {

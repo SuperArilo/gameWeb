@@ -135,30 +135,6 @@ export default {
     mounted(){
     },
     methods:{
-        selectFile(e){
-            if(e.target.files[0] != undefined){
-                this.getBase64(e.target.files[0]).then(resq => {
-                    this.imageList.push(resq)
-                    this.$refs.fileInput.value =''
-                })
-            }
-        },
-        getBase64(file) {
-            return new Promise((resolve, reject) => {
-                let reader = new FileReader()
-                let fileResult = ""
-                reader.readAsDataURL(file)
-                reader.onload = function() {
-                    fileResult = reader.result;
-                }
-                reader.onerror = function(error) {
-                    reject(error)
-                }
-                reader.onloadend = function() {
-                    resolve(fileResult)
-                }
-            })
-        },
         tagFunc(id,title){
             if(!this.$store.getters.dyAllLoadingGet){
                 if(this.$store.getters.isPhoneGet){

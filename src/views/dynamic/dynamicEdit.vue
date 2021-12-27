@@ -20,7 +20,38 @@
             <span class="dy-edit-title">动态简介</span>
             <textarea/>
             <span class="dy-edit-title">选择标签</span>
+            <span class="dy-edit-title">动态内容编辑</span>
+            <v-md-editor v-model="inputText" @change="mdEditor" ref="fileInput"></v-md-editor>
+            <div class="md-editor-submit">
+                <span class="buttom-file" @click="dialogVisible = true">媒体文件管理</span>
+                <span class="button-confirm">发布</span>
+            </div>
         </div>
+        <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
+            <div class="media-title">
+                <i class="fas fa-times-circle left-i" @click="dialogVisible = false"/>
+                <span class="center-title">媒体管理器</span>
+                <div class="right-upload">
+                    <input type="file" @change="fileUpload" accept="image/*" multiple/>
+                    <i class="fas fa-file-upload"/>
+                    <span>上传</span>
+                </div>
+            </div>
+            <span class="media-empty" v-if="imageList.length === 0">您还没有上传过文件哦！</span>
+            <div class="media-div" v-if="imageList.length !== 0">
+                <div class="media-sub-item" v-for="(item,index) in imageList" :key="index">
+                    <div class="title-func">
+                        <i class="fas fa-trash-alt"/>
+                    </div>
+                    <img :src="item.url"/>
+                    <span class="file-name">{{item.fileName}}</span>
+                </div>
+            </div>
+            <div class="media-bottom">
+                <span class="cancel" @click="dialogVisible = false">取消</span>
+                <span class="upload">嵌入</span>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -44,13 +75,96 @@ export default {
                 '5. 不得使用超过3行的自定义头衔（超长头衔）',
                 '6. 不得恶意模仿论坛现有用户及站内外团体',
                 '7. 不得包含或暗示管制类精神药品或有类似功效的生物制品的内容。'
-            ]
+            ],
+            tagList:[
+                {
+                    id: 0,
+                    title: '杰哥'
+                },
+                {
+                    id: 1,
+                    title: 'Van♂'
+                },
+                {
+                    id: 2,
+                    title: 'Deep Dark Fansty'
+                },
+                {
+                    id: 3,
+                    title: "That's Good ♂"
+                },
+                {
+                    id: 4,
+                    title: '单身狗'
+                },
+                {
+                    id: 5,
+                    title: '情投一盒'
+                },
+                {
+                    id: 6,
+                    title: '不要做舔狗'
+                },
+                {
+                    id: 7,
+                    title: '萝卜'
+                },
+                {
+                    id: 8,
+                    title: '菜菜'
+                },
+                {
+                    id: 9,
+                    title: '腐竹通知'
+                },
+                {
+                    id: 10,
+                    title: 'Epic被刺'
+                },
+                {
+                    id: 11,
+                    title: 'Steam宣布破产'
+                },
+                {
+                    id: 12,
+                    title: '服务器维护'
+                },
+                {
+                    id:13,
+                    title: '群主太帅了'
+                }
+            ],
+            inputText: '',
+            dialogVisible: false,
+            imageList:[],
         }
     },
     methods:{
         routerBackFunc() {
             this.$router.push('/dynamic')
-        }
+        },
+        mdEditor(text,html){
+        },
+        fileUpload(e){
+            let files = e.target.files
+            if(files !== 0){
+                this.imageList = this.getBase64(files)
+                // this.imageList.push(resq)
+                // this.$refs.fileInput.value =''
+            }
+        },
+        getBase64(fileList) {
+            let returnFileList = [];
+            for(let i = 0;i <= fileList.length;i++){
+                let reader = new FileReader()
+                reader.readAsDataURL(fileList[0])
+                reader.onload = function(e){
+                    console.log(e)
+                    returnFileList.unshift(e.target.result)
+                }
+            }
+            return returnFileList
+        },
     }
 }
 </script>
@@ -161,6 +275,14 @@ export default {
             border-radius: 0.3rem;
             margin-right: 0.5rem;
         }
+        .choice-tags
+        {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-content: flex-start;
+            padding: 0.5rem 0.3rem;
+        }
         textarea , input
         {
             width: 100%;
@@ -169,8 +291,295 @@ export default {
             padding: 0.5rem 0.5rem;
             outline: none;
             border: none;
+            border-radius: 0.2rem;
             margin: 0.5rem 0;
             font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+        }
+        ::v-deep(.v-md-editor)
+        {
+            margin: 0.5rem 0;
+            border-radius: 0.2rem;
+            box-shadow: none;
+            height: 15rem;
+        }
+        .md-editor-submit
+        {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            height: 1.5rem;
+            span
+            {
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 0.6rem;
+                min-width: 4rem;
+                transition: all 0.3s;
+                border-radius: 0.2rem;
+                cursor: pointer;
+            }
+            .buttom-file
+            {
+                background-color: #8db0b9;
+                color: #ffffff;
+                border: solid 0.05rem #6c888f;
+            }
+            .buttom-file:hover
+            {
+                background-color: #407e8d;
+            }
+            .button-confirm
+            {
+                background-color: #b3d8ff;
+                color: #3399ff;
+                border: solid 0.05rem #409eff;
+            }
+            .button-confirm:hover
+            {
+                color: white;
+                background-color: #409eff;
+            }
+        }
+    }
+    .media-title
+    {
+        width: 100%;
+        height: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 0.5rem;
+        .left-i
+        {
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .left-i:hover
+        {
+            color: red;
+        }
+        .center-title
+        {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+        .right-upload
+        {
+            width: 3rem;
+            height: 1.4rem;
+            border-radius: 0.2rem;
+            background-color: #e8ecf3;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            span
+            {
+                margin-left: 0.2rem;
+            }
+            input
+            {
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+                position: absolute;
+                z-index: 1;
+                opacity: 0;
+            }
+        }
+        .right-upload:hover
+        {
+            background-color: #3773f3;
+            color: #ffffff;
+        }
+    }
+    .media-empty
+    {
+        width: 100%;
+        height: 14rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.7rem;
+    }
+    .media-div
+    {
+        width: 100%;
+        height: 14rem;
+        overflow-y: scroll;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 7rem);
+        grid-template-rows: repeat(auto-fill,6rem);
+        grid-row-gap: 0.5rem;
+        justify-content: space-around;
+        background-color: #e8ecf3;
+        padding: 0.8rem 1rem;
+        .media-sub-item
+        {
+            width: 7rem;
+            height: 6rem;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            border-radius: 0.2rem;
+            overflow: hidden;
+            background-color: #ffffff;
+            .title-func
+            {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                height: 1.2rem;
+                i
+                {
+                    width: 1.2rem;
+                    border-radius: 0.2rem;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                i:hover
+                {
+                    background-color: #dddddd;
+                }
+            }
+            img
+            {
+                width: 100%;
+                height: 3.8rem;
+                object-fit: cover;
+            }
+            .file-name
+            {
+                width: 100%;
+                padding: 0 0.5rem;
+                height: 1rem;
+                line-height: 1rem;
+                text-align: center;
+                font-size: 0.5rem;
+                overflow: hidden; 
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+    .media-bottom
+    {
+        width: 100%;
+        height: 2rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 0.5rem;
+        span
+        {
+            width: 3rem;
+            height: 1.6rem;
+            border-radius: 0.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cancel
+        {
+            background-color: #e8ecf3;
+        }
+        .upload
+        {
+            background-color: #4d698e;
+            color: #ffffff;
+            margin-left: 1rem;
+        }
+        .cancel:hover
+        {
+            background-color: #cad8f1;
+        }
+        .upload:hover
+        {
+            background-color: #cecfd1;
+            color: rgb(100, 100, 100);
+        }
+    }
+    ::v-deep(.el-dialog__body)
+    {
+        padding: 0;
+    }
+    ::v-deep(.el-dialog__header)
+    {
+        display: none;
+    }
+}
+@media screen and (min-width:1400px)
+{
+    .edit-box
+    {
+        ::v-deep(.el-dialog)
+        {
+            width: 35rem;
+        }
+    }
+}
+@media screen and (max-width:1400px) and (min-width:1200px)
+{
+    .edit-box
+    {
+        ::v-deep(.el-dialog)
+        {
+            width: 35rem;
+        }
+    }
+}
+@media screen and (max-width:1200px) and (min-width:936px)
+{
+    .edit-box
+    {
+        ::v-deep(.el-dialog)
+        {
+            width: 30rem;
+        }
+    }
+}
+@media screen and (max-width:936px) and (min-width:767px)
+{
+    .edit-box
+    {
+        ::v-deep(.el-dialog)
+        {
+            width: 90%;
+        }
+    }
+}
+@media screen and (max-width:767px) and (min-width:676px)
+{
+    .edit-box
+    {
+        ::v-deep(.el-dialog)
+        {
+            width: 90%;
+        }
+    }
+}
+@media screen and (max-width:676px)
+{
+    .edit-box
+    {
+        ::v-deep(.el-dialog)
+        {
+            width: 90%;
         }
     }
 }

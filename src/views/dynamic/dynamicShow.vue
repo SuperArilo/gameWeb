@@ -61,6 +61,14 @@
                     {{item.inf}}
                 </span>
                 <div class="bottom-buttom">
+                    <el-dropdown>
+                        <i class="fas fa-ellipsis-v"/>
+                        <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item v-for="(itemDyFunc,indexDyFunc) in dyFuncList" :key="indexDyFunc">{{itemDyFunc.title}}</el-dropdown-item>
+                        </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
                     <span class="buttom" @click="detailsRouterfunc(index)">跃迁</span>
                 </div>
             </div>
@@ -91,6 +99,16 @@ export default {
                 {
                     id: 0,
                     title: '发布时间正序'
+                }
+            ],
+            dyFuncList:[
+                {
+                    id: 0,
+                    title: '收藏'
+                },
+                {
+                    id: 1,
+                    title: '举报'
                 }
             ],
             refreshLoading: false,
@@ -426,8 +444,9 @@ export default {
             {
                 width: 100%;
                 display: flex;
-                justify-content: flex-end;
+                justify-content: space-between;
                 align-items: center;
+                padding: 0 0.5rem;
                 .buttom
                 {
                     width: 4rem;

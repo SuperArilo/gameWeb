@@ -19,7 +19,8 @@ const cdn = {
         "element-plus": "ElementPlus",
         'vue-router': 'VueRouter',
         axios: 'axios',
-        jquery: '$'
+        jquery: '$',
+        hljs: 'hljs'
     },
     // cdn的css链接
     css: [
@@ -35,6 +36,7 @@ const cdn = {
         'https://unpkg.com/element-plus@1.2.0-beta.6/dist/index.full.js',
         'https://unpkg.com/vue-router@4.0.12/dist/vue-router.global.js',
         'https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js',
+        'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js'
     ]
 }
  
