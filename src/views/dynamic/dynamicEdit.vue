@@ -21,7 +21,7 @@
             <textarea/>
             <span class="dy-edit-title">选择标签</span>
             <span class="dy-edit-title">动态内容编辑</span>
-            <v-md-editor v-model="inputText" @change="mdEditor" ref="fileInput"></v-md-editor>
+            <v-md-editor v-model="inputText" @change="mdEditor"></v-md-editor>
             <div class="md-editor-submit">
                 <span class="buttom-file" @click="dialogVisible = true">媒体文件管理</span>
                 <span class="button-confirm">发布</span>
@@ -32,7 +32,7 @@
                 <i class="fas fa-times-circle left-i" @click="dialogVisible = false"/>
                 <span class="center-title">媒体管理器</span>
                 <div class="right-upload">
-                    <input type="file" @change="fileUpload" accept="image/*" multiple/>
+                    <input type="file" ref="fileInput" @change="fileUpload" accept="image/*" multiple/>
                     <i class="fas fa-file-upload"/>
                     <span>上传</span>
                 </div>
@@ -41,7 +41,7 @@
             <div class="media-div" v-if="imageList.length !== 0">
                 <div class="media-sub-item" v-for="(item,index) in imageList" :key="index">
                     <div class="title-func">
-                        <i class="fas fa-trash-alt"/>
+                        <i class="fas fa-trash-alt" @click="delBeforeUploadImage(index)"/>
                     </div>
                     <img :src="item.url"/>
                     <span class="file-name">{{item.fileName}}</span>
@@ -55,6 +55,7 @@
     </div>
 </template>
 <script>
+import { ElMessage } from 'element-plus'
 export default {
     data(){
         return{
@@ -137,6 +138,7 @@ export default {
             inputText: '',
             dialogVisible: false,
             imageList:[],
+            base64Temp:''
         }
     },
     methods:{
@@ -148,23 +150,49 @@ export default {
         fileUpload(e){
             let files = e.target.files
             if(files !== 0){
-                this.imageList = this.getBase64(files)
-                // this.imageList.push(resq)
-                // this.$refs.fileInput.value =''
-            }
-        },
-        getBase64(fileList) {
-            let returnFileList = [];
-            for(let i = 0;i <= fileList.length;i++){
-                let reader = new FileReader()
-                reader.readAsDataURL(fileList[0])
-                reader.onload = function(e){
-                    console.log(e)
-                    returnFileList.unshift(e.target.result)
+                let _this = this
+                for(let i = 0,length = files.length;i < length;i++){
+                    let reader = new FileReader()
+                    reader.readAsDataURL(files[i])
+                    reader.onload = function(e) {
+                        _this.imageList = _this.imageList.concat({url: e.target.result,fileName: files[i].name})
+                    }
                 }
+                // this.$refs.fileInput.value = ''
+                // for(let i = 0, length = files.length;i < length;i++){
+                //     this.getBase64(files[i]).then(resq => {
+                //         this.imageList = this.imageList.concat({url: resq,fileName: files[i].name})
+                //         if(i === length - 1){
+                //             this.$refs.fileInput.value = ''
+                //         }
+                //     }).catch(err => {
+                //         ElMessage({
+                //             message: '在上传图片的过程中出错！' + err,
+                //             type: 'error'
+                //         })
+                //     })
+                // }
             }
-            return returnFileList
         },
+        getBase64(file) {
+            return new Promise(function(resolve, reject) {
+                let reader = new FileReader()
+                let results = ''
+                reader.readAsDataURL(file)
+                reader.onload = function () {
+                    results = reader.result
+                }
+                reader.onerror = function (error) {
+                    reject(error)
+                }
+                reader.onloadend = function () {
+                    resolve(results)
+                }
+            })
+        },
+        delBeforeUploadImage(index){
+            this.imageList.splice(index,1)
+        }
     }
 }
 </script>
