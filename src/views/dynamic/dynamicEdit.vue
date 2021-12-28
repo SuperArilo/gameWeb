@@ -32,14 +32,14 @@
                 <i class="fas fa-times-circle left-i" @click="dialogVisible = false"/>
                 <span class="center-title">媒体管理器</span>
                 <div class="right-upload">
-                    <input type="file" ref="fileInput" @change="fileUpload" accept="image/*" multiple/>
+                    <input type="file" ref="fileInput" @change="fileUpload" accept="image/*" multiple title=""/>
                     <i class="fas fa-file-upload"/>
                     <span>上传</span>
                 </div>
             </div>
             <span class="media-empty" v-if="imageList.length === 0">您还没有上传过文件哦！</span>
             <div class="media-div" v-if="imageList.length !== 0">
-                <div class="media-sub-item" v-for="(item,index) in imageList" :key="index">
+                <div class="media-sub-item" v-for="(item,index) in imageList" :key="index"> 
                     <div class="title-func">
                         <i class="fas fa-trash-alt" @click="delBeforeUploadImage(index)"/>
                     </div>
@@ -148,14 +148,15 @@ export default {
         mdEditor(text,html){
         },
         fileUpload(e){
-            let files = e.target.files
+            let files = [...e.target.files]
+            
             if(files !== 0){
                 let _this = this
                 for(let i = 0,length = files.length;i < length;i++){
                     let reader = new FileReader()
                     reader.readAsDataURL(files[i])
                     reader.onload = function(e) {
-                        _this.imageList = _this.imageList.concat({url: e.target.result,fileName: files[i].name})
+                        _this.imageList = _this.imageList.concat({url: e.target.result,fileName: files[i].name});
                     }
                 }
                 // this.$refs.fileInput.value = ''
@@ -163,7 +164,7 @@ export default {
                 //     this.getBase64(files[i]).then(resq => {
                 //         this.imageList = this.imageList.concat({url: resq,fileName: files[i].name})
                 //         if(i === length - 1){
-                //             this.$refs.fileInput.value = ''
+                //             this.$refs.fileInput = ''
                 //         }
                 //     }).catch(err => {
                 //         ElMessage({
