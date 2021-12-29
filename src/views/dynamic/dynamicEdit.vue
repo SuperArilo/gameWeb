@@ -16,10 +16,34 @@
         </div>
         <div class="edit-dy-content">
             <span class="dy-edit-title">动态标题</span>
-            <input/>
+            <input class="title-input" type="text"/>
             <span class="dy-edit-title">动态简介</span>
-            <textarea/>
+            <textarea class="inf-textarea"/>
             <span class="dy-edit-title">选择标签</span>
+            <div class="choice-tags">
+                <div class="content">
+                    <div class="input-tags">
+                        <div class="left-tags">
+                            <span class="tags" v-for="(item,index) in tagTemp" :key="index">
+                                {{item.title}}
+                                <i class="fas fa-trash-alt" @click="tagDel(index)"/>
+                            </span>
+                            <div class="add-new-tag-input">
+                                <input type="text" @keyup.enter="tagInputEnter" placeholder="输入自定义标签"/>
+                            </div>
+                        </div>
+                        <span class="right-add-haved" @click="showMoreTags =! showMoreTags">
+                            选择更多
+                            <i class="fas fa-align-left"/>
+                        </span>
+                    </div>
+                    <el-collapse-transition>
+                        <div v-if="showMoreTags" class="drop-menu">
+                            <span class="span-tag" v-for="(item,index) in tagList" :key="index" @click="addHavedTag(item.id,item.title)">{{item.title}}</span>
+                        </div>
+                    </el-collapse-transition>
+                </div>
+            </div>
             <span class="dy-edit-title">动态内容编辑</span>
             <v-md-editor v-model="inputText" @change="mdEditor"></v-md-editor>
             <div class="md-editor-submit">
@@ -32,7 +56,7 @@
                 <i class="fas fa-times-circle left-i" @click="dialogVisible = false"/>
                 <span class="center-title">媒体管理器</span>
                 <div class="right-upload">
-                    <input type="file" ref="fileInput" @change="fileUpload" accept="image/*" multiple title=""/>
+                    <input type="file" ref="fileInput" @change="fileBeforeUpload" accept="image/*" multiple title=""/>
                     <i class="fas fa-file-upload"/>
                     <span>上传</span>
                 </div>
@@ -135,10 +159,12 @@ export default {
                     title: '群主太帅了'
                 }
             ],
+            showMoreTags: false,
             inputText: '',
             dialogVisible: false,
             imageList:[],
-            base64Temp:''
+            imageTempList:[],
+            tagTemp:[]
         }
     },
     methods:{
@@ -147,52 +173,77 @@ export default {
         },
         mdEditor(text,html){
         },
-        fileUpload(e){
+        fileBeforeUpload(e){
             let files = [...e.target.files]
-            
+            this.$refs.fileInput.value = ''
             if(files !== 0){
                 let _this = this
                 for(let i = 0,length = files.length;i < length;i++){
+                    let randomId = this.randomSum()
+                    this.imageTempList = this.imageTempList.concat({temporaryId: randomId,file: files[i]})
                     let reader = new FileReader()
                     reader.readAsDataURL(files[i])
                     reader.onload = function(e) {
-                        _this.imageList = _this.imageList.concat({url: e.target.result,fileName: files[i].name});
+                        _this.imageList = _this.imageList.concat({url: e.target.result,fileName: files[i].name,sendToServer: false,temporaryId: randomId});
+                    }
+                    reader.onerror = function() {
+                        ElMessage({
+                            message: '在上传图片的过程中出错！' + err,
+                            type: 'error'
+                        })
                     }
                 }
-                // this.$refs.fileInput.value = ''
-                // for(let i = 0, length = files.length;i < length;i++){
-                //     this.getBase64(files[i]).then(resq => {
-                //         this.imageList = this.imageList.concat({url: resq,fileName: files[i].name})
-                //         if(i === length - 1){
-                //             this.$refs.fileInput = ''
-                //         }
-                //     }).catch(err => {
-                //         ElMessage({
-                //             message: '在上传图片的过程中出错！' + err,
-                //             type: 'error'
-                //         })
-                //     })
-                // }
             }
         },
-        getBase64(file) {
-            return new Promise(function(resolve, reject) {
-                let reader = new FileReader()
-                let results = ''
-                reader.readAsDataURL(file)
-                reader.onload = function () {
-                    results = reader.result
-                }
-                reader.onerror = function (error) {
-                    reject(error)
-                }
-                reader.onloadend = function () {
-                    resolve(results)
-                }
-            })
+        randomSum(){
+            let id = ''
+            for(let i = 0;i < 7;i++){
+                id += Math.floor(Math.random() * 9).toString()
+            }
+            return parseInt(id);
+        },
+        upLoadFileToServer(){
+
         },
         delBeforeUploadImage(index){
             this.imageList.splice(index,1)
+        },
+        tagInputEnter(e){
+            if(this.tagTemp.length > 2){
+                ElMessage({
+                    message: '标签最多只能添加3个哦！',
+                })
+            } else {
+                this.tagTemp = this.tagTemp.concat({id: -1,title: e.target.value})
+                e.target.value = null
+            }
+        },
+        addHavedTag(id,title){
+            let length = this.tagTemp.length
+            if(length != 0){
+                if(length > 2){
+                    ElMessage({
+                        message: '标签最多只能添加3个哦！',
+                    })
+                } else {
+                    for(let i = 0;i < length;i++){
+                        if(this.tagTemp[i].id === id || this.tagTemp.title === title){
+                            ElMessage({
+                                message: '添加的标签已经存在！',
+                                type: 'warning',
+                            })
+                        } else {
+                            this.tagTemp = this.tagTemp.concat({id: id,title: title})
+                        }
+                    }
+                }
+                
+            } else {
+                this.tagTemp = this.tagTemp.concat({id: id,title: title})
+            }
+        },
+        tagDel(index){
+            this.tagTemp.splice(index,1)
         }
     }
 }
@@ -308,11 +359,123 @@ export default {
         {
             width: 100%;
             display: flex;
-            justify-content: space-between;
-            align-content: flex-start;
-            padding: 0.5rem 0.3rem;
+            justify-content: center;
+            margin: 0.5rem 0;
+            border-radius: 0.2rem;
+            overflow: hidden;
+            .content
+            {
+                width: 100%;
+                background-color: #f5f5f5;
+                border-radius: 0.2rem;
+                display: flex;
+                align-content: flex-start;
+                flex-wrap: wrap;
+                .input-tags .left-tags  .tags , .drop-menu .span-tag
+                {
+                    height: 1.5rem;
+                    min-height: 1.5rem;
+                    margin: 0.3rem;
+                    padding: 0.3rem 0.5rem;
+                    font-size: 0.6rem;
+                    border-radius: 0.3rem;
+                    border: solid 0.05rem #dfdfdf;
+                    text-align: left;
+                    letter-spacing: 0.04rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                .input-tags
+                {
+                    width: 100%;
+                    padding: 0.3vw 0;
+                    background-color: #ffffff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    .left-tags
+                    {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        justify-content: flex-start;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        padding: 0 0.5rem;
+                        .tags
+                        {
+                            
+                            i
+                            {
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                transition: all 0.3s;
+                                margin-left: 0.3rem;
+                            }
+                            i:hover
+                            {
+                                color: red;
+                            }
+                        }
+                        .add-new-tag-input
+                        {
+                            height: 1.5rem;
+                            width: 5rem;
+                            border: solid 0.05rem #dfdfdf;
+                            background-color: #ffffff;
+                            border-radius: 0.3rem;
+                            overflow: hidden;
+                            margin: 0.3rem;
+                            input
+                            {
+                                width: 100%;
+                                height: 100%;
+                                outline: none;
+                                border: none;
+                                padding:0 0.25rem;
+                            }
+                        }
+                    }
+                    .right-add-haved
+                    {
+                        width: 5rem;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 0.65rem;
+                        cursor: pointer;
+                        letter-spacing: 0.05rem;
+                        i
+                        {
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 0.75rem;
+                            margin-left: 0.2rem;
+                        }
+                    }
+                }
+                .drop-menu
+                {
+                    width: 100%;
+                    display: flex;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+                    .span-tag:hover , .span-tag-active
+                    {
+                        color: #ffffff;
+                        background-color: #3773f3;
+                    }
+                }
+            }
         }
-        textarea , input
+        .inf-textarea , .title-input
         {
             width: 100%;
             min-width: 100%;
