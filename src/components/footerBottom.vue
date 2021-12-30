@@ -137,4 +137,63 @@ export default {
         }
     }
 }
+@media screen and (min-width:1400px)
+{
+    .footer-div .top-div
+    {
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .public-div .contant-div .sub-div span
+        {
+            margin-left: 0.6rem;
+        }
+    }
+}
+@media screen and (max-width:1400px) and (min-width:1200px)
+{
+    .footer-div .top-div
+    {
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .public-div .contant-div .sub-div span
+        {
+            margin-left: 0.6rem;
+        }
+    }
+}
+@media screen and (max-width:1200px) and (min-width:936px)
+{
+    .footer-div .top-div
+    {
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .public-div .contant-div .sub-div span
+        {
+            margin-left: 0.6rem;
+        }
+    }
+}
+@media screen and (max-width:936px)
+{
+    .footer-div .top-div
+    {
+        flex-direction: column;
+        align-items: center;
+        justify-items: center;
+        .public-div 
+        {
+            width: auto !important;
+            .contant-div .sub-div
+            {
+                span
+                {
+                    margin-left: 1rem;
+                }
+            }
+        }
+    }
+}
 </style>

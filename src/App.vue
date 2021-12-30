@@ -1,102 +1,101 @@
 <template>
     <div class="main-container">
-        <nav class="nav-top-pc" v-if="!this.$store.getters.isPhoneGet" ref="topPc">
-            <el-row :gutter="10">
-                <el-col class="el-row-style" :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-                </el-col>
-                <el-col class="el-row-style" :xs="13" :sm="13" :md="13" :lg="13" :xl="13">
-                    <div class="menu-div">
-                        <div v-for="(item,index) in navMenuList" :key="index" @click="menuFunc(item.id,item.path)" :class="item.id === navMenuIndex ? 'menu-active':''">
-                            <img  :src="item.icon"/>
-                            <span>{{item.title}}</span>
-                        </div>
-                    </div>
-                </el-col>
-                <el-col class="el-row-style" :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-                    <div class="search-div">
-                        <input type="text" maxlength="16"/>
-                        <span>搜索</span>
-                    </div>
-                </el-col>
-                <el-col class="el-row-style" :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
-                    <div class="button-box">
-                        <i class="fas fa-sign-in-alt" @click="loginDrawer = true"></i>
-                    </div>
-                </el-col>
-            </el-row>
-        </nav>
-        <nav class="nav-top-phone" v-if="this.$store.getters.isPhoneGet" ref="topPhone">
-            <div class="top-user-inf">
-                <i class="fas fa-bars left-menu" @click="navPhoneListShow =! navPhoneListShow"></i>
+        <nav class="top-nav">
+            <div class="left-func">
+                <i class="fas fa-bars" @click="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
             </div>
-            <el-collapse-transition>
-                <div class="menu-list-line" v-show="navPhoneListShow">
-                    <div class="sub-div" v-for="(item,index) in navMenuList" :key="index" @click="menuFunc(item.id,item.path)" :class="item.id === navMenuIndex ? 'sub-div-active':''">
-                        <img :src="item.icon"/>
-                        <span>{{item.title}}</span>
+        </nav>
+        <div class="change-content">
+            <div class="change-left-menu" :style="openMenu ? 'width:14rem;':''">
+                <div class="menu-list">
+                    <div class="sub-item" v-for="(item,index) in navMenuList" :key="index" @click="menuFunc(item.id,item.path)" @mouseleave="isOpenDoubleMenu = null">
+                        <div class="top-func">
+                            <div class="img-and-span">
+                                <img :src="item.icon"/>
+                                <span>{{item.title}}</span>
+                            </div>
+                            <i v-if="item.subMemu" class="fas fa-angle-down" @mouseenter="openDoubleMenu(item.id)" />
+                        </div>
+                        <el-collapse-transition>
+                            <div v-if="item.subMemu && item.id === isOpenDoubleMenu" class="double-sub-menu">
+                                <div class="double-sub-item" v-for="(itemSub,indexSub) in item.subMemu" :key="indexSub">
+                                    <img :src="itemSub.icon"/>
+                                    <span>{{itemSub.title}}</span>
+                                </div>
+                            </div>
+                        </el-collapse-transition>
                     </div>
                 </div>
-            </el-collapse-transition>
-        </nav>
-        <div class="router-content">
-            <router-view v-slot="{ Component }" style="position: absolute;">
-                <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
-                    <component :is="Component" />
-                </transition>
-            </router-view>
+            </div>
+            <div class="router-content">
+                <router-view v-slot="{ Component }" style="position: absolute;">
+                    <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
+                        <component :is="Component" />
+                    </transition>
+                </router-view>
+            </div>
         </div>
-        <el-drawer v-model="loginDrawer" :with-header="false">
-            <span>我来啦!</span>
-        </el-drawer>
     </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            navMenuIndex: 0,
-            loginDrawer: false,
-            isPhone: null,
+            openMenu: false,
+            isOpenDoubleMenu: null,
             navMenuList:[
                 {
                     id: 0,
                     title: '首页',
                     icon: require('@/views/icon/index/home.png'),
-                    path: ''
+                    path: '',
+                    subMemu: null
                 },
                 {
                     id: 1,
                     title: '动态',
                     icon: require('@/views/icon/index/dynamic.png'),
-                    path: 'dynamic'
+                    path: 'dynamic',
+                    subMemu: null
                 },
                 {
                     id: 2,
                     title: '留言',
                     icon: require('@/views/icon/index/iMessage.png'),
-                    path: 'message'
+                    path: 'message',
+                    subMenu: null
                 },
                 {
                     id: 3,
                     title: '随笔',
                     icon: require('@/views/icon/index/note.png'),
-                    path: 'note'
+                    path: 'note',
+                    subMemu: null
                 },
                 {
                     id: 4,
                     title: '凡尔赛小镇',
                     icon: require('@/views/icon/index/frs.png'),
-                    path: 'versaillestown'
+                    path: 'versaillestown',
+                    subMemu:[
+                        {
+                            id: 0,
+                            title: '与服务器在线聊天',
+                            icon: require('@/views/icon/index/onlineTalk.png'),
+                            path: 'versaillestown/onlinetalk'
+                        },
+                        {
+                            id: 1,
+                            title: '玩家信息',
+                            icon: require('@/views/icon/index/player.png'),
+                            path: 'versaillestown/player'
+                        }
+                    ]
                 }
             ],
-            navPhoneListShow: false,
         }
     },
     created(){
-        this.navMenuIndex = parseInt(sessionStorage.getItem('menuIndex'))
-        if(isNaN(this.navMenuIndex)){
-            this.navMenuIndex = 0
-        }
         window.addEventListener('resize',this.windowWidth)
         this.windowWidth()
     },
@@ -106,7 +105,6 @@ export default {
     methods:{
         windowWidth(){
             let windowWidth = window.innerWidth
-            this.navPhoneListShow = false
             if(windowWidth <= 936){
                 this.$store.commit('isPhoneSet',true)
             } else {
@@ -114,15 +112,18 @@ export default {
             }
         },
         menuFunc(id,path){
-            this.navMenuIndex = id
             setTimeout(() => {
                 this.$router.push('/' + path)
-                this.navPhoneListShow = false
-                sessionStorage.setItem('menuIndex',parseInt(id))
+                this.openMenu = false
             },200)
         },
         scrollValue(e){
             this.$store.commit('windowScrollValueSet',e.target.scrollTop)
+        },
+        openDoubleMenu(id){
+            if(this.isOpenDoubleMenu === null){
+                this.isOpenDoubleMenu = id
+            }
         }
     },
     computed:{
@@ -135,6 +136,252 @@ export default {
 }
 </script>
 <style lang="scss">
+img
+{
+    -webkit-user-drag: none;
+    max-width: 100%;
+}
+body, html
+{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100%;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    overflow-x: hidden;
+    padding-right: 0 !important;
+}
+*
+{
+    box-sizing: border-box;
+}
+a
+{
+    text-decoration: none;
+}
+::-webkit-scrollbar
+{
+    width: 0.5rem;
+}
+::-webkit-scrollbar-thumb
+{
+    background-color: rgb(172, 172, 172);
+}
+#app
+{
+    width: 100%;
+}
+.main-container
+{
+    width: 100%;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    .top-nav
+    {
+        width: 100%;
+        height: 2.2rem;
+        background-color: #3d6cd1;
+        display: flex;
+        padding: 0 0.5rem;
+        position: fixed;
+        z-index: 100;
+        justify-content: space-between;
+        box-shadow: 0 0 0.2rem black;
+        .left-func
+        {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            i
+            {
+                font-size: 1.2rem;
+                color: #ffffff;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+        }
+    }
+    .change-content
+    {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-top: 2.2rem;
+        .change-left-menu
+        {
+            width: 0;
+            overflow: hidden;
+            height: 100%;
+            transition: all 0.4s;
+            z-index: 10;
+            background-color: #ffffff;
+            display: flex;
+            align-content: flex-start;
+            flex-wrap: wrap;
+            position: fixed;
+            box-shadow: 0 0 0.5rem black;
+            .menu-list
+            {
+                width: 100%;
+                display: flex;
+                align-content: flex-start;
+                flex-wrap: wrap;
+                margin-top: 0.5rem;
+                .sub-item
+                {
+                    width: 100%;
+                    display: flex;
+                    align-content: flex-start;
+                    flex-wrap: wrap;
+                    .top-func
+                    {
+                        width: 100%;
+                        height: 2.5rem;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        .img-and-span
+                        {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            img
+                            {
+                                height: 60%;
+                                max-height: 60%;
+                                margin: 0 1rem;
+                            }
+                            span
+                            {
+                                font-size: 0.62rem;
+                                width: 100%;
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                letter-spacing: 0.1rem;
+                                word-break:keep-all;
+                                white-space:nowrap;
+                            }
+                        }
+                        i
+                        {
+                            width: 3rem;
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                    .double-sub-menu
+                    {
+                        width: 100%;
+                        display: flex;
+                        align-content: flex-start;
+                        flex-wrap: wrap;
+                        .double-sub-item
+                        {
+                            width: 100%;
+                            height: 1.8rem;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            padding: 0 2rem;
+                            cursor: pointer;
+                            img
+                            {
+                                height: 50%;
+                                max-height: 50%;
+                                margin: 0 1rem;
+                            }
+                            span
+                            {
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                font-size: 0.62rem;
+                                letter-spacing: 0.1rem;
+                                width: 6rem;
+                                word-break:keep-all;
+                                white-space:nowrap;
+                            }
+                        }
+                        .double-sub-item:hover
+                        {
+                            background-color: cadetblue;
+                            span
+                            {
+                                color: #ffffff;
+                            }
+                        }
+                    }
+                }
+                .sub-item:hover
+                {
+                    background-color: rgb(226, 226, 226);
+                }
+            }
+        }
+        .router-content
+        {
+            width: 100%;
+            position: relative;
+            .router_animate-enter-active
+            {
+                animation: slideInLeft 0.6s;
+            }
+            .router_animate-leave-active
+            {
+                animation: slideOutRight 0.6s;
+            }
+        }
+    }
+}
+@media screen and (min-width:1400px)
+{
+    html
+    {
+        font-size: 24px !important;
+    }
+}
+@media screen and (max-width:1400px) and (min-width:1200px)
+{
+    html
+    {
+        font-size: 24px !important;
+    }
+}
+@media screen and (max-width:1200px) and (min-width:936px)
+{
+    html
+    {
+        font-size: 24px !important;
+    }
+}
+@media screen and (max-width:936px) and (min-width:767px)
+{
+    html
+    {
+        font-size: 24px !important;
+    }
+}
+@media screen and (max-width:767px) and (min-width:676px)
+{
+    html
+    {
+        font-size: 22px !important;
+    }
+}
+@media screen and (max-width:676px)
+{
+    html
+    {
+        font-size: 20px !important;
+    }
+}
 .server-own-border
 {
     border: solid 0.12rem #3773f3;
@@ -174,433 +421,5 @@ export default {
 .vip-b-color
 {
     background-color: #a52525;
-}
-img
-{
-    -webkit-user-drag: none;
-    max-width: 100%;
-}
-body, html
-{
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    min-height: 100%;
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-    overflow-x: hidden;
-    padding-right: 0 !important;
-}
-*
-{
-    box-sizing: border-box;
-}
-a
-{
-    text-decoration: none;
-}
-::-webkit-scrollbar
-{
-    width: 0.5rem;
-}
-::-webkit-scrollbar-thumb
-{
-    background-color: rgb(172, 172, 172);
-}
-#app
-{
-    width: 100%;
-}
-.main-container
-{
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    .nav-top-pc
-    {
-        width: 100%;
-        height: 2.2rem;
-        display: flex;
-        justify-content: flex-end;
-        position: fixed;
-        align-items: center;
-        padding-left: 0.5rem;
-        background-color: #4d698e;
-        z-index: 100;
-        transition: all 0.3s;
-        box-shadow: 0 0 0.5rem rgb(10, 10, 10);
-        .el-row
-        {
-            width: 100% !important;
-            height: 100% !important;
-        }
-        .el-row-style
-        {
-            height: 100%  !important;
-        }
-        .el-input
-        {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            input
-            {
-                width: 100%;
-                height: 55%;
-                max-height: 55%;
-            }
-        }
-        .menu-div
-        {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            div
-            {
-                width: 100%;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                transition: all 0.3s;
-                position: relative;
-                overflow: hidden;
-                cursor: pointer;
-                img
-                {
-                    height: 40%;
-                    max-height: 40%;
-                    position: relative;
-                    transition: all 0.3s;
-                }
-                span
-                {
-                    width: 100%;
-                    height: auto;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 0.5rem;
-                    color: white;
-                    letter-spacing: 0.05rem;
-                    position: absolute;
-                    top: 2.2rem;
-                    font-weight: 600;
-                    transition: all 0.3s;
-                }
-            }
-            div:hover
-            {
-                background: rgba(0, 130, 216, 0.5);
-                span
-                {
-                    margin-top: -0.9rem;
-                }
-                img
-                {
-                    margin-top: -0.9rem;
-                }
-            }
-            .menu-active
-            {
-                background: rgba(0, 130, 216, 0.5);
-                span
-                {
-                    margin-top: -0.9rem;
-                }
-                img
-                {
-                    margin-top: -0.9rem;
-                }
-            }
-        }
-        .search-div
-        {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0 1rem 0 1rem;
-            input
-            {
-                background-color: transparent;
-                outline: none;
-                border-radius: 0.3rem 0 0 0.3rem;
-                border: solid 1px rgb(0, 130, 216);
-                width: 75%;
-                height: 1.2rem;
-                padding-left: 0.3rem;
-                color: white;
-                letter-spacing: 0.02rem;
-                
-            }
-            span
-            {
-                width: 25%;
-                height: 1.2rem;
-                background: rgb(0, 130, 216);
-                font-size: 0.3rem;
-                border-radius: 0 0.3rem 0.3rem 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                color: white;
-            }
-        }
-        .button-box
-        {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            i
-            {
-                width: 3rem;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 2rem;
-                cursor: pointer;
-                transition: all 0.3s;
-                color: rgb(231, 231, 231);
-            }
-            i:hover
-            {
-                
-                color: rgb(8, 128, 209);
-            }
-        }
-    }
-    .nav-top-phone
-    {
-        width: 100%;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        background-color: #4d698e;
-        box-shadow: 0 0 0.5rem rgb(10, 10, 10);
-        position: fixed;
-        transition: all 0.3s;
-        z-index: 100;
-        .top-user-inf
-        {
-            width: 100%;
-            height: 2.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 0.5rem 0 0.5rem;
-            .left-menu
-            {
-                color: #ffffff;
-                font-size: 1.5rem;
-            }
-        }
-        .menu-list-line
-        {
-            width: 100%;
-            height: auto;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            align-content: flex-start;
-            .sub-div
-            {
-                width: 100%;
-                height: 2.5rem;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                padding-left: 0.5rem;
-                cursor: pointer;
-                transition: all 0.3s;
-                img
-                {
-                    max-height: 55%;
-                }
-                span
-                {
-                    font-size: 0.7rem;
-                    color: rgb(223, 223, 223);
-                    margin-left: 1rem;
-                }
-            }
-            .sub-div-active
-            {
-                background: rgba(0, 130, 216, 0.5);
-            }
-        }
-    }
-    .router-content
-    {
-        width: 100%;
-        position: relative;
-        margin-top: 2.2rem;
-        .router_animate-enter-active
-        {
-            animation: slideInLeft 0.6s;
-        }
-        .router_animate-leave-active
-        {
-            animation: slideOutRight 0.6s;
-        }
-    }
-}
-@media screen and (min-width:1400px)
-{
-    html
-    {
-        font-size: 24px !important;
-        .main-container 
-        {
-            .footer-div .top-div
-            {
-                justify-content: space-between;
-                align-items: flex-start;
-                flex-wrap: wrap;
-                .public-div .contant-div .sub-div span
-                {
-                    margin-left: 0.6rem;
-                }
-            }
-        }
-    }
-}
-@media screen and (max-width:1400px) and (min-width:1200px)
-{
-    html
-    {
-        font-size: 24px !important;
-        .main-container
-        {
-            .footer-div .top-div
-            {
-                justify-content: space-between;
-                align-items: flex-start;
-                flex-wrap: wrap;
-                .public-div .contant-div .sub-div span
-                {
-                    margin-left: 0.6rem;
-                }
-            }
-            
-        }
-    }
-}
-@media screen and (max-width:1200px) and (min-width:936px)
-{
-    html
-    {
-        font-size: 24px !important;
-        .main-container 
-        {
-            .footer-div .top-div
-            {
-                justify-content: space-between;
-                align-items: flex-start;
-                flex-wrap: wrap;
-                .public-div .contant-div .sub-div span
-                {
-                    margin-left: 0.6rem;
-                }
-            }
-        }
-    }
-}
-@media screen and (max-width:936px) and (min-width:767px)
-{
-    html
-    {
-        font-size: 24px !important;
-        .main-container
-        {
-            .footer-div .top-div
-            {
-                flex-direction: column;
-                align-items: center;
-                justify-items: center;
-                .public-div 
-                {
-                    width: auto !important;
-                    .contant-div .sub-div
-                    {
-                        span
-                        {
-                            margin-left: 1rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-@media screen and (max-width:767px) and (min-width:676px)
-{
-    html
-    {
-        font-size: 22px !important;
-        .main-container
-        {
-            .footer-div .top-div
-            {
-                flex-direction: column;
-                align-items: center;
-                justify-items: center;
-                .public-div 
-                {
-                    width: auto !important;
-                    .contant-div .sub-div
-                    {
-                        span
-                        {
-                            margin-left: 1rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-@media screen and (max-width:676px)
-{
-    html
-    {
-        font-size: 20px !important;
-        .main-container
-        {
-            .footer-div .top-div
-            {
-                flex-direction: column;
-                align-items: center;
-                justify-items: center;
-                .public-div 
-                {
-                    width: auto !important;
-                    .contant-div .sub-div
-                    {
-                        span
-                        {
-                            margin-left: 1rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 </style>
