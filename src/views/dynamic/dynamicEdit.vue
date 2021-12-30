@@ -209,6 +209,7 @@ export default {
             this.imageList.splice(index,1)
         },
         tagInputEnter(e){
+            if(e.target.value === '') return
             if(this.tagTemp.length > 2){
                 ElMessage({
                     message: '标签最多只能添加3个哦！',
@@ -219,22 +220,25 @@ export default {
             }
         },
         addHavedTag(id,title){
-            let length = this.tagTemp.length
-            if(length != 0){
-                if(length > 2){
+            if(title === '') return
+            if(this.tagTemp.length != 0){
+                if(this.tagTemp.length > 2){
                     ElMessage({
                         message: '标签最多只能添加3个哦！',
                     })
                 } else {
-                    for(let i = 0;i < length;i++){
-                        if(this.tagTemp[i].id === id || this.tagTemp.title === title){
+                    let isHave;
+                    this.tagTemp.forEach(e => {
+                        if(e.id === id || e.title.includes(title)){
                             ElMessage({
                                 message: '添加的标签已经存在！',
                                 type: 'warning',
                             })
-                        } else {
-                            this.tagTemp = this.tagTemp.concat({id: id,title: title})
+                            isHave = true
                         }
+                    })
+                    if(!isHave){
+                        this.tagTemp = this.tagTemp.concat({id: id,title: title})
                     }
                 }
                 
@@ -466,6 +470,7 @@ export default {
                     width: 100%;
                     display: flex;
                     justify-content: flex-start;
+                    align-items: flex-start;
                     flex-wrap: wrap;
                     .span-tag:hover , .span-tag-active
                     {
