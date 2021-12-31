@@ -25,22 +25,22 @@
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
                 <div class="message-content">
-                    <div class="sub-message-item">
+                    <div class="sub-message-item" v-for="(item,index) in 6" :key="index">
                         <div class="left-head">
                             <img src="../views/icon/head/stranger8.jpg"/>
                         </div>
                         <div class="right-content">
                             <span class="message-title">这是标题</span>
                             <span class="show-content">
-                                这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容
+                                这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容
                             </span>
                             <div class="show-who">
                                 <div>
-                                    <i class="fa fa-rocket"></i>
+                                    <i class="fas fa-paper-plane"></i>
                                     <span>腐竹 留言</span>
                                 </div>
                                 <div>
-                                    <i class="fa fa-calendar"></i>
+                                    <i class="far fa-calendar-alt"></i>
                                     <span>2021-12-21</span>
                                 </div>
                             </div>
@@ -48,7 +48,9 @@
                     </div>
                 </div>
             </div>
+            <el-pagination background layout="prev, pager, next" :total="20" :page-size="8"></el-pagination>
         </div>
+        <loading></loading>
         <footer-bottom></footer-bottom>
     </div>
 </template>
@@ -187,6 +189,8 @@ export default {
                 border: none;
                 border-radius: 0.1rem;
                 transition: all 0.3s;
+                padding: 0.3rem;
+                font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
             }
             textarea:focus
             {
@@ -249,12 +253,9 @@ export default {
             .message-content
             {
                 width: 100%;
-                height: 50rem;
                 display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                flex-wrap: wrap;
                 align-content: flex-start;
+                flex-wrap: wrap;
                 padding: 1rem 0 1rem 0;
                 .sub-message-item
                 {
@@ -323,9 +324,9 @@ export default {
                             display: flex;
                             justify-content: flex-start;
                             align-items: flex-start;
-                            font-size: 0.6rem;
+                            font-size: 0.55rem;
                             word-break: break-all;
-                            letter-spacing: 0.03rem;
+                            letter-spacing: 0.04rem;
                         }
                         .show-who
                         {
@@ -348,7 +349,7 @@ export default {
                                     justify-content: center;
                                     align-items: center;
                                     height: 100%;
-                                    font-size: 0.8rem;
+                                    font-size: 0.7rem;
                                     margin: 0 0.3rem 0 0.3rem;
                                 }
                                 span

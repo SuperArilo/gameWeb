@@ -250,6 +250,7 @@ export default {
                 margin: 0;
                 padding: 1rem 0;
                 font-size: 2.2rem;
+                text-align: center;
                 color: #ffffff;
                 font-weight: 400;
                 letter-spacing: 0.3rem;

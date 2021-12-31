@@ -56,6 +56,14 @@ const routes = [
             path: '/versaillestown',
             title: '凡尔赛小镇'
         }
+    },
+    {
+        path: '/versaillestown/onlinetalk',
+        component: () => import('@/views/versaillesTown/onlineTalk.vue'),
+        meta:{
+            path: '/versaillestown/onlinetalk',
+            title: '在线聊天'
+        }
     }
 ]
 

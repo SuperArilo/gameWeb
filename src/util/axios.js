@@ -1,6 +1,6 @@
 // import axios from 'axios'
 axios.defaults.withCredentials = true;
-const service= axios.create({
+const service = axios.create({
     baseURL: 'http://localhos/api/',
     timeout: 5000
 });
@@ -50,9 +50,6 @@ service.interceptors.response.use(
             // 清除token
             // localStorage.removeItem("token");
             // 跳转登录
-            setTimeout(() => {
-            //   window.location.href = "/login";
-            }, 1000);
         } else {
             if (error.response.status >= 500) {
                 alert("服务器开小差了，请稍后再试！");

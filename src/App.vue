@@ -2,15 +2,25 @@
     <div class="main-container">
         <nav class="top-nav">
             <div class="left-func">
-                <i class="fas fa-bars" @click="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
+                <i class="fas fa-bars" @mouseenter="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
             </div>
         </nav>
         <div class="change-content">
-            <div class="change-left-menu" :style="openMenu ? 'width:14rem;':''">
+            <div class="change-left-menu" :style="!openMenu ? 'width:0;':''" @mouseleave="openMenu = false">
+                <div class="user-inf-show">
+                    <div class="user-head-name">
+                        <div class="user-content">
+                            <img :src="userHead"/>
+                            <span>这次换你听歌</span>
+                        </div>
+                        <i class="fas fa-user-cog"/>
+                    </div>
+                    <p class="autograph">Single_Dog找不到女朋友，太惨了吧。萝卜CSGO天天白给</p>
+                </div>
                 <div class="menu-list">
-                    <div class="sub-item" v-for="(item,index) in navMenuList" :key="index" @click="menuFunc(item.id,item.path)" @mouseleave="isOpenDoubleMenu = null">
+                    <div class="sub-item" v-for="(item,index) in navMenuList" :key="index" @mouseleave="isOpenDoubleMenu = null">
                         <div class="top-func">
-                            <div class="img-and-span">
+                            <div class="img-and-span" @click="menuFunc(item.id,item.path)">
                                 <img :src="item.icon"/>
                                 <span>{{item.title}}</span>
                             </div>
@@ -18,7 +28,7 @@
                         </div>
                         <el-collapse-transition>
                             <div v-if="item.subMemu && item.id === isOpenDoubleMenu" class="double-sub-menu">
-                                <div class="double-sub-item" v-for="(itemSub,indexSub) in item.subMemu" :key="indexSub">
+                                <div class="double-sub-item" v-for="(itemSub,indexSub) in item.subMemu" :key="indexSub" @click="subMenuFunc(itemSub.id,itemSub.path)">
                                     <img :src="itemSub.icon"/>
                                     <span>{{itemSub.title}}</span>
                                 </div>
@@ -93,6 +103,7 @@ export default {
                     ]
                 }
             ],
+            userHead: require('@/views/icon/head/stranger18.jpg')
         }
     },
     created(){
@@ -112,6 +123,12 @@ export default {
             }
         },
         menuFunc(id,path){
+            setTimeout(() => {
+                this.$router.push('/' + path)
+                this.openMenu = false
+            },200)
+        },
+        subMenuFunc(id,path){
             setTimeout(() => {
                 this.$router.push('/' + path)
                 this.openMenu = false
@@ -149,7 +166,6 @@ body, html
     min-height: 100%;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     overflow-x: hidden;
-    padding-right: 0 !important;
 }
 *
 {
@@ -195,6 +211,9 @@ a
             align-items: center;
             i
             {
+                height: 100%;
+                display: flex;
+                align-items: center;
                 font-size: 1.2rem;
                 color: #ffffff;
                 cursor: pointer;
@@ -211,17 +230,88 @@ a
         margin-top: 2.2rem;
         .change-left-menu
         {
-            width: 0;
+            width: 14rem;
             overflow: hidden;
             height: 100%;
             transition: all 0.4s;
-            z-index: 10;
+            z-index: 100;
             background-color: #ffffff;
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
             position: fixed;
-            box-shadow: 0 0 0.5rem black;
+            box-shadow: 0 0.5rem 0.5rem black;
+            span
+            {
+                word-break:keep-all;
+                white-space:nowrap;
+            }
+            .user-inf-show
+            {
+                width: 100%;
+                align-content: flex-start;
+                flex-wrap: wrap;
+                margin-top: 1rem;
+                background-color: rgb(245, 245, 245);
+                padding: 1rem 0;
+                .user-head-name
+                {
+                    width: 100%;
+                    height: 2rem;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0 1rem;
+                    align-items: center;
+                    .user-content
+                    {
+                        height: 2rem;
+                        display: flex;
+                        align-items: center;
+                        img
+                        {
+                            width: 2rem;
+                            height: 2rem;
+                            min-width: 2rem;
+                            border-radius: 50%;
+                            max-height: 100%;
+                        }
+                        span
+                        {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            text-align: center;
+                            font-size: 0.65rem;
+                            margin-left: 1rem;
+                        }
+                    }
+                    i
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+                        color: #90adec;
+                        transition: all 0.3s;
+                    }
+                    i:hover
+                    {
+                        color: lightskyblue;
+                    }
+                }
+                .autograph
+                {
+                    min-width: 14rem;
+                    display: flex;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+                    font-size: 0.52rem;
+                    padding: 0 1rem;
+                    text-align: left;
+                    word-break: break-all;
+                    letter-spacing: 0.04rem;
+                }
+            }
             .menu-list
             {
                 width: 100%;
@@ -246,6 +336,7 @@ a
                         transition: all 0.3s;
                         .img-and-span
                         {
+                            width: 100%;
                             height: 100%;
                             display: flex;
                             align-items: center;
@@ -263,13 +354,12 @@ a
                                 display: flex;
                                 align-items: center;
                                 letter-spacing: 0.1rem;
-                                word-break:keep-all;
-                                white-space:nowrap;
                             }
                         }
                         i
                         {
                             width: 3rem;
+                            min-width: 3rem;
                             height: 100%;
                             display: flex;
                             align-items: center;
@@ -305,8 +395,6 @@ a
                                 font-size: 0.62rem;
                                 letter-spacing: 0.1rem;
                                 width: 6rem;
-                                word-break:keep-all;
-                                white-space:nowrap;
                             }
                         }
                         .double-sub-item:hover
