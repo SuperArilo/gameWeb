@@ -6,23 +6,30 @@
                 <span>与在服务器里游玩的小伙伴一起聊天吧！</span>
                 <span>连接可能会有稍许延迟，这是正常现象，请注意语言规范</span>
             </div>
-            <div class="talk-content">
-                <div class="user-message-item-left">
-                    <div class="user-head">
-                        <img src="../icon/head/stranger6.jpg"/>
+            <div class="talk-content" ref="talkContent" @scroll="talkContentScroll">
+                <i class="fas fa-circle-notch refresh" :class="refreshShow ? 'refresh-is-loaded fa-spin':''" />
+                <transition-group name="list">
+                    <div v-for="(item,index) in test" :key="index" :class="item.isMe ? 'user-message-item-right' : 'user-message-item-left'">
+                        <div class="user-head">
+                            <img :src="item.userHead"/>
+                        </div>
+                        <div class="user-name-and-message">
+                            <span class="user-name">{{item.userName}}</span>
+                            <span class="user-message">{{item.content}}</span>
+                        </div>
                     </div>
-                    <div class="user-name-and-message">
-                        <span class="user-name">这次换你听歌</span>
-                        <span class="user-message">测试内容测试内容测试内容测试内测试内容测试内容测试内容测试内</span>
-                    </div>
+                </transition-group>
+            </div>
+            <div class="talk-edit-div">
+                <div class="talk-edit-func">
+                    <i class="fas fa-smile-wink"/>
                 </div>
-                <div class="user-message-item-right">
-                    <div class="user-head">
-                        <img src="../icon/head/stranger6.jpg"/>
-                    </div>
-                    <div class="user-name-and-message">
-                        <span class="user-name">这次换你听歌</span>
-                        <span class="user-message">测试内容测试内容测试内容测试内</span>
+                <textarea v-model="userWriteContent" class="talk-text" @keyup.enter.exact="sentToServer" @keyup.ctrl="addLang" onkeydown="if (event.keyCode === 13) event.preventDefault();"/>
+                <div class="talk-submit">
+                    <span class="button-clear" @click="userWriteContent = ''">清空</span>
+                    <div class="button-confirm" @click="sentToServer">
+                        <span v-if="!sentToServerStatu">发送</span>
+                        <i v-if="sentToServerStatu" class="fas fa-circle-notch fa-spin"/>
                     </div>
                 </div>
             </div>
@@ -32,6 +39,7 @@
 </template>
 <script>
 import FooterBottom from '@/components/footerBottom.vue'
+import { ElNotification } from 'element-plus'
 export default {
     components:{
         FooterBottom
@@ -39,6 +47,154 @@ export default {
     data(){
         return{
             indexBg: require('@/views/icon/index/index_center.jpg'),
+            test:[
+                {
+                    id: 0,
+                    userHead: require('@/views/icon/head/stranger6.jpg'),
+                    userName: '这次换你听歌',
+                    content:'服务器要关机维护啦，请大家退出游戏，保存数据',
+                    sendTime: '',
+                    isMe: true,
+                },
+                {
+                    id: 1,
+                    userHead: require('@/views/icon/head/stranger7.jpg'),
+                    userName: '弔人',
+                    content: '萝卜打GoGo天天白给',
+                    sendTime: '',
+                    isMe: false,
+                },
+                {
+                    id: 2,
+                    userHead: require('@/views/icon/head/stranger2.jpg'),
+                    userName: '菜菜',
+                    content: '院子无限咕咕咕',
+                    sendTime: '',
+                    isMe: false,
+                },
+                {
+                    id: 3,
+                    userHead: require('@/views/icon/head/stranger10.jpg'),
+                    userName: 'ALarEr',
+                    content: '我有很多fufu表情包',
+                    sendTime: '',
+                    isMe: false,
+                },
+                {
+                    id: 4,
+                    userHead: require('@/views/icon/head/stranger6.jpg'),
+                    userName: '这次换你听歌',
+                    content: '单身猫，给我变！',
+                    sendTime: '',
+                    isMe: true,
+                },
+                {
+                    id: 5,
+                    userHead: require('@/views/icon/head/stranger19.jpg'),
+                    userName: '酱油',
+                    content: '我被歌谣子了',
+                    sendTime: '',
+                    isMe: false,
+                },
+                {
+                    id: 0,
+                    userHead: require('@/views/icon/head/stranger6.jpg'),
+                    userName: '这次换你听歌',
+                    content:'服务器要关机维护啦，请大家退出游戏，保存数据',
+                    sendTime: '',
+                    isMe: true,
+                },
+                {
+                    id: 1,
+                    userHead: require('@/views/icon/head/stranger7.jpg'),
+                    userName: '弔人',
+                    content: '萝卜打GoGo天天白给',
+                    sendTime: '',
+                    isMe: false,
+                },
+                {
+                    id: 2,
+                    userHead: require('@/views/icon/head/stranger2.jpg'),
+                    userName: '菜菜',
+                    content: '院子无限咕咕咕',
+                    sendTime: '',
+                    isMe: false,
+                },
+                {
+                    id: 3,
+                    userHead: require('@/views/icon/head/stranger10.jpg'),
+                    userName: 'ALarEr',
+                    content: '我有很多fufu表情包',
+                    sendTime: '',
+                    isMe: false,
+                },
+                {
+                    id: 4,
+                    userHead: require('@/views/icon/head/stranger6.jpg'),
+                    userName: '这次换你听歌',
+                    content: '单身猫，给我变！',
+                    sendTime: '',
+                    isMe: true,
+                },
+                {
+                    id: 5,
+                    userHead: require('@/views/icon/head/stranger19.jpg'),
+                    userName: '酱油',
+                    content: '我被歌谣子了',
+                    sendTime: '',
+                    isMe: false,
+                },
+            ],
+            refreshShow: false,
+            userWriteContent: '',
+            sentToServerStatu: false,
+        }
+    },
+    mounted(){
+        this.scrollToBottom()
+    },
+    methods:{
+        talkContentScroll(e){
+            if(e.target.scrollTop === 0){
+                this.refreshShow = true
+                setTimeout(() => {
+                    this.refreshShow = false
+                },2000)
+            }
+        },
+        addLang(){
+            this.userWriteContent = this.userWriteContent + '\n'
+        },
+        sentToServer(){
+            if(!this.sentToServerStatu){
+                this.sentToServerStatu = true
+                if(this.userWriteContent === ''){
+                    ElNotification({
+                        title: '提示',
+                        message: '发送的信息不能为空！',
+                        type: 'info',
+                    })
+                    this.sentToServerStatu = false
+                    return
+                }
+                setTimeout(() => {
+                    this.test = this.test.concat({
+                        userHead: require('@/views/icon/head/stranger6.jpg'),
+                        userName: '这次换你听歌',
+                        content: this.userWriteContent,
+                        sendTime: '',
+                        isMe: true,
+                    })
+                    this.sentToServerStatu = false
+                    this.scrollToBottom()
+                    this.userWriteContent = ''
+                },1000)
+            }
+        },
+        scrollToBottom(){
+            this.$nextTick(()=>{
+                this.$refs.talkContent.scrollTop = this.$refs.talkContent.scrollHeight
+            })
         }
     }
 }
@@ -108,12 +264,27 @@ export default {
         .talk-content
         {
             width: 100%;
-            height: 20rem;
+            height: 25rem;
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
             overflow-y: scroll;
             overflow-x: hidden;
+            .refresh
+            {
+                width: 100%;
+                height: 2rem;
+                margin-top: -2.8rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #3773f3;
+                transition: all 0.5s;
+            }
+            .refresh-is-loaded
+            {
+                margin-top: 0;
+            }
             .user-message-item-left , .user-message-item-right
             {
                 width: 100%;
@@ -123,12 +294,13 @@ export default {
                 margin: 0.5rem 0;
                 .user-head
                 {
-                    width: 2.5rem;
-                    height: 2.5rem;
-                    min-width: 2.5rem;
+                    width: 2.4rem;
+                    height: 2.4rem;
+                    min-width: 2.4rem;
                     border-radius: 50%;
                     overflow: hidden;
                     box-shadow: 0 0 0.1rem black;
+                    cursor: pointer;
                     img
                     {
                         object-fit: cover;
@@ -149,6 +321,7 @@ export default {
                         font-size: 0.6rem;
                         color: rgb(68, 68, 68);
                         letter-spacing: 0.02rem;
+                        word-break: keep-all;
                     }
                     .user-message
                     {
@@ -159,6 +332,7 @@ export default {
                         font-size: 0.55rem;
                         color: #ffffff;
                         letter-spacing: 0.02rem;
+                        white-space:pre-wrap;
                     }
                 }
                 .user-name-and-message::before , .user-name-and-message::after
@@ -206,6 +380,109 @@ export default {
                     right: -0.4rem;
                 }
             }
+            .list-enter-active , .list-leave-active
+            {
+                transition: all 0.5s;
+            }
+            .list-enter-from , .list-leave-to
+            {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+        .talk-content::-webkit-scrollbar
+        {
+            width: 0.22rem;
+        }
+        .talk-content::-webkit-scrollbar-thumb
+        {
+            background-color: rgb(172, 172, 172);
+            border-radius: 2rem;
+        }
+        .talk-edit-div
+        {
+            width: 100%;
+            display: flex;
+            align-content: flex-start;
+            flex-wrap: wrap;
+            background-color: #ffffff;
+            .talk-edit-func
+            {
+                width: 100%;
+                height: 1.5rem;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                background-color: rgb(250, 250, 250);
+                padding: 0 0.5rem;
+                i
+                {
+                    color: rgb(153, 153, 153);
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                i:hover
+                {
+                    color: #4b7add;
+                }
+            }
+            .talk-text
+            {
+                padding: 0.5rem;
+                font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+                font-size: 0.7rem;
+                letter-spacing: 0.03rem;
+                width: 100%;
+                height: 6rem;
+                resize: none;
+                outline: none;
+                border: none;
+            }
+            .talk-submit
+            {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 0.3rem;
+                background-color: rgb(250, 250, 250);
+                span , i
+                {
+                    height: 1.5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 0.6rem;
+                    width: 4rem;
+                    transition: all 0.3s;
+                    cursor: pointer;
+                }
+                .button-clear
+                {
+                    background-color: #fdf6ec;
+                    color:  #e6a23c;
+                    border: solid 0.05rem #f5dab1;
+                    border-radius: 0.2rem;
+                }
+                .button-clear:hover
+                {
+                    color: white;
+                    background-color:  #e6a23c;
+                }
+                .button-confirm
+                {
+                    margin-left: 1rem;
+                    background-color: #b3d8ff;
+                    color: #3399ff;
+                    border: solid 0.05rem #409eff;
+                    border-radius: 0.2rem;
+                }
+                .button-confirm:hover
+                {
+                    color: white;
+                    background-color: #409eff;
+                }
+            }
         }
     }
 }
@@ -215,10 +492,10 @@ export default {
     {
         .talk-div
         {
-            width: 60%;
+            width: 50%;
             .talk-content
             {
-                padding: 0.8rem 0.5rem 0 0.5rem;
+                padding: 0.8rem 1rem 0.8rem 1rem;
                 .user-message-item-left , .user-message-item-right
                 {
                     .user-name-and-message .user-message
@@ -236,10 +513,10 @@ export default {
     {
         .talk-div
         {
-            width: 60%;
+            width: 50%;
             .talk-content
             {
-                padding: 0.8rem 0.5rem 0 0.5rem;
+                padding: 0.8rem 1rem 0.8rem 1rem;
                 .user-message-item-left , .user-message-item-right
                 {
                     .user-name-and-message .user-message
@@ -257,10 +534,10 @@ export default {
     {
         .talk-div
         {
-            width: 60%;
+            width: 50%;
             .talk-content
             {
-                padding: 0.8rem 0.5rem 0 0.5rem;
+                padding: 0.8rem 1rem 0.8rem 0.8rem;
                 .user-message-item-left , .user-message-item-right
                 {
                     .user-name-and-message .user-message
@@ -281,7 +558,7 @@ export default {
             width: 80%;
             .talk-content
             {
-                padding: 0.8rem 0 0 0.5rem;
+                padding: 0.8rem 0.5rem 0.8rem 0.5rem;
                 .user-message-item-left , .user-message-item-right
                 {
                     .user-name-and-message .user-message
@@ -302,7 +579,7 @@ export default {
             width: 80%;
             .talk-content
             {
-                padding: 0.8rem 0 0 0.5rem;
+                padding: 0.8rem 0.5rem 0.8rem 0.5rem;
                 .user-message-item-left , .user-message-item-right
                 {
                     .user-name-and-message .user-message
@@ -323,7 +600,7 @@ export default {
             width: 80%;
             .talk-content
             {
-                padding: 0.8rem 0 0 0.5rem;
+                padding: 0.8rem 0.5rem 0.8rem 0.5rem;
                 .user-message-item-left , .user-message-item-right
                 {
                     .user-name-and-message .user-message
