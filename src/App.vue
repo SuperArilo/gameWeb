@@ -417,6 +417,8 @@ a
         {
             width: 100%;
             position: relative;
+            display: flex;
+            justify-content: center;
             .router_animate-enter-active
             {
                 animation: slideInLeft 0.6s;

@@ -64,6 +64,40 @@ const routes = [
             path: '/versaillestown/onlinetalk',
             title: '在线聊天'
         }
+    },
+    {
+        path: '/versaillestown/player',
+        component: () => import('@/views/versaillesTown/player.vue'),
+        meta:{
+            path: '/versaillestown/player',
+            title: '玩家信息'
+        },
+        children:[
+            {
+                path: '',
+                component: () => import('@/views/versaillesTown/player/main.vue'),
+                meta:{
+                    path: '/versaillestown/player',
+                    title: '玩家信息'
+                }
+            },
+            {
+                path: 'personalinformation',
+                component: () => import('@/views/versaillesTown/player/personalInformation.vue'),
+                meta:{
+                    path: '/versaillestown/player/personalInformation',
+                    title: '个人信息'
+                }
+            },
+            {
+                path: 'idbind',
+                component: () => import('@/views/versaillesTown/player/IDBind.vue'),
+                meta:{
+                    path: '/versaillestown/player/idbind',
+                    title: 'id绑定'
+                }
+            }
+        ]
     }
 ]
 

@@ -50,7 +50,6 @@
             </div>
             <el-pagination background layout="prev, pager, next" :total="20" :page-size="8"></el-pagination>
         </div>
-        <loading></loading>
         <footer-bottom></footer-bottom>
     </div>
 </template>
