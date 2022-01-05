@@ -24,18 +24,18 @@ const cdn = {
     },
     // cdn的css链接
     css: [
-        'https://unpkg.com/element-plus@1.2.0-beta.6/dist/index.css',
-        'https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.min.css',
+        'https://unpkg.com/element-plus/dist/index.css',
+        'https://unpkg.com/animate.css',
         'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.3/css/all.min.css'
     ],
     // cdn的js链接
     js: [
-        'https://unpkg.com/vue@3.2.26/dist/vue.global.js',
-        'https://unpkg.com/vuex@4.0.2/dist/vuex.global.js',
-        'https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js',
-        'https://unpkg.com/element-plus@1.2.0-beta.6/dist/index.full.js',
-        'https://unpkg.com/vue-router@4.0.12/dist/vue-router.global.js',
-        'https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js',
+        'https://unpkg.com/vue@next',
+        'https://unpkg.com/vuex@4',
+        'https://unpkg.com/jquery',
+        'https://unpkg.com/element-plus',
+        'https://unpkg.com/vue-router@4',
+        'https://cdn.jsdelivr.net/npm/axios@0.24.0/dist/axios.min.js',
         'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js'
     ]
 }
