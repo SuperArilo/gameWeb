@@ -1,9 +1,11 @@
 import request from '@/util/axios.js'
 
-export const getImgCode = () => {
+//查询动态
+export const dynamicGet = (params) => {
     return request({
-        url: '/image/code',
+        url: '/dynamic/list',
         method: 'get',
+        data: params
     })
 }
 export const getPhoneCode = (query) => {

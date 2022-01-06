@@ -9,7 +9,7 @@
                         </span>
                         <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title)">{{item.title}}</el-dropdown-item>
+                            <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title,item.order)">{{item.title}}</el-dropdown-item>
                         </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -28,9 +28,13 @@
         </div>
         <div class="dy-content">
             <i class="fas fa-sync-alt refresh-div" :class="this.$store.getters.dyAllLoadingGet ? 'refresh-div-is-loaded fa-spin':''"/>
-            <div class="sub-item" v-for="(item,index) in dyContent" :key="index" :class="item.class === 1 ? 'server-own-border': item.class === 2 ? 'admin-border':item.class === 3 ? 'player-border':item.class === 4 ? 'builder-border':item.class === 5 ? 'vip-border':''">
+            <div class="data-empty" v-if="this.$store.getters.dyContentGet.length === 0">
+                <span>没有动态数据哦！</span>
+                <i class="fas fa-inbox"/>
+            </div>
+            <div class="sub-item" v-for="(item,index) in this.$store.getters.dyContentGet" :key="index" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
                 <div class="title-and-user-head">
-                    <span class="title">{{item.title}}</span>
+                    <span class="title">{{item.dynamicTitle}}</span>
                     <div class="user-head">
                         <img :src="item.userHead"/>
                     </div>
@@ -38,27 +42,27 @@
                 <div class="dy-inf-show">
                     <div class="dy-sub-item">
                         <i class="far fa-calendar-alt"/>
-                        <span>{{item.time}}</span>
+                        <span>{{item.createTime}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="fas fa-rocket"/>
-                        <span>{{item.name}}</span>
+                        <span>{{item.username}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="far fa-comment-dots"/>
-                        <span>{{item.commentSum}} 条评论</span>
+                        <span>{{item.dynamicContent}} 条评论</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="fas fa-tag"/>
-                        <span v-for="(itemSub,indexSub) in item.tags" :key="indexSub">{{itemSub}}</span>
+                        <span v-for="(itemSub,indexSub) in item.tags" :key="indexSub">{{itemSub.tagContent}}</span>
                     </div>
                     <div class="dy-sub-item">
-                        <i class="fas fa-eye"/>
-                        <span>{{item.watchSum}} 浏览</span>
+                        <i class="far fa-eye"/>
+                        <span>{{item.dynamicPageView}} 浏览</span>
                     </div>
                 </div>
                 <span class="dy-introduction">
-                    {{item.inf}}
+                    {{item.dynamicDescribe}}
                 </span>
                 <div class="bottom-buttom">
                     <el-dropdown>
@@ -69,36 +73,41 @@
                         </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                    <span class="buttom" @click="detailsRouterfunc(index)">跃迁</span>
+                    <span class="buttom" @click="detailsRouterfunc(item.id)">跃迁</span>
                 </div>
             </div>
         </div>
         <div class="dy-change-page">
-            <el-pagination background layout="prev, pager, next" :total="10" :page-size="6"></el-pagination>
+            <el-pagination background layout="prev, pager, next" :total="80" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange"></el-pagination>
         </div>
     </div>
 </template>
 <script>
 import { ElMessage } from 'element-plus'
+import { dynamicGet } from '@/util/api.js'
 export default {
     data(){
         return{
             dropdownMenu:[
                 {
                     id: 0,
-                    title: '最新'
+                    title: '最新',
+                    order: 'newest'
                 },
                 {
                     id: 0,
-                    title: '热门'
+                    title: '热门',
+                    order: 'hottest'
                 },
                 {
                     id: 0,
-                    title: '发布时间倒序'
+                    title: '发布时间倒序',
+                    order: 'ASC'
                 },
                 {
                     id: 0,
-                    title: '发布时间正序'
+                    title: '发布时间正序',
+                    order: 'DESC'
                 }
             ],
             dyFuncList:[
@@ -114,86 +123,77 @@ export default {
             refreshLoading: false,
             dropdownMenuTitle: '最新',
             dyContent:[
-                {
-                    id: 0,
-                    class: 1,
-                    userHead: require('@/views/icon/head/stranger16.jpg'),
-                    title: '腐竹发给所有玩家的通知',
-                    inf: '关于最近java爆发严重的安全漏洞修复说明',
-                    time: '2021-12-25 16:03',
-                    name: '这次换你听歌',
-                    commentSum: 100,
-                    tags:["安全","服务器","Minecraft"],
-                    watchSum: 1405,
-                },
-                {
-                    id: 1,
-                    class: 2,
-                    userHead: require('@/views/icon/head/stranger12.jpg'),
-                    title: '打gogo白给',
-                    inf: '来个黄金段位的组队排位',
-                    time: '2021-12-23 16:03',
-                    name: 'single_290',
-                    commentSum: 10,
-                    tags:["CSGO","Steam"],
-                    watchSum: 157,
-                },
-                {
-                    id: 2,
-                    class: 3,
-                    userHead: require('@/views/icon/head/stranger7.jpg'),
-                    title: '明日方舟更新计划',
-                    inf: '明日方舟决定与2022年1月1日关闭服务器，删除所有玩家的记录，请玩家不要抱有官方会赔偿的想法',
-                    time: '2021-12-23 16:03',
-                    name: '萝卜',
-                    commentSum: 10221,
-                    tags:["明日方舟","垃圾游戏"],
-                    watchSum: 190797,
-                }
-            ]
+            ],
+            currentPage: 1
         }
     },
+    created(){
+        this.sendToServer()
+    },
+    mounted(){
+        
+    },
     methods:{
-        dropdownMenuFunc(id,title){
+        dropdownMenuFunc(id,title,order){
             if(!this.$store.getters.dyAllLoadingGet){
-                this.dropdownMenuTitle = title
                 this.$store.commit('dyAllLoadingSet',true)
+                this.dropdownMenuTitle = title
+                this.$store.commit('dYsendToServerParamsOrderSet', order)
                 setTimeout(() => {
-                    ElMessage({
-                        message: '切换成功！',
-                        type: 'success'
-                    })
-                    this.$store.commit('dyAllLoadingSet',false)
-                },2000)
+                    this.sendToServer()
+                },1500)
             }
         },
         refreshFunc(){
-            if(!this.$store.getters.dyAllLoadingGet){
-                this.$store.commit('dyAllLoadingSet',true)
-                setTimeout(() => {
-                    this.$store.commit('dyAllLoadingSet',false)
-                    ElMessage({
-                        message: '刷新成功，共更新了5条动态！',
-                        type: 'success',
-                        center: false
-                    })
-                },3000)
-            }
+            this.$store.commit('dyAllLoadingSet',true)
+            setTimeout(() => {
+                this.sendToServer()
+            },1500)
         },
         editRouter(){
             this.$router.push('/dynamic/edit')
         },
         delTag(id){
             if(!this.$store.getters.dyAllLoadingGet){
-                this.$store.commit('dyTagListDel',id)
                 this.$store.commit('dyAllLoadingSet',true)
+                this.$store.commit('dyTagListDel',id)
                 setTimeout(() => {
-                    this.$store.commit('dyAllLoadingSet',false)
+                    this.sendToServer()
                 },2000)
             }
         },
         detailsRouterfunc(id){
             this.$router.push({path: '/dynamic/details',query: { id: id }})
+        },
+        pageChange(e){
+            this.currentPage = e
+            this.$store.commit('dYsendToServerParamsPageNumberSet', e)
+            this.sendToServer()
+        },
+        sendToServer(){
+            console.log(this.$store.getters.dYsendToServerParamsGet)
+            dynamicGet(this.$store.getters.dYsendToServerParamsGet).then(resq => {
+                if(resq.flag){
+                    this.$store.commit('dyContentSet', resq.data)
+                    ElMessage({showClose: true, message: '成功获取数据!', type: 'success'})
+                    this.$store.commit('dyAllLoadingSet',false)
+                } else {
+                    ElMessage({
+                        showClose: true,
+                        message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！',
+                        type: 'warning',
+                    })
+                    this.$store.commit('dyAllLoadingSet',false)
+                }
+            }).catch(err => {
+                ElMessage({
+                    showClose: true,
+                    message: '请求动态发生错误，请稍后重试！' + err,
+                    type: 'error',
+                    center: false
+                })
+                this.$store.commit('dyAllLoadingSet',false)
+            })
         }
     }
 }
@@ -345,6 +345,25 @@ export default {
         background-color: rgb(240, 240, 240);
         border-radius:0 0 0.2rem 0.2rem;
         overflow: hidden;
+        .data-empty
+        {
+            width: 100%;
+            height: 10rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span
+            {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                font-size: 0.65rem;
+            }
+            i
+            {
+                font-size: 1rem;
+            }
+        }
         .refresh-div
         {
             width: 100%;
@@ -414,12 +433,19 @@ export default {
                     justify-content: center;
                     align-items: center;
                     margin: 0 0.3rem 0 0.3rem;
+                    i
+                    {
+                        font-size: 0.7rem;
+                    }
                     span , i
                     {
-                        font-size: 0.58rem;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
                     }
                     span
                     {
+                        font-size: 0.58rem;
                         margin-left: 0.3rem;
                     }
                 }

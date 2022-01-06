@@ -57,6 +57,7 @@
 <script>
 import loading from '@/components/loading.vue'
 import FooterBottom from '@/components/footerBottom.vue'
+import { dynamicGet } from '@/util/api.js'
 export default {
     components:{
         loading,
@@ -142,8 +143,7 @@ export default {
                         document.body.scrollTop = 0
                     },300)
                 }
-                let object = {id: id,title: title}
-                this.$store.commit('dyTagListSet',object)
+                this.$store.commit('dyTagListSet', {id: id,title: title})
             }
         }
     },
