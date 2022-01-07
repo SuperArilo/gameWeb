@@ -27,55 +27,59 @@
             </div>
         </div>
         <div class="dy-content">
-            <i class="fas fa-sync-alt refresh-div" :class="this.$store.getters.dyAllLoadingGet ? 'refresh-div-is-loaded fa-spin':''"/>
-            <div class="data-empty" v-if="this.$store.getters.dyContentGet.length === 0">
-                <span>没有动态数据哦！</span>
-                <i class="fas fa-inbox"/>
-            </div>
-            <div class="sub-item" v-for="(item,index) in this.$store.getters.dyContentGet" :key="index" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
-                <div class="title-and-user-head">
-                    <span class="title">{{item.dynamicTitle}}</span>
-                    <div class="user-head">
-                        <img :src="item.userHead"/>
+            <i class="fas fa-sync-alt refresh-div fa-spin" :class="this.$store.getters.dyAllLoadingGet ? 'refresh-div-is-loaded':''"/>
+            <transition name="list">
+                <div class="data-empty" v-if="this.$store.getters.dyContentGet.length === 0">
+                    <span>没有动态数据哦！</span>
+                    <i class="fas fa-inbox"/>
+                </div>
+            </transition>
+            <transition-group name="list">
+                <div class="sub-item" v-for="(item,index) in this.$store.getters.dyContentGet" :key="index" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
+                    <div class="title-and-user-head">
+                        <span class="title">{{item.dynamicTitle}}</span>
+                        <div class="user-head">
+                            <img :src="item.userHead"/>
+                        </div>
+                    </div>
+                    <div class="dy-inf-show">
+                        <div class="dy-sub-item">
+                            <i class="far fa-calendar-alt"/>
+                            <span>{{item.createTime}}</span>
+                        </div>
+                        <div class="dy-sub-item">
+                            <i class="fas fa-rocket"/>
+                            <span>{{item.username}}</span>
+                        </div>
+                        <div class="dy-sub-item">
+                            <i class="far fa-comment-dots"/>
+                            <span>{{item.commentNum}} 条评论</span>
+                        </div>
+                        <div class="dy-sub-item">
+                            <i class="fas fa-tag"/>
+                            <span v-for="(itemSub,indexSub) in item.tags" :key="indexSub">{{itemSub.tagContent}}</span>
+                        </div>
+                        <div class="dy-sub-item">
+                            <i class="far fa-eye"/>
+                            <span>{{item.dynamicPageView}} 浏览</span>
+                        </div>
+                    </div>
+                    <span class="dy-introduction">
+                        {{item.dynamicDescribe}}
+                    </span>
+                    <div class="bottom-buttom">
+                        <el-dropdown>
+                            <i class="fas fa-ellipsis-v"/>
+                            <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-for="(itemDyFunc,indexDyFunc) in dyFuncList" :key="indexDyFunc">{{itemDyFunc.title}}</el-dropdown-item>
+                            </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
+                        <span class="buttom" @click="detailsRouterfunc(item.id)">跃迁</span>
                     </div>
                 </div>
-                <div class="dy-inf-show">
-                    <div class="dy-sub-item">
-                        <i class="far fa-calendar-alt"/>
-                        <span>{{item.createTime}}</span>
-                    </div>
-                    <div class="dy-sub-item">
-                        <i class="fas fa-rocket"/>
-                        <span>{{item.username}}</span>
-                    </div>
-                    <div class="dy-sub-item">
-                        <i class="far fa-comment-dots"/>
-                        <span>{{item.dynamicContent}} 条评论</span>
-                    </div>
-                    <div class="dy-sub-item">
-                        <i class="fas fa-tag"/>
-                        <span v-for="(itemSub,indexSub) in item.tags" :key="indexSub">{{itemSub.tagContent}}</span>
-                    </div>
-                    <div class="dy-sub-item">
-                        <i class="far fa-eye"/>
-                        <span>{{item.dynamicPageView}} 浏览</span>
-                    </div>
-                </div>
-                <span class="dy-introduction">
-                    {{item.dynamicDescribe}}
-                </span>
-                <div class="bottom-buttom">
-                    <el-dropdown>
-                        <i class="fas fa-ellipsis-v"/>
-                        <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item v-for="(itemDyFunc,indexDyFunc) in dyFuncList" :key="indexDyFunc">{{itemDyFunc.title}}</el-dropdown-item>
-                        </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
-                    <span class="buttom" @click="detailsRouterfunc(item.id)">跃迁</span>
-                </div>
-            </div>
+            </transition-group>
         </div>
         <div class="dy-change-page">
             <el-pagination background layout="prev, pager, next" :total="80" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange"></el-pagination>
@@ -171,11 +175,9 @@ export default {
             this.sendToServer()
         },
         sendToServer(){
-            console.log(this.$store.getters.dYsendToServerParamsGet)
             dynamicGet(this.$store.getters.dYsendToServerParamsGet).then(resq => {
                 if(resq.flag){
                     this.$store.commit('dyContentSet', resq.data)
-                    ElMessage({showClose: true, message: '成功获取数据!', type: 'success'})
                     this.$store.commit('dyAllLoadingSet',false)
                 } else {
                     ElMessage({
@@ -345,6 +347,7 @@ export default {
         background-color: rgb(240, 240, 240);
         border-radius:0 0 0.2rem 0.2rem;
         overflow: hidden;
+        transition: all 0.3s;
         .data-empty
         {
             width: 100%;
@@ -493,6 +496,15 @@ export default {
                     background-color: darkcyan;
                 }
             }
+        }
+        .list-enter-active , .list-leave-active
+        {
+            transition: all 0.4s;
+        }
+        .list-enter-from , .list-leave-to
+        {
+            opacity: 0;
+            margin-top: -10rem;
         }
         .sub-item:hover
         {

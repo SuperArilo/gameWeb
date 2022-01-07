@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 import { dynamicGet } from '@/util/api.js'
+import qs from 'qs'
 export default createStore({
     state:{
         isPhone: null,
@@ -12,7 +13,7 @@ export default createStore({
             tagIds:[],
             order: 'newest',
             pageNumber: 1,
-            pageSize: 2,
+            pageSize: 10,
         },
         //动态标签传入
         dyTagList:[],
@@ -88,12 +89,10 @@ export default createStore({
             state.dYsendToServerParams.pageSize = value
         },
         sendToServer(){
-            console.log(this.state.dYsendToServerParams)
             dynamicGet(this.state.dYsendToServerParams).then(resq => {
                 if(resq.flag){
                     setTimeout(() => {
                         this.state.dyContent = resq.data
-                        ElMessage({showClose: true, message: '成功获取数据!', type: 'success'})
                         this.state.dyAllLoading = false
                     },2000)
                 } else {

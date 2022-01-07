@@ -16,16 +16,16 @@
         </div>
         <div class="edit-dy-content">
             <span class="dy-edit-title">动态标题</span>
-            <input class="title-input" type="text"/>
+            <input class="title-input" v-model="dyTitle" type="text" maxlength="16"/>
             <span class="dy-edit-title">动态简介</span>
-            <textarea class="inf-textarea"/>
+            <textarea class="inf-textarea" v-model="dyDescribe"/>
             <span class="dy-edit-title">选择标签</span>
             <div class="choice-tags">
                 <div class="content">
                     <div class="input-tags">
                         <div class="left-tags">
                             <span class="tags" v-for="(item,index) in tagTemp" :key="index">
-                                {{item.title}}
+                                {{item}}
                                 <i class="fas fa-trash-alt" @click="tagDel(index)"/>
                             </span>
                             <div class="add-new-tag-input">
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <span class="dy-edit-title">动态内容编辑</span>
-            <v-md-editor v-model="inputText" @change="mdEditor"></v-md-editor>
+            <v-md-editor @change="mdEditor"></v-md-editor>
             <div class="md-editor-submit">
                 <span class="buttom-file" @click="dialogVisible = true">媒体文件管理</span>
                 <span class="button-confirm">发布</span>
@@ -160,11 +160,15 @@ export default {
                 }
             ],
             showMoreTags: false,
-            inputText: '',
             dialogVisible: false,
             imageList:[],
             imageTempList:[],
-            tagTemp:[]
+            noHaveTag:[],
+            havedTag:[],
+            tagTemp:[],
+            dyTitle: '',
+            dyDescribe: '',
+            dyContent: ''
         }
     },
     methods:{
@@ -172,6 +176,7 @@ export default {
             this.$router.push('/dynamic')
         },
         mdEditor(text,html){
+            this.dyContent = text
         },
         fileBeforeUpload(e){
             let files = [...e.target.files]
@@ -210,43 +215,13 @@ export default {
         },
         tagInputEnter(e){
             if(e.target.value === '') return
-            if(this.tagTemp.length > 2){
-                ElMessage({
-                    message: '标签最多只能添加3个哦！',
-                })
-            } else {
-                this.tagTemp = this.tagTemp.concat({id: -1,title: e.target.value})
-                e.target.value = null
-            }
         },
         addHavedTag(id,title){
             if(title === '') return
-            if(this.tagTemp.length != 0){
-                if(this.tagTemp.length > 2){
-                    ElMessage({
-                        message: '标签最多只能添加3个哦！',
-                    })
-                } else {
-                    let isHave;
-                    this.tagTemp.forEach(e => {
-                        if(e.id === id || e.title.includes(title)){
-                            ElMessage({
-                                message: '添加的标签已经存在！',
-                                type: 'warning',
-                            })
-                            isHave = true
-                        }
-                    })
-                    if(!isHave){
-                        this.tagTemp = this.tagTemp.concat({id: id,title: title})
-                    }
-                }
-                
-            } else {
-                this.tagTemp = this.tagTemp.concat({id: id,title: title})
-            }
         },
         tagDel(index){
+            this.noHaveTag.splice(index,1)
+            this.havedTag.splice(index,1)
             this.tagTemp.splice(index,1)
         }
     }

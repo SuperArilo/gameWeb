@@ -24,7 +24,7 @@
                 <div class="talk-edit-func">
                     <i class="fas fa-smile-wink"/>
                 </div>
-                <textarea v-model="userWriteContent" class="talk-text" @keyup.enter.exact="sentToServer" @keyup.ctrl="addLang" onkeydown="if (event.keyCode === 13) event.preventDefault();"/>
+                <textarea v-model="userWriteContent" class="talk-text" @keyup.enter.exact="sentToServer" @keyup.shift="addLang" onkeydown="if (event.keyCode === 13) event.preventDefault();"/>
                 <div class="talk-submit">
                     <span class="button-clear" @click="userWriteContent = ''">清空</span>
                     <div class="button-confirm" @click="sentToServer">
