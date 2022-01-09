@@ -16,7 +16,7 @@
         </div>
         <div class="edit-dy-content">
             <span class="dy-edit-title">动态标题</span>
-            <input class="title-input" v-model="dyTitle" type="text" maxlength="16"/>
+            <input class="title-input" type="text" maxlength="16"/>
             <span class="dy-edit-title">动态简介</span>
             <textarea class="inf-textarea" v-model="dyDescribe"/>
             <span class="dy-edit-title">选择标签</span>
@@ -29,7 +29,7 @@
                                 <i class="fas fa-trash-alt" @click="tagDel(index)"/>
                             </span>
                             <div class="add-new-tag-input">
-                                <input type="text" @keyup.enter="tagInputEnter" placeholder="输入自定义标签"/>
+                                <input type="text" v-model="clearTagInput" @keyup.enter="tagInputEnter" placeholder="输入自定义标签"/>
                             </div>
                         </div>
                         <span class="right-add-haved" @click="showMoreTags =! showMoreTags">
@@ -166,9 +166,9 @@ export default {
             noHaveTag:[],
             havedTag:[],
             tagTemp:[],
-            dyTitle: '',
             dyDescribe: '',
-            dyContent: ''
+            dyContent: '',
+            clearTagInput: ''
         }
     },
     methods:{
@@ -215,9 +215,45 @@ export default {
         },
         tagInputEnter(e){
             if(e.target.value === '') return
+            if(this.noHaveTag.length + this.havedTag.length > 2){
+                ElMessage({message: '标签最多添加3个哦！',type: 'warning',})
+                return
+            }
+            let isHave
+            this.noHaveTag.forEach(key => {
+                if(key === e.target.value) isHave = true
+            })
+            this.tagTemp.forEach(key => {
+                if(key === e.target.value) isHave = true
+            })
+            if(isHave){
+                ElMessage({message: '添加的标签已经存在了哦！',type: 'warning',})
+            } else {
+                this.noHaveTag = this.noHaveTag.concat(e.target.value)
+                this.tagTemp = this.tagTemp.concat(e.target.value)
+                console.log(1111)
+                this.clearTagInput = ''
+            }
         },
         addHavedTag(id,title){
             if(title === '') return
+            if(this.noHaveTag.length + this.havedTag.length > 2){
+                ElMessage({message: '标签最多添加3个哦！',type: 'warning',})
+                return
+            }
+            let isHave
+            this.noHaveTag.forEach(key => {
+                if(key === title) isHave = true
+            })
+            this.havedTag.forEach(key => {
+                if(key === id) isHave = true
+            })
+            if(isHave){
+                ElMessage({message: '添加的标签已经存在了哦！',type: 'warning',})
+            } else {
+                this.havedTag = this.havedTag.concat(id)
+                this.tagTemp = this.tagTemp.concat(title)
+            }
         },
         tagDel(index){
             this.noHaveTag.splice(index,1)

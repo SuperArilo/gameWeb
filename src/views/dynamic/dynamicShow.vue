@@ -13,12 +13,23 @@
                         </el-dropdown-menu>
                         </template>
                     </el-dropdown>
+                    <div class="choice-tag" @click="openChoiceTags =! openChoiceTags">
+                        <span>选择标签</span>
+                        <i class="fas fa-caret-down"/>
+                    </div>
                     <i class="fas fa-redo refresh" @click="refreshFunc()"/>
                 </div>
                 <div class="right-menu">
                     <i class="far fa-edit edit-icon" @click="editRouter()"/>
                 </div>
             </div>
+            <el-collapse-transition>
+                <div v-if="openChoiceTags" class="tag-content">
+                    <span class="tag-sub-item" v-for="(item,index) in tagList" :key="index" @click="tagFunc(item.id,item.title)">
+                        {{item.title}}
+                    </span>
+                </div>
+            </el-collapse-transition>
             <div class="tag-show">
                 <span class="tag-sub-item" v-for="(item,index) in this.$store.getters.dyTagListGet" :key="index">
                     {{item.title}}
@@ -124,6 +135,65 @@ export default {
                     title: '举报'
                 }
             ],
+            tagList:[
+                {
+                    id: 0,
+                    title: '杰哥'
+                },
+                {
+                    id: 1,
+                    title: 'Van♂'
+                },
+                {
+                    id: 2,
+                    title: 'Deep Dark Fansty'
+                },
+                {
+                    id: 3,
+                    title: "That's Good ♂"
+                },
+                {
+                    id: 4,
+                    title: '单身狗'
+                },
+                {
+                    id: 5,
+                    title: '情投一盒'
+                },
+                {
+                    id: 6,
+                    title: '不要做舔狗'
+                },
+                {
+                    id: 7,
+                    title: '萝卜'
+                },
+                {
+                    id: 8,
+                    title: '菜菜'
+                },
+                {
+                    id: 9,
+                    title: '腐竹通知'
+                },
+                {
+                    id: 10,
+                    title: 'Epic被刺'
+                },
+                {
+                    id: 11,
+                    title: 'Steam宣布破产'
+                },
+                {
+                    id: 12,
+                    title: '服务器维护'
+                },
+                {
+                    id:13,
+                    title: '群主太帅了'
+                }
+            ],
+            openChoiceTags: false,
             refreshLoading: false,
             dropdownMenuTitle: '最新',
             dyContent:[
@@ -156,6 +226,16 @@ export default {
         },
         editRouter(){
             this.$router.push('/dynamic/edit')
+        },
+        tagFunc(id,title){
+            if(!this.$store.getters.dyAllLoadingGet){
+                if(this.$store.getters.isPhoneGet){
+                    setTimeout(() => {
+                        document.body.scrollTop = 0
+                    },300)
+                }
+                this.$store.commit('dyTagListSet', {id: id,title: title})
+            }
         },
         delTag(id){
             if(!this.$store.getters.dyAllLoadingGet){
@@ -254,6 +334,27 @@ export default {
                         }
                     }
                 }
+                .choice-tag
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    margin: 0 0.5rem;
+                    cursor: pointer;
+                    span
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.6rem;
+                    }
+                    i
+                    {
+                        margin-left: 0.2rem;
+                        color: #3773f3;
+                        font-size: 0.8rem;
+                    }
+                }
                 .refresh
                 {
                     width: 1.5rem;
@@ -264,7 +365,6 @@ export default {
                     justify-content: center;
                     align-items: center;
                     transition: all 0.3s;
-                    margin-left: 0.2rem;
                 }
                 .refresh:hover
                 {
@@ -293,22 +393,19 @@ export default {
                 }
             }
         }
-        .tag-show
+        .tag-content , .tag-show
         {
             width: 100%;
-            margin-top: 0.3rem;
             display: flex;
             justify-content: flex-start;
             align-items: flex-start;
             flex-wrap: wrap;
-            border-top: solid 0.05rem darkgrey;
             .tag-sub-item
             {
-                height: 1.8rem;
                 min-height: 1.8rem;
-                margin: 0.3rem;
                 padding: 0.3rem 0.5rem;
                 font-size: 0.6rem;
+                margin: 0.3rem;
                 border-radius: 0.3rem;
                 border: solid 0.05rem #dfdfdf;
                 letter-spacing: 0.03rem;
@@ -317,6 +414,22 @@ export default {
                 align-items: center;
                 cursor: pointer;
                 transition: all 0.3s;
+            }
+            .tag-sub-item:hover
+            {
+                box-shadow: 0 0 0.3rem rgba(66, 66, 66, 0.288);
+            }
+        }
+        .tag-content
+        {
+            background-color: rgb(250, 250, 250);
+            border-radius: 0.2rem;
+            overflow: hidden;
+        }
+        .tag-show
+        {
+            .tag-sub-item
+            {
                 i
                 {
                     height: 100%;
@@ -329,10 +442,6 @@ export default {
                 {
                     color: red;
                 }
-            }
-            .tag-sub-item:hover
-            {
-                box-shadow: 0 0 0.3rem rgba(66, 66, 66, 0.288);
             }
         }
     }
@@ -414,10 +523,10 @@ export default {
                 }
                 .user-head
                 {
-                    width: 3rem;
-                    min-width: 3rem;
-                    height: 3rem;
-                    min-height: 3rem;
+                    width: 2.5rem;
+                    min-width: 2.5rem;
+                    height: 2.5rem;
+                    min-height: 2.5rem;
                     border-radius: 50%;
                     overflow: hidden;
                 }
@@ -499,12 +608,12 @@ export default {
         }
         .list-enter-active , .list-leave-active
         {
-            transition: all 0.4s;
+            transition: all 0.5s;
         }
         .list-enter-from , .list-leave-to
         {
             opacity: 0;
-            margin-top: -10rem;
+            margin-top: -9rem;
         }
         .sub-item:hover
         {
