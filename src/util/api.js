@@ -18,4 +18,3 @@ export const getPhoneCode = (query) => {
         data: query
     })
 }
-

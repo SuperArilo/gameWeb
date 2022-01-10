@@ -12,16 +12,19 @@
             </div>
         </div>
         <div class="player-router">
-            <router-view v-slot="{ Component }" style="position: absolute;">
-                <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
+            <router-view v-slot="{ Component }">
+                <transition mode="out-in" name="router_animate">
                     <component :is="Component" />
                 </transition>
             </router-view>
         </div>
+        <footer-bottom/>
     </div>
 </template>
 <script>
+import footerBottom from '../../components/footerBottom.vue'
 export default {
+  components: { footerBottom },
     data(){
         return{
             playerMenu:[
@@ -29,19 +32,19 @@ export default {
                     id: 0,
                     title: '主页',
                     icon: 'fa-home',
-                    path: 'versaillestown/player'
+                    path: 'player'
                 },
                 {
                     id: 1,
                     title: '个人信息',
                     icon: 'fa-id-badge',
-                    path: 'versaillestown/player/personalInformation'
+                    path: 'player/personalInformation'
                 },
                 {
                     id: 2,
                     title: 'ID绑定',
                     icon: 'fa-address-card',
-                    path: 'versaillestown/player/idbind'
+                    path: 'player/idbind'
                 }
             ],
             playerMenuIndex: 0
@@ -58,7 +61,7 @@ export default {
 <style lang="scss" scoped>
 .index-box
 {
-    width: 80%;
+    width: 100%;
     min-height: 100vh;
     display: flex;
     align-content: flex-start;
@@ -165,14 +168,13 @@ export default {
     .player-router
     {
         width: 100%;
-        position: relative;
         .router_animate-enter-active
         {
-            animation: slideInLeft 0.6s;
+            animation: fadeInLeft 0.6s;
         }
         .router_animate-leave-active
         {
-            animation: slideOutRight 0.6s;
+            animation: fadeOutRight 0.6s;
         }
     }
 }

@@ -63,8 +63,11 @@
             </div>
             <span class="media-empty" v-if="imageList.length === 0">您还没有上传过文件哦！</span>
             <div class="media-div" v-if="imageList.length !== 0">
-                <div class="media-sub-item" v-for="(item,index) in imageList" :key="index"> 
+                <div class="media-sub-item" v-for="(item,index) in imageList" :key="index" @click="userChoicePicture(item.id)" :class="imageIsHaveIdList.indexOf(item.id) !== -1 ? 'media-sub-item-active':''"> 
                     <div class="title-func">
+                        <div class="is-choice">
+                            <i v-show="imageIsHaveIdList.indexOf(item.id) !== -1" class="fas fa-check"/>
+                        </div>
                         <i class="fas fa-trash-alt" @click="delBeforeUploadImage(index)"/>
                     </div>
                     <img :src="item.url"/>
@@ -162,7 +165,7 @@ export default {
             showMoreTags: false,
             dialogVisible: false,
             imageList:[],
-            imageTempList:[],
+            imageIsHaveIdList:[],
             noHaveTag:[],
             havedTag:[],
             tagTemp:[],
@@ -178,6 +181,13 @@ export default {
         mdEditor(text,html){
             this.dyContent = text
         },
+        userChoicePicture(id){
+            if(this.imageIsHaveIdList.indexOf(id) === -1){
+                this.imageIsHaveIdList.unshift(id)
+            } else {
+                this.imageIsHaveIdList.splice(this.imageIsHaveIdList.findIndex(item => item === id), 1)
+            }
+        },
         fileBeforeUpload(e){
             let files = [...e.target.files]
             this.$refs.fileInput.value = ''
@@ -185,17 +195,13 @@ export default {
                 let _this = this
                 for(let i = 0,length = files.length;i < length;i++){
                     let randomId = this.randomSum()
-                    this.imageTempList = this.imageTempList.concat({temporaryId: randomId,file: files[i]})
                     let reader = new FileReader()
                     reader.readAsDataURL(files[i])
                     reader.onload = function(e) {
-                        _this.imageList = _this.imageList.concat({url: e.target.result,fileName: files[i].name,sendToServer: false,temporaryId: randomId});
+                        _this.imageList.unshift({url: e.target.result,fileName: files[i].name,sendToServer: false, id: randomId})
                     }
                     reader.onerror = function() {
-                        ElMessage({
-                            message: '在上传图片的过程中出错！' + err,
-                            type: 'error'
-                        })
+                        ElMessage({message: '在上传图片的过程中出错！' + err ,type: 'error'})
                     }
                 }
             }
@@ -231,7 +237,6 @@ export default {
             } else {
                 this.noHaveTag = this.noHaveTag.concat(e.target.value)
                 this.tagTemp = this.tagTemp.concat(e.target.value)
-                console.log(1111)
                 this.clearTagInput = ''
             }
         },
@@ -640,13 +645,21 @@ export default {
             border-radius: 0.2rem;
             overflow: hidden;
             background-color: #ffffff;
+            transition: all 0.3s;
             .title-func
             {
                 width: 100%;
                 display: flex;
-                justify-content: flex-end;
+                justify-content: space-between;
                 align-items: center;
                 height: 1.2rem;
+                .is-choice
+                {
+                    .fa-check
+                    {
+                        color: green;
+                    }
+                }
                 i
                 {
                     width: 1.2rem;
@@ -655,10 +668,13 @@ export default {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    cursor: pointer;
-                    transition: all 0.3s;
                 }
-                i:hover
+                .fa-trash-alt
+                {
+                    transition: all 0.3s;
+                    cursor: pointer;
+                }
+                .fa-trash-alt:hover
                 {
                     background-color: #dddddd;
                 }
@@ -681,6 +697,10 @@ export default {
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
+        }
+        .media-sub-item-active
+        {
+            box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.767);
         }
     }
     .media-bottom

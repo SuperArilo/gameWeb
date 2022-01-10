@@ -24,16 +24,7 @@
                                 <img :src="item.icon"/>
                                 <span>{{item.title}}</span>
                             </div>
-                            <i v-if="item.subMemu" class="fas fa-angle-down" @mouseenter="openDoubleMenu(item.id)" />
                         </div>
-                        <el-collapse-transition>
-                            <div v-if="item.subMemu && item.id === isOpenDoubleMenu" class="double-sub-menu">
-                                <div class="double-sub-item" v-for="(itemSub,indexSub) in item.subMemu" :key="indexSub" @click="subMenuFunc(itemSub.id,itemSub.path)">
-                                    <img :src="itemSub.icon"/>
-                                    <span>{{itemSub.title}}</span>
-                                </div>
-                            </div>
-                        </el-collapse-transition>
                     </div>
                 </div>
             </div>
@@ -58,49 +49,37 @@ export default {
                     id: 0,
                     title: '首页',
                     icon: require('@/views/icon/index/home.png'),
-                    path: '',
-                    subMemu: null
+                    path: ''
                 },
                 {
                     id: 1,
                     title: '动态',
                     icon: require('@/views/icon/index/dynamic.png'),
-                    path: 'dynamic',
-                    subMemu: null
+                    path: 'dynamic'
                 },
                 {
                     id: 2,
                     title: '留言',
                     icon: require('@/views/icon/index/iMessage.png'),
-                    path: 'message',
-                    subMenu: null
+                    path: 'message'
                 },
                 {
                     id: 3,
                     title: '随笔',
                     icon: require('@/views/icon/index/note.png'),
-                    path: 'note',
-                    subMemu: null
+                    path: 'note'
                 },
                 {
                     id: 4,
-                    title: '凡尔赛小镇',
-                    icon: require('@/views/icon/index/frs.png'),
-                    path: 'versaillestown',
-                    subMemu:[
-                        {
-                            id: 0,
-                            title: '与服务器在线聊天',
-                            icon: require('@/views/icon/index/onlineTalk.png'),
-                            path: 'versaillestown/onlinetalk'
-                        },
-                        {
-                            id: 1,
-                            title: '玩家信息',
-                            icon: require('@/views/icon/index/player.png'),
-                            path: 'versaillestown/player'
-                        }
-                    ]
+                    title: '与服务器在线聊天',
+                    icon: require('@/views/icon/index/onlineTalk.png'),
+                    path: 'onlinetalk'
+                },
+                {
+                    id: 5,
+                    title: '玩家信息',
+                    icon: require('@/views/icon/index/player.png'),
+                    path: 'player'
                 }
             ],
             userHead: require('@/views/icon/head/stranger18.jpg')
@@ -233,7 +212,7 @@ a
             width: 14rem;
             overflow: hidden;
             height: 100%;
-            transition: all 0.4s;
+            transition: all 0.5s;
             z-index: 100;
             background-color: #ffffff;
             display: flex;
@@ -364,46 +343,6 @@ a
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                        }
-                    }
-                    .double-sub-menu
-                    {
-                        width: 100%;
-                        display: flex;
-                        align-content: flex-start;
-                        flex-wrap: wrap;
-                        .double-sub-item
-                        {
-                            width: 100%;
-                            height: 1.8rem;
-                            display: flex;
-                            justify-content: flex-start;
-                            align-items: center;
-                            padding: 0 2rem;
-                            cursor: pointer;
-                            img
-                            {
-                                height: 50%;
-                                max-height: 50%;
-                                margin: 0 1rem;
-                            }
-                            span
-                            {
-                                height: 100%;
-                                display: flex;
-                                align-items: center;
-                                font-size: 0.62rem;
-                                letter-spacing: 0.1rem;
-                                width: 6rem;
-                            }
-                        }
-                        .double-sub-item:hover
-                        {
-                            background-color: cadetblue;
-                            span
-                            {
-                                color: #ffffff;
-                            }
                         }
                     }
                 }

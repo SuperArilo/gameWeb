@@ -30,7 +30,6 @@ export default {
             data:[],
             isCountToPage: true,
             imageList: [],
-            userDynamic: require('@/views/icon/index/user_dynamic.png'),
             indexBg: require('@/views/icon/index/index_center.jpg'),
         }
     },

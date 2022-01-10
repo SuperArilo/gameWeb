@@ -50,15 +50,7 @@ const routes = [
         }
     },
     {
-        path: '/versaillestown',
-        component: () => import('@/views/versaillesTown.vue'),
-        meta:{
-            path: '/versaillestown',
-            title: '凡尔赛小镇'
-        }
-    },
-    {
-        path: '/versaillestown/onlinetalk',
+        path: '/onlinetalk',
         component: () => import('@/views/versaillesTown/onlineTalk.vue'),
         meta:{
             path: '/versaillestown/onlinetalk',
@@ -66,10 +58,10 @@ const routes = [
         }
     },
     {
-        path: '/versaillestown/player',
+        path: '/player',
         component: () => import('@/views/versaillesTown/player.vue'),
         meta:{
-            path: '/versaillestown/player',
+            path: '/player',
             title: '玩家信息'
         },
         children:[
@@ -77,7 +69,7 @@ const routes = [
                 path: '',
                 component: () => import('@/views/versaillesTown/player/main.vue'),
                 meta:{
-                    path: '/versaillestown/player',
+                    path: '/player',
                     title: '玩家信息'
                 }
             },
@@ -85,7 +77,7 @@ const routes = [
                 path: 'personalinformation',
                 component: () => import('@/views/versaillesTown/player/personalInformation.vue'),
                 meta:{
-                    path: '/versaillestown/player/personalInformation',
+                    path: '/player/personalInformation',
                     title: '个人信息'
                 }
             },
@@ -93,7 +85,7 @@ const routes = [
                 path: 'idbind',
                 component: () => import('@/views/versaillesTown/player/IDBind.vue'),
                 meta:{
-                    path: '/versaillestown/player/idbind',
+                    path: '/player/idbind',
                     title: 'id绑定'
                 }
             }
