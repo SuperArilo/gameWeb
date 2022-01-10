@@ -613,7 +613,7 @@ export default {
         .list-enter-from , .list-leave-to
         {
             opacity: 0;
-            margin-top: -9.5rem;
+            margin-top: -10rem;
         }
         .sub-item:hover
         {
