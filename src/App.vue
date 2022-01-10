@@ -2,7 +2,7 @@
     <div class="main-container">
         <nav class="top-nav">
             <div class="left-func">
-                <i class="fas fa-bars" @mouseenter="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
+                <i class="fas fa-bars" @click="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
             </div>
         </nav>
         <div class="change-content">
@@ -13,12 +13,11 @@
                             <img :src="userHead"/>
                             <span>这次换你听歌</span>
                         </div>
-                        <i class="fas fa-user-cog"/>
                     </div>
                     <p class="autograph">Single_Dog找不到女朋友，太惨了吧。萝卜CSGO天天白给</p>
                 </div>
                 <div class="menu-list">
-                    <div class="sub-item" v-for="(item,index) in navMenuList" :key="index" @mouseleave="isOpenDoubleMenu = null">
+                    <div class="sub-item" v-for="(item,index) in navMenuList" :key="index">
                         <div class="top-func">
                             <div class="img-and-span" @click="menuFunc(item.id,item.path)">
                                 <img :src="item.icon"/>
@@ -43,7 +42,6 @@ export default {
     data(){
         return{
             openMenu: false,
-            isOpenDoubleMenu: null,
             navMenuList:[
                 {
                     id: 0,
@@ -115,11 +113,6 @@ export default {
         },
         scrollValue(e){
             this.$store.commit('windowScrollValueSet',e.target.scrollTop)
-        },
-        openDoubleMenu(id){
-            if(this.isOpenDoubleMenu === null){
-                this.isOpenDoubleMenu = id
-            }
         }
     },
     computed:{
@@ -145,6 +138,7 @@ body, html
     min-height: 100%;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 *
 {
@@ -238,7 +232,7 @@ a
                     width: 100%;
                     height: 2rem;
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: flex-start;
                     padding: 0 1rem;
                     align-items: center;
                     .user-content
@@ -263,19 +257,6 @@ a
                             font-size: 0.65rem;
                             margin-left: 1rem;
                         }
-                    }
-                    i
-                    {
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        cursor: pointer;
-                        color: #90adec;
-                        transition: all 0.3s;
-                    }
-                    i:hover
-                    {
-                        color: lightskyblue;
                     }
                 }
                 .autograph

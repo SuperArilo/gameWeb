@@ -170,12 +170,30 @@ export default {
         width: 100%;
         .router_animate-enter-active
         {
-            animation: fadeInLeft 0.6s;
+            animation: fadeInLeft 0.4s;
         }
         .router_animate-leave-active
         {
-            animation: fadeOutRight 0.6s;
+            animation: fadeOutRight 0.4s;
         }
     }
+}
+@media screen and (min-width:1400px)
+{
+}
+@media screen and (max-width:1400px) and (min-width:1200px)
+{
+}
+@media screen and (max-width:1200px) and (min-width:936px)
+{
+}
+@media screen and (max-width:936px) and (min-width:767px)
+{
+}
+@media screen and (max-width:767px) and (min-width:676px)
+{
+}
+@media screen and (max-width:676px)
+{
 }
 </style>

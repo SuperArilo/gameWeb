@@ -393,17 +393,15 @@ export default {
                 flex-wrap: wrap;
                 .input-tags .left-tags  .tags , .drop-menu .span-tag
                 {
-                    height: 1.5rem;
-                    min-height: 1.5rem;
-                    margin: 0.3rem;
+                    min-height: 1.8rem;
                     padding: 0.3rem 0.5rem;
                     font-size: 0.6rem;
+                    margin: 0.3rem;
                     border-radius: 0.3rem;
                     border: solid 0.05rem #dfdfdf;
-                    text-align: left;
-                    letter-spacing: 0.04rem;
+                    letter-spacing: 0.03rem;
                     display: flex;
-                    justify-content: center;
+                    justify-content: space-between;
                     align-items: center;
                     cursor: pointer;
                     transition: all 0.3s;

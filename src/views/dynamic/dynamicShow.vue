@@ -93,7 +93,7 @@
             </transition-group>
         </div>
         <div class="dy-change-page">
-            <el-pagination background layout="prev, pager, next" :total="80" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange"></el-pagination>
+            <el-pagination background layout="prev, pager, next" :total="80" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange" :small="this.$store.getters.isPhoneGet"/>
         </div>
     </div>
 </template>
