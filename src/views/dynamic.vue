@@ -107,11 +107,11 @@ export default {
             overflow: hidden;
             .router_animate-enter-active
             {
-                animation: fadeInLeft 0.6s;
+                animation: fadeInLeft 0.4s;
             }
             .router_animate-leave-active
             {
-                animation: fadeOutRight 0.6s;
+                animation: fadeOutRight 0.4s;
             }
         }
     }

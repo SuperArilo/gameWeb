@@ -429,7 +429,7 @@ export default {
             flex-wrap: wrap;
             .tag-sub-item
             {
-                min-height: 1.8rem;
+                min-height: 1.5rem;
                 padding: 0.3rem 0.5rem;
                 font-size: 0.6rem;
                 margin: 0.3rem;

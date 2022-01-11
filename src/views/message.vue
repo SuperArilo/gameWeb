@@ -11,16 +11,11 @@
             </div>
             <div class="lingan-div">
                 <div class="sub-item" v-for="(item,index) in titleMdList" :key="index">
-                    <v-md-preview :text="item.text"></v-md-preview>
+                    {{item.text}}
                 </div>
             </div>
             <div class="edit-div">
                 <span class="title-span">说点什么</span>
-                <textarea></textarea>
-                <div class="buttom">
-                    <span class="button-clear">清空</span>
-                    <span class="button-confirm">提交</span>
-                </div>
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
@@ -174,27 +169,6 @@ export default {
         .edit-div
         {
             width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            textarea
-            {
-                width: 100%;
-                height: 3rem;
-                margin: 1rem 1rem 0.5rem 1rem;
-                outline: none;
-                resize: none;
-                border: none;
-                border-radius: 0.1rem;
-                transition: all 0.3s;
-                padding: 0.3rem;
-                font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-            }
-            textarea:focus
-            {
-                box-shadow: 0 0 0.3rem rgb(68, 112, 148);
-            }
             .buttom
             {
                 width: 100%;

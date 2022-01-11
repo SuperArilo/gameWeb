@@ -14,13 +14,12 @@ const devNeedCdn = true
 const cdn = {
     // cdn：模块名称和模块作用域命名（对应window里面挂载的变量名称）
     externals: {
-        vue: 'Vue',
-        vuex: 'Vuex',
+        'vue': 'Vue',
+        'vuex': 'Vuex',
         "element-plus": "ElementPlus",
         'vue-router': 'VueRouter',
-        axios: 'axios',
-        jquery: '$',
-        hljs: 'hljs'
+        'axios': 'axios',
+        'jquery': '$'
     },
     // cdn的css链接
     css: [
@@ -35,8 +34,7 @@ const cdn = {
         'https://unpkg.com/jquery',
         'https://unpkg.com/element-plus',
         'https://unpkg.com/vue-router@4',
-        'https://cdn.jsdelivr.net/npm/axios@0.24.0/dist/axios.min.js',
-        'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js'
+        'https://cdn.jsdelivr.net/npm/axios@0.24.0/dist/axios.min.js'
     ]
 }
  
