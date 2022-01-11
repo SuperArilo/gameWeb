@@ -3,14 +3,14 @@
         <div class="top-menu">
             <div class="user-func-div">
                 <div class="left-menu">
-                    <el-dropdown class="dropdown-menu">
+                    <el-dropdown class="dropdown-menu" :hide-on-click="false" @command="dropdownMenuFunc">
                         <span>{{dropdownMenuTitle}}
                             <i class="fa fa-chevron-down"/>
                         </span>
                         <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title,item.order)">{{item.title}}</el-dropdown-item>
-                        </el-dropdown-menu>
+                            <el-dropdown-menu>
+                                <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" :command="item.order">{{item.title}}</el-dropdown-item>
+                            </el-dropdown-menu>
                         </template>
                     </el-dropdown>
                     <div class="choice-tag" @click="openChoiceTags =! openChoiceTags">
@@ -31,22 +31,22 @@
                 </div>
             </el-collapse-transition>
             <div class="tag-show">
-                <span class="tag-sub-item" v-for="(item,index) in this.$store.getters.dyTagListGet" :key="index">
+                <span class="tag-sub-item" v-for="(item,index) in dyTagList" :key="index">
                     {{item.title}}
                     <i class="fas fa-trash-alt" @click="delTag(item.id)"/>
                 </span>
             </div>
         </div>
         <div class="dy-content">
-            <i class="fas fa-sync-alt refresh-div fa-spin" :class="this.$store.getters.dyAllLoadingGet ? 'refresh-div-is-loaded':''"/>
+            <i class="fas fa-sync-alt refresh-div fa-spin" :class="dyAllLoading ? 'refresh-div-is-loaded':''"/>
             <transition name="list">
-                <div class="data-empty" v-if="this.$store.getters.dyContentGet.length === 0">
+                <div class="data-empty" v-if="dyContent.length === 0">
                     <span>没有动态数据哦！</span>
                     <i class="fas fa-inbox"/>
                 </div>
             </transition>
             <transition-group name="list">
-                <div class="sub-item" v-for="(item,index) in this.$store.getters.dyContentGet" :key="index" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
+                <div class="sub-item" v-for="(item,index) in dyContent" :key="index" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
                     <div class="title-and-user-head">
                         <span class="title">{{item.dynamicTitle}}</span>
                         <div class="user-head">
@@ -194,11 +194,21 @@ export default {
                 }
             ],
             openChoiceTags: false,
-            refreshLoading: false,
             dropdownMenuTitle: '最新',
-            dyContent:[
-            ],
-            currentPage: 1
+            //显示的主要数据
+            dyContent: [],
+            currentPage: 1,
+            // 发送到服务器的参数
+            dYsendToServerParams:{
+                tagIds:[],
+                order: 'newest',
+                pageNumber: 1,
+                pageSize: 10,
+            },
+            //动态标签传入
+            dyTagList:[],
+            //动态页面检测活动冷却标识
+            dyAllLoading: false
         }
     },
     created(){
@@ -208,39 +218,65 @@ export default {
         
     },
     methods:{
-        dropdownMenuFunc(id,title,order){
-            if(!this.$store.getters.dyAllLoadingGet){
-                this.$store.commit('dyAllLoadingSet',true)
-                this.dropdownMenuTitle = title
-                this.$store.commit('dYsendToServerParamsOrderSet', order)
+        dropdownMenuFunc(command, number, object){
+            if(!this.dyAllLoading){
+                this.dyAllLoading = true
+                this.dropdownMenuTitle = object.target.textContent
+                this.dYsendToServerParams.order = command
                 setTimeout(() => {
                     this.sendToServer()
                 },1500)
             }
         },
         refreshFunc(){
-            this.$store.commit('dyAllLoadingSet',true)
-            setTimeout(() => {
-                this.sendToServer()
-            },1500)
+            if(!this.dyAllLoading){
+                this.dyAllLoading = true
+                setTimeout(() => {
+                    this.sendToServer()
+                },1500)
+            }
         },
         editRouter(){
             this.$router.push('/dynamic/edit')
         },
         tagFunc(id,title){
-            if(!this.$store.getters.dyAllLoadingGet){
+            if(!this.dyAllLoading){
                 if(this.$store.getters.isPhoneGet){
                     setTimeout(() => {
                         document.body.scrollTop = 0
                     },300)
                 }
-                this.$store.commit('dyTagListSet', {id: id,title: title})
+                let length = this.dYsendToServerParams.tagIds.length
+                if(length === 0){
+                    this.dyAllLoading = true
+                    this.dYsendToServerParams.tagIds.unshift(id)
+                    this.dyTagList.unshift({id: id, title: title})
+                    setTimeout(() =>{
+                        this.sendToServer()
+                    },1500)
+                } else if (length > 2){
+                    ElMessage({message: '最多支持筛选3个标签！'})
+                } else {
+                    let isHave = this.dYsendToServerParams.tagIds.indexOf(id)
+                    if(isHave === -1){
+                        this.dyAllLoading = true
+                        this.dYsendToServerParams.tagIds.unshift(id)
+                        this.dyTagList.unshift({id: id, title: title})
+                        setTimeout(() =>{
+                            this.sendToServer()
+                        },1500)
+                    } else if (isHave === 0){
+                        ElMessage({message: title + '标签 已经添加了哦！'})
+                    }
+                }
             }
         },
         delTag(id){
-            if(!this.$store.getters.dyAllLoadingGet){
-                this.$store.commit('dyAllLoadingSet',true)
-                this.$store.commit('dyTagListDel',id)
+            if(!this.dyAllLoading){
+                this.dyAllLoading = true
+                let index = this.dYsendToServerParams.tagIds.indexOf(id)
+                this.dyTagList.splice(index,1)
+                this.dYsendToServerParams.tagIds.splice(index,1)
                 setTimeout(() => {
                     this.sendToServer()
                 },2000)
@@ -251,30 +287,21 @@ export default {
         },
         pageChange(e){
             this.currentPage = e
-            this.$store.commit('dYsendToServerParamsPageNumberSet', e)
+            this.dYsendToServerParams.pageNumber = e
             this.sendToServer()
         },
         sendToServer(){
-            dynamicGet(this.$store.getters.dYsendToServerParamsGet).then(resq => {
+            dynamicGet(this.dYsendToServerParams).then(resq => {
                 if(resq.flag){
-                    this.$store.commit('dyContentSet', resq.data)
-                    this.$store.commit('dyAllLoadingSet',false)
+                    this.dyContent = resq.data
+                    this.dyAllLoading = false
                 } else {
-                    ElMessage({
-                        showClose: true,
-                        message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！',
-                        type: 'warning',
-                    })
-                    this.$store.commit('dyAllLoadingSet',false)
+                    ElMessage({ showClose: true, message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！', type: 'warning',})
+                    this.dyAllLoading = false
                 }
             }).catch(err => {
-                ElMessage({
-                    showClose: true,
-                    message: '请求动态发生错误，请稍后重试！' + err,
-                    type: 'error',
-                    center: false
-                })
-                this.$store.commit('dyAllLoadingSet',false)
+                ElMessage({showClose: true, message: '请求动态发生错误，请稍后重试！' + err, type: 'error', center: false})
+                this.dyAllLoading = false
             })
         }
     }
