@@ -78,7 +78,7 @@
                     </div>
                     <div class="edit-div">
                         <div class="title-func"></div>
-                        <textarea/>
+                        <div class="render-edit" ref="dyEditTool"></div>
                     </div>
                 </div>
             </div>
@@ -111,6 +111,7 @@
     </div>
 </template>
 <script>
+import E from 'wangeditor'
 export default {
     data(){
         return{
@@ -137,8 +138,38 @@ export default {
                     title: '发布时间正序',
                     order: 'DESC'
                 }
-            ]
+            ],
+            editor: null
         }
+    },
+    mounted(){
+        const editor = new E(this.$refs.dyEditTool)
+        editor.config.showLinkImg = false
+        editor.config.height = 200
+        editor.config.menus = [
+            'head',
+            'bold',
+            'fontSize',
+            'italic',
+            'underline',
+            'strikeThrough',
+            'indent',
+            'lineHeight',
+            'foreColor',
+            'backColor',
+            'link',
+            'list',
+            'justify',
+            'quote',
+            'emoticon',
+            'image',
+            'table',
+            'splitLine',
+        ]
+        editor.config.onchange = (newHtml) => {
+        }
+        editor.create()
+        this.editor = editor
     }
 }
 </script>
@@ -376,28 +407,29 @@ export default {
                 {
                     width: 100%;
                     margin-left: 1rem;
-                    border: solid 0.05rem #d4d4d4;
-                    border-radius: 0.2rem;
-                    overflow: hidden;
-                    .title-func
+                    .render-edit
                     {
                         width: 100%;
-                        height: 1.5rem;
-                        display: flex;
-                        justify-content: flex-start;
-                        align-items: center;
-                        background-color: rgb(247, 247, 247);
                     }
-                    textarea
+                    ::v-deep(.w-e-toolbar)
+                    {
+                        z-index: 400 !important;
+                    }
+                    ::v-deep(.w-e-text-container)
+                    {
+                        z-index: 399 !important;
+                    }
+                    ::v-deep(i)
+                    {
+                        font-size: 0.6rem !important;
+                    }
+                    ::v-deep(.w-e-menu-tooltip)
+                    {
+                        font-size: 0.6rem;
+                    }
+                    ::v-deep(.w-e-up-btn)
                     {
                         width: 100%;
-                        height: 4rem;
-                        padding: 0.5rem;
-                        font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-                        letter-spacing: 0.02rem;
-                        outline: none;
-                        resize: none;
-                        border: none;
                     }
                 }
             }
@@ -429,19 +461,18 @@ export default {
                 }
                 .right-content
                 {
-                    margin-left: 1.5rem;
                     width: 100%;
                     display: flex;
                     align-content: flex-start;
                     flex-wrap: wrap;
                     position: relative;
                     background-color: rgba(255, 255, 255, 0.7);
+                    border-left: solid 0.2rem darkgreen;
+                    border-right: solid 0.2rem darkgreen;
                     .main-message-content
                     {
                         width: 100%;
                         min-height: 4rem;
-                        border-left: solid 0.2rem darkgreen;
-                        border-right: solid 0.2rem darkgreen;
                     }
                     .data-show
                     {
@@ -450,6 +481,7 @@ export default {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
+                        padding: 0 1rem;
                         .sub-item
                         {
                             height: 100%;
@@ -480,8 +512,8 @@ export default {
                     border-top: solid 0.3rem transparent;
                     border-right: solid 0.4rem darkgreen;
                     border-bottom: solid 0.3rem transparent;
-                    left: -0.4rem;
-                    top: 1.25rem;
+                    left: -0.6rem;
+                    top: 1rem;
                 }
             }
             .no-message
@@ -517,6 +549,16 @@ export default {
         .center-content
         {
             width: 70%;
+            .message-content
+            {
+                .message-sub-item
+                {
+                    .right-content
+                    {
+                        margin-left: 1.5rem;
+                    }
+                }
+            }
         }
     }
 }
@@ -527,6 +569,16 @@ export default {
         .center-content
         {
             width: 70%;
+            .message-content
+            {
+                .message-sub-item
+                {
+                    .right-content
+                    {
+                        margin-left: 1.5rem;
+                    }
+                }
+            }
         }
     }
 }
@@ -537,6 +589,16 @@ export default {
         .center-content
         {
             width: 65%;
+            .message-content
+            {
+                .message-sub-item
+                {
+                    .right-content
+                    {
+                        margin-left: 1.5rem;
+                    }
+                }
+            }
         }
     }
 }
@@ -547,6 +609,16 @@ export default {
         .center-content
         {
             width: 90%;
+            .message-content
+            {
+                .message-sub-item
+                {
+                    .right-content
+                    {
+                        margin-left: 1rem;
+                    }
+                }
+            }
         }
     }
 }
@@ -557,6 +629,16 @@ export default {
         .center-content
         {
             width: 90%;
+            .message-content
+            {
+                .message-sub-item
+                {
+                    .right-content
+                    {
+                        margin-left: 0.8rem;
+                    }
+                }
+            }
         }
     }
 }
@@ -567,6 +649,16 @@ export default {
         .center-content
         {
             width: 90%;
+            .message-content
+            {
+                .message-sub-item
+                {
+                    .right-content
+                    {
+                        margin-left: 0.8rem;
+                    }
+                }
+            }
         }
     }
 }

@@ -576,7 +576,7 @@ export default {
     {
         .talk-div
         {
-            width: 80%;
+            width: 85%;
             .talk-content
             {
                 padding: 0.8rem 0.5rem 0.8rem 0.5rem;
@@ -597,7 +597,7 @@ export default {
     {
         .talk-div
         {
-            width: 80%;
+            width: 90%;
             .talk-content
             {
                 padding: 0.8rem 0.5rem 0.8rem 0.5rem;

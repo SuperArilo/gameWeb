@@ -1,10 +1,11 @@
 // import axios from 'axios'
 axios.defaults.withCredentials = true
 const service = axios.create({
-    baseURL: 'http://www.itrong.love:1234/api',
+    baseURL: 'https://www.itrong.love:1234/api',
     timeout: 5000
 })
 service.interceptors.request.use(config => {
+    console.log(config)
    //  if (localStorage.getItem('token')) {
 
    //     config.headers.ACCESS_TOKEN = localStorage.getItem('token');

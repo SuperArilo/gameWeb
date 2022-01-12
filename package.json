@@ -11,7 +11,8 @@
     "compression-webpack-plugin": "^6.1.1",
     "core-js": "^3.20.0",
     "qs": "^6.10.2",
-    "uglifyjs-webpack-plugin": "^2.2.0"
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "wangeditor": "^4.7.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.15",

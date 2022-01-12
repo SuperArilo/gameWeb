@@ -63,18 +63,12 @@ export default {
                 },
                 {
                     id: 3,
-                    title: '随笔',
-                    icon: require('@/views/icon/index/note.png'),
-                    path: 'note'
-                },
-                {
-                    id: 4,
                     title: '与服务器在线聊天',
                     icon: require('@/views/icon/index/onlineTalk.png'),
                     path: 'onlinetalk'
                 },
                 {
-                    id: 5,
+                    id: 4,
                     title: '玩家信息',
                     icon: require('@/views/icon/index/player.png'),
                     path: 'player'
@@ -174,7 +168,7 @@ a
         display: flex;
         padding: 0 0.5rem;
         position: fixed;
-        z-index: 100;
+        z-index: 1000;
         justify-content: space-between;
         box-shadow: 0 0 0.2rem black;
         .left-func
@@ -354,42 +348,42 @@ a
 {
     html
     {
-        font-size: 24px !important;
+        font-size: 24px;
     }
 }
 @media screen and (max-width:1400px) and (min-width:1200px)
 {
     html
     {
-        font-size: 24px !important;
+        font-size: 24px;
     }
 }
 @media screen and (max-width:1200px) and (min-width:936px)
 {
     html
     {
-        font-size: 24px !important;
+        font-size: 24px;
     }
 }
 @media screen and (max-width:936px) and (min-width:767px)
 {
     html
     {
-        font-size: 24px !important;
+        font-size: 24px;
     }
 }
 @media screen and (max-width:767px) and (min-width:676px)
 {
     html
     {
-        font-size: 22px !important;
+        font-size: 22px;
     }
 }
 @media screen and (max-width:676px)
 {
     html
     {
-        font-size: 20px !important;
+        font-size: 20px;
     }
 }
 .server-own-border

@@ -11,9 +11,9 @@ export const dynamicGet = (params) => {
         }
     })
 }
-export const getPhoneCode = (query) => {
+export const uploadImage = (query) => {
     return request({
-        url: '/user/messageCode',
+        url: '/file/upload/image',
         method: 'post',
         data: query
     })

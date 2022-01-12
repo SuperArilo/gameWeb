@@ -44,8 +44,10 @@
                     </el-collapse-transition>
                 </div>
             </div>
-            <span class="dy-edit-title">动态内容编辑</span>
-            <v-md-editor @change="mdEditor"></v-md-editor>
+            <span class="dy-edit-title" style="margin: 0.5rem 0">动态内容编辑</span>
+            <div class="dy-edit-tool">
+                <div class="render-edit" ref="dyEditTool"></div>
+            </div>
             <div class="md-editor-submit">
                 <span class="buttom-file" @click="dialogVisible = true">媒体文件管理</span>
                 <span class="button-confirm">发布</span>
@@ -83,6 +85,8 @@
 </template>
 <script>
 import { ElMessage } from 'element-plus'
+import E from 'wangeditor'
+import { uploadImage } from '@/util/api.js'
 export default {
     data(){
         return{
@@ -171,8 +175,37 @@ export default {
             tagTemp:[],
             dyDescribe: '',
             dyContent: '',
-            clearTagInput: ''
+            clearTagInput: '',
+            editor: null
         }
+    },
+    mounted(){
+        const editor = new E(this.$refs.dyEditTool)
+        editor.config.showLinkImg = false
+        editor.config.menus = [
+            'head',
+            'bold',
+            'fontSize',
+            'italic',
+            'underline',
+            'strikeThrough',
+            'indent',
+            'lineHeight',
+            'foreColor',
+            'backColor',
+            'link',
+            'list',
+            'justify',
+            'quote',
+            'emoticon',
+            'image',
+            'table',
+            'splitLine',
+        ]
+        editor.config.onchange = (newHtml) => {
+        }
+        editor.create()
+        this.editor = editor
     },
     methods:{
         routerBackFunc() {
@@ -190,28 +223,18 @@ export default {
         },
         fileBeforeUpload(e){
             let files = [...e.target.files]
+            console.log(files)
             this.$refs.fileInput.value = ''
             if(files !== 0){
-                let _this = this
-                for(let i = 0,length = files.length;i < length;i++){
-                    let randomId = this.randomSum()
-                    let reader = new FileReader()
-                    reader.readAsDataURL(files[i])
-                    reader.onload = function(e) {
-                        _this.imageList.unshift({url: e.target.result,fileName: files[i].name,sendToServer: false, id: randomId})
-                    }
-                    reader.onerror = function() {
-                        ElMessage({message: '在上传图片的过程中出错！' + err ,type: 'error'})
-                    }
-                }
+                let data = new FormData()
+                data.append('imageFile',files)
+                data.append('uid',10)
+                uploadImage(data).then(resq => {
+                    console.log(resq)
+                })
+                console.log(this.editor.cmd)
+                // this.editor.cmd.do('insertHTML', `<img src="${imgUrl}" style="max-width:100%;"/>`)
             }
-        },
-        randomSum(){
-            let id = ''
-            for(let i = 0;i < 7;i++){
-                id += Math.floor(Math.random() * 9).toString()
-            }
-            return parseInt(id);
         },
         upLoadFileToServer(){
 
@@ -375,6 +398,34 @@ export default {
             border-radius: 0.3rem;
             margin-right: 0.5rem;
         }
+        .dy-edit-tool
+        {
+            width: 100%;
+            .render-edit
+            {
+                width: 100%;
+            }
+            ::v-deep(.w-e-toolbar)
+            {
+                z-index: 400 !important;
+            }
+            ::v-deep(.w-e-text-container)
+            {
+                z-index: 399 !important;
+            }
+            ::v-deep(i)
+            {
+                font-size: 0.6rem !important;
+            }
+            ::v-deep(.w-e-menu-tooltip)
+            {
+                font-size: 0.6rem;
+            }
+            ::v-deep(.w-e-up-btn)
+            {
+                width: 100%;
+            }
+        }
         .choice-tags
         {
             width: 100%;
@@ -460,7 +511,7 @@ export default {
                     }
                     .right-add-haved
                     {
-                        width: 5rem;
+                        width: 6rem;
                         height: 100%;
                         display: flex;
                         justify-content: center;
@@ -494,7 +545,7 @@ export default {
                 }
             }
         }
-        .inf-textarea , .title-input
+        .inf-textarea, .title-input
         {
             width: 100%;
             min-width: 100%;
@@ -504,6 +555,7 @@ export default {
             border: none;
             border-radius: 0.2rem;
             margin: 0.5rem 0;
+            resize: none;
             font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
         }
         ::v-deep(.v-md-editor)
@@ -519,6 +571,7 @@ export default {
             display: flex;
             justify-content: space-between;
             height: 1.5rem;
+            margin-top: 0.5rem;
             span
             {
                 height: 100%;
