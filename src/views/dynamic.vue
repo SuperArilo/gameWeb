@@ -1,5 +1,5 @@
 <template>
-    <div class="index-box" :style="{backgroundImage:`url(${indexBg})`}">
+    <div class="index-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
         <div class="center-box">
             <div class="top-tips">
                 <span>动态发表</span>

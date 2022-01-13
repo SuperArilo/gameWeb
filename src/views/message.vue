@@ -1,5 +1,5 @@
 <template>
-    <div class="index-box" :style="{backgroundImage:`url(${indexBg})`}">
+    <div class="index-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
         <div class="center-top-inf">
             <div class="top-tips">
                 <span class="title">闲言碎语</span>
@@ -54,7 +54,6 @@ export default {
   components: { footerBottom },
     data(){
         return{
-            indexBg: require('@/views/icon/index/index_center.jpg'),
             titleMdList:[
                 {
                     id: 0,

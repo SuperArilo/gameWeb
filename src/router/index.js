@@ -98,6 +98,22 @@ const routes = [
                 }
             }
         ]
+    },
+    {
+        path: '/login',
+        component: () => import('@/views/login.vue'),
+        meta:{
+            path: '/login',
+            title: '登录'
+        }
+    },
+    {
+        path: '/register',
+        component: () => import('@/views/register.vue'),
+        meta:{
+            path: '/register',
+            title: '注册'
+        }
     }
 ]
 

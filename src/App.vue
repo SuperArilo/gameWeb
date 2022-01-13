@@ -4,17 +4,23 @@
             <div class="left-func">
                 <i class="fas fa-bars" @click="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
             </div>
+            <div class="right-func">
+                <div class="login" @click="this.$router.push('/login')">
+                    <span>登录</span>
+                    <i class="fas fa-location-arrow"/>
+                </div>
+            </div>
         </nav>
         <div class="change-content">
             <div class="change-left-menu" :style="!openMenu ? 'width:0;':''" @mouseleave="openMenu = false">
                 <div class="user-inf-show">
                     <div class="user-head-name">
                         <div class="user-content">
-                            <img :src="userHead"/>
-                            <span>这次换你听歌</span>
+                            <img :src="this.$store.getters.userNoLoginGet"/>
+                            <span>未登录</span>
                         </div>
                     </div>
-                    <p class="autograph">Single_Dog找不到女朋友，太惨了吧。萝卜CSGO天天白给</p>
+                    <p class="autograph"></p>
                 </div>
                 <div class="menu-list">
                     <div class="sub-item" v-for="(item,index) in navMenuList" :key="index">
@@ -73,8 +79,7 @@ export default {
                     icon: require('@/views/icon/index/player.png'),
                     path: 'player'
                 }
-            ],
-            userHead: require('@/views/icon/head/stranger18.jpg')
+            ]
         }
     },
     created(){
@@ -166,7 +171,7 @@ a
         height: 2.2rem;
         background-color: #3d6cd1;
         display: flex;
-        padding: 0 0.5rem;
+        padding-left: 0.5rem;
         position: fixed;
         z-index: 1000;
         justify-content: space-between;
@@ -185,6 +190,48 @@ a
                 color: #ffffff;
                 cursor: pointer;
                 transition: all 0.3s;
+            }
+        }
+        .right-func
+        {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            .login
+            {
+                width: 4rem;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #409eff;
+                cursor: pointer;
+                transition: all 0.2s;
+                span , i
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    color: white;
+                }
+                span
+                {
+                    font-size: 0.58rem;
+                    letter-spacing: 0.05rem;
+                }
+                i
+                {
+                    font-size: 0.7rem;
+                    margin-left: 0.3rem;
+                }
+            }
+            .login:hover
+            {
+                background-color: #b3d8ff;
+                span , i
+                {
+                    color: #3399ff;
+                }
             }
         }
     }
