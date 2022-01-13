@@ -1,15 +1,11 @@
 // 是否为生产环境
-const isProduction = process.env.NODE_ENV !== 'development';
-
+const isProduction = process.env.NODE_ENV !== 'development'
 // 代码压缩
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
- 
 // gzip压缩
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
- 
 // 本地环境是否需要使用cdn
 const devNeedCdn = true
- 
 // cdn链接
 const cdn = {
     // cdn：模块名称和模块作用域命名（对应window里面挂载的变量名称）
@@ -53,7 +49,6 @@ module.exports = {
     configureWebpack: config => {
         // 用cdn方式引入，则构建时要忽略相关资源
         if (isProduction || devNeedCdn) config.externals = cdn.externals
- 
         // 生产环境相关配置
         if (isProduction) {
             //gzip压缩
@@ -62,15 +57,12 @@ module.exports = {
                 new CompressionWebpackPlugin({
                     filename: '[path][base].gz',
                     algorithm: 'gzip',
-                    test: new RegExp(
-                        '\\.(' + productionGzipExtensions.join('|') + ')$'
-                    ),
+                    test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
                     threshold: 10240, // 只有大小大于该值的资源会被处理 10240
                     minRatio: 0.7, // 只有压缩率小于这个值的资源才会被处理
-                    deleteOriginalAssets: false // 删除原文件
+                    deleteOriginalAssets: true // 删除原文件
                 })
             )
- 
             // 代码压缩
             config.plugins.push(
                 new UglifyJsPlugin({
@@ -82,12 +74,11 @@ module.exports = {
                             pure_funcs: ['console.log']
                         }
                     },
-                    sourceMap: false,
+                    sourceMap: true,
                     parallel: true
                 })
             )
         }
- 
         // 公共代码抽离
         config.optimization = {
             splitChunks: {

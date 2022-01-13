@@ -29,13 +29,13 @@
             <div class="sended-dynamic">
                 <div class="choice-menu">
                     <div class="left-right-func">
-                        <el-dropdown class="dropdown-menu">
+                        <el-dropdown class="dropdown-menu" :hide-on-click="false" @command="dropdownMenuFunc">
                             <span>{{dropdownMenuTitle}}
                                 <i class="fa fa-chevron-down"/>
                             </span>
                             <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" @click="dropdownMenuFunc(item.id,item.title,item.order)">{{item.title}}</el-dropdown-item>
+                                <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" :command="item.order">{{item.title}}</el-dropdown-item>
                             </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -139,7 +139,8 @@ export default {
                     order: 'DESC'
                 }
             ],
-            editor: null
+            editor: null,
+            dyAllLoading: false
         }
     },
     mounted(){
@@ -170,6 +171,17 @@ export default {
         }
         editor.create()
         this.editor = editor
+    },
+    methods:{
+        dropdownMenuFunc(command, number, object){
+            if(!this.dyAllLoading){
+                this.dyAllLoading = true
+                this.dropdownMenuTitle = object.target.textContent
+                setTimeout(() => {
+                    this.dyAllLoading = false
+                })
+            }
+        }
     }
 }
 </script>
@@ -186,6 +198,7 @@ export default {
         display: flex;
         align-content: flex-start;
         flex-wrap: wrap;
+        margin: 0.5rem 0;
         .public-title
         {
             width: 100%;

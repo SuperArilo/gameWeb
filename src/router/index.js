@@ -74,6 +74,14 @@ const routes = [
                 }
             },
             {
+                path: 'notice',
+                component: () => import('@/views/versaillesTown/player/notice.vue'),
+                meta:{
+                    path: '/player/notice',
+                    title: '通知'
+                }
+            },
+            {
                 path: 'personalinformation',
                 component: () => import('@/views/versaillesTown/player/personalInformation.vue'),
                 meta:{

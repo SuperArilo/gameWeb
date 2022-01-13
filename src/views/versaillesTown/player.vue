@@ -36,12 +36,18 @@ export default {
                 },
                 {
                     id: 1,
+                    title: '通知',
+                    icon: 'fas fa-exclamation-circle',
+                    path: 'player/notice'
+                },
+                {
+                    id: 2,
                     title: '个人信息',
                     icon: 'fa-id-badge',
                     path: 'player/personalInformation'
                 },
                 {
-                    id: 2,
+                    id: 3,
                     title: 'ID绑定',
                     icon: 'fa-address-card',
                     path: 'player/idbind'
