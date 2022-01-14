@@ -73,9 +73,8 @@ export default {
     },
     methods:{
         sendToUserEmail(){
-            if(!this.isClickSend || !this.isSendCounted){
+            if(!this.isClickSend && !this.isSendCounted){
                 this.isClickSend = true
-                console.log(1111)
                 setTimeout(() => {
                     this.isClickSend = false
                     ElNotification({ title: '成功', message: '已发送验证码到邮箱', type: 'success', })

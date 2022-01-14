@@ -54,40 +54,18 @@
             </div>
         </div>
         <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
-            <div class="media-title">
-                <i class="fas fa-times-circle left-i" @click="dialogVisible = false"/>
-                <span class="center-title">媒体管理器</span>
-                <div class="right-upload">
-                    <input type="file" ref="fileInput" @change="fileBeforeUpload" accept="image/*" multiple title=""/>
-                    <i class="fas fa-file-upload"/>
-                    <span>上传</span>
-                </div>
-            </div>
-            <span class="media-empty" v-if="imageList.length === 0">您还没有上传过文件哦！</span>
-            <div class="media-div" v-if="imageList.length !== 0">
-                <div class="media-sub-item" v-for="(item,index) in imageList" :key="index" @click="userChoicePicture(item.id)" :class="imageIsHaveIdList.indexOf(item.id) !== -1 ? 'media-sub-item-active':''"> 
-                    <div class="title-func">
-                        <div class="is-choice">
-                            <i v-show="imageIsHaveIdList.indexOf(item.id) !== -1" class="fas fa-check"/>
-                        </div>
-                        <i class="fas fa-trash-alt" @click="delBeforeUploadImage(index)"/>
-                    </div>
-                    <img :src="item.url"/>
-                    <span class="file-name">{{item.fileName}}</span>
-                </div>
-            </div>
-            <div class="media-bottom">
-                <span class="cancel" @click="dialogVisible = false">取消</span>
-                <span class="upload">嵌入</span>
-            </div>
+            <media-file @closeWindow="closeWindow"/>
         </el-dialog>
     </div>
 </template>
 <script>
 import { ElMessage } from 'element-plus'
 import E from 'wangeditor'
-import { uploadImage } from '@/util/api.js'
+import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
+    components:{
+        mediaFile
+    },
     data(){
         return{
             ruleListO:[
@@ -168,8 +146,6 @@ export default {
             ],
             showMoreTags: false,
             dialogVisible: false,
-            imageList:[],
-            imageIsHaveIdList:[],
             noHaveTag:[],
             havedTag:[],
             tagTemp:[],
@@ -203,6 +179,7 @@ export default {
             'splitLine',
         ]
         editor.config.onchange = (newHtml) => {
+
         }
         editor.create()
         this.editor = editor
@@ -213,34 +190,6 @@ export default {
         },
         mdEditor(text,html){
             this.dyContent = text
-        },
-        userChoicePicture(id){
-            if(this.imageIsHaveIdList.indexOf(id) === -1){
-                this.imageIsHaveIdList.unshift(id)
-            } else {
-                this.imageIsHaveIdList.splice(this.imageIsHaveIdList.findIndex(item => item === id), 1)
-            }
-        },
-        fileBeforeUpload(e){
-            let files = [...e.target.files]
-            console.log(files)
-            this.$refs.fileInput.value = ''
-            if(files !== 0){
-                let data = new FormData()
-                data.append('imageFile',files)
-                data.append('uid',10)
-                uploadImage(data).then(resq => {
-                    console.log(resq)
-                })
-                console.log(this.editor.cmd)
-                // this.editor.cmd.do('insertHTML', `<img src="${imgUrl}" style="max-width:100%;"/>`)
-            }
-        },
-        upLoadFileToServer(){
-
-        },
-        delBeforeUploadImage(index){
-            this.imageList.splice(index,1)
         },
         tagInputEnter(e){
             if(e.target.value === '') return
@@ -287,6 +236,9 @@ export default {
             this.noHaveTag.splice(index,1)
             this.havedTag.splice(index,1)
             this.tagTemp.splice(index,1)
+        },
+        closeWindow(value){
+            this.dialogVisible = value
         }
     }
 }
@@ -444,7 +396,7 @@ export default {
                 flex-wrap: wrap;
                 .input-tags .left-tags  .tags , .drop-menu .span-tag
                 {
-                    min-height: 1.8rem;
+                    min-height: 1.5rem;
                     padding: 0.3rem 0.5rem;
                     font-size: 0.6rem;
                     margin: 0.3rem;
@@ -605,192 +557,6 @@ export default {
                 color: white;
                 background-color: #409eff;
             }
-        }
-    }
-    .media-title
-    {
-        width: 100%;
-        height: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 0.5rem;
-        .left-i
-        {
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .left-i:hover
-        {
-            color: red;
-        }
-        .center-title
-        {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-size: 0.7rem;
-        }
-        .right-upload
-        {
-            width: 3rem;
-            height: 1.4rem;
-            border-radius: 0.2rem;
-            background-color: #e8ecf3;
-            transition: all 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            z-index: 10;
-            cursor: pointer;
-            span
-            {
-                margin-left: 0.2rem;
-            }
-            input
-            {
-                width: 100%;
-                height: 100%;
-                background-color: transparent;
-                position: absolute;
-                z-index: 1;
-                opacity: 0;
-            }
-        }
-        .right-upload:hover
-        {
-            background-color: #3773f3;
-            color: #ffffff;
-        }
-    }
-    .media-empty
-    {
-        width: 100%;
-        height: 14rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 0.7rem;
-    }
-    .media-div
-    {
-        width: 100%;
-        height: 14rem;
-        overflow-y: scroll;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 7rem);
-        grid-template-rows: repeat(auto-fill,6rem);
-        grid-row-gap: 0.5rem;
-        justify-content: space-around;
-        background-color: #e8ecf3;
-        padding: 0.8rem 1rem;
-        .media-sub-item
-        {
-            width: 7rem;
-            height: 6rem;
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            border-radius: 0.2rem;
-            overflow: hidden;
-            background-color: #ffffff;
-            transition: all 0.3s;
-            .title-func
-            {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                height: 1.2rem;
-                .is-choice
-                {
-                    .fa-check
-                    {
-                        color: green;
-                    }
-                }
-                i
-                {
-                    width: 1.2rem;
-                    border-radius: 0.2rem;
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                .fa-trash-alt
-                {
-                    transition: all 0.3s;
-                    cursor: pointer;
-                }
-                .fa-trash-alt:hover
-                {
-                    background-color: #dddddd;
-                }
-            }
-            img
-            {
-                width: 100%;
-                height: 3.8rem;
-                object-fit: cover;
-            }
-            .file-name
-            {
-                width: 100%;
-                padding: 0 0.5rem;
-                height: 1rem;
-                line-height: 1rem;
-                text-align: center;
-                font-size: 0.5rem;
-                overflow: hidden; 
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-        }
-        .media-sub-item-active
-        {
-            box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.767);
-        }
-    }
-    .media-bottom
-    {
-        width: 100%;
-        height: 2rem;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 0 0.5rem;
-        span
-        {
-            width: 3rem;
-            height: 1.6rem;
-            border-radius: 0.2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .cancel
-        {
-            background-color: #e8ecf3;
-        }
-        .upload
-        {
-            background-color: #4d698e;
-            color: #ffffff;
-            margin-left: 1rem;
-        }
-        .cancel:hover
-        {
-            background-color: #cad8f1;
-        }
-        .upload:hover
-        {
-            background-color: #cecfd1;
-            color: rgb(100, 100, 100);
         }
     }
     ::v-deep(.el-dialog__body)
