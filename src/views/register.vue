@@ -12,24 +12,28 @@
                 <div class="input-box">
                     <div class="input-sub-item">
                         <span :class="spanStyleAdd === 1 ? 'span-move-active':''">邮箱</span>
-                        <input type="text" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
+                        <input type="text" maxlength="20" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="input-sub-item">
                         <span :class="spanStyleAdd === 2 ? 'span-move-active':''">密码</span>
-                        <input type="password" v-model="userPwd" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
+                        <input type="password" maxlength="16" v-model="userPwd" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="input-sub-item">
                         <span :class="spanStyleAdd === 3 ? 'span-move-active':''">再次输入密码</span>
-                        <input type="password" v-model="userPwdAgain" @focus="spanStyleAdd = 3" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
+                        <input type="password" maxlength="16" v-model="userPwdAgain" @focus="spanStyleAdd = 3" @blur="spanStyleAdd = 0" :style="userPwdAgain === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="CAPTCHA">
                         <span :class="spanStyleAdd === 4 ? 'span-move-active':''">邮箱验证码</span>
-                        <input type="text" v-model="eMailPwd" @focus="spanStyleAdd = 4" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
-                        
+                        <input type="text" maxlength="6" v-model="eMailPwd" @focus="spanStyleAdd = 4" @blur="spanStyleAdd = 0" :style="eMailPwd === '' ? 'background-color: transparent;':''"/>
+                        <div class="CAPTCHA-send" @click="sendToUserEmail">
+                            <span v-if="!isClickSend && !isSendCounted" class="info-span">发送验证码</span>
+                            <i v-if="isClickSend" class="fas fa-circle-notch fa-spin"/>
+                            <span v-if="isSendCounted" class="info-span">{{timeCount}} 秒</span>
+                        </div>
                     </div>
                     <div class="CAPTCHA">
                         <span :class="spanStyleAdd === 5 ? 'span-move-active':''">验证码</span>
-                        <input type="text" v-model="CAPTCHACode" @focus="spanStyleAdd = 5" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
+                        <input type="text" maxlength="4" v-model="CAPTCHACode" @focus="spanStyleAdd = 5" @blur="spanStyleAdd = 0" :style="CAPTCHACode === '' ? 'background-color: transparent;':''"/>
                         <div class="CAPTCHA-picture"></div>
                     </div>
                     <div class="account-func">
@@ -48,6 +52,7 @@
     </div>
 </template>
 <script>
+import { ElNotification } from 'element-plus'
 import footerBottom from '@/components/footerBottom.vue'
 export default {
     components: { footerBottom },
@@ -59,7 +64,33 @@ export default {
             userPwd: '',
             userPwdAgain: '',
             remberMe:[],
-            CAPTCHACode:''
+            CAPTCHACode:'',
+            timeCount: 60,
+            isClickSend: false,
+            isSendCounted: false,
+            timeInterval: null,
+        }
+    },
+    methods:{
+        sendToUserEmail(){
+            if(!this.isClickSend || !this.isSendCounted){
+                this.isClickSend = true
+                console.log(1111)
+                setTimeout(() => {
+                    this.isClickSend = false
+                    ElNotification({ title: '成功', message: '已发送验证码到邮箱', type: 'success', })
+                    this.isSendCounted = true
+                    this.timeInterval = setInterval(() => {
+                        if(this.timeCount <= 60 && this.timeCount > 0){
+                            this.timeCount--
+                        } else {
+                            clearInterval(this.timeInterval)
+                            this.timeCount = 60
+                            this.isSendCounted = false
+                        }
+                    },1000)
+                },1500)
+            }
         }
     }
 }
@@ -199,8 +230,43 @@ export default {
                     .CAPTCHA-picture
                     {
                         width: 50%;
-                        height: 50%;
+                        height: 1.5rem;
                         background-color: wheat;
+                    }
+                    .CAPTCHA-send
+                    {
+                        width: 50%;
+                        height: 1.5rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 0.8rem;
+                        background-color: #b3d8ff;
+                        transition: all 0.3s;
+                        cursor: pointer;
+                        .info-span
+                        {
+                            height: 1.5rem;
+                            margin-left: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            text-align: center;
+                            font-size: 0.55rem;
+                            color: #3399ff;
+                        }
+                        i
+                        {
+                            color: #3399ff;
+                        }
+                    }
+                    .CAPTCHA-send:hover
+                    {
+                        .info-span , i
+                        {
+                            color: #ffffff;
+                        }
+                        background-color: #409eff;
                     }
                 }
                 .confirm-span

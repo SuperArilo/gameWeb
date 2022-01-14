@@ -12,15 +12,15 @@
                 <div class="input-box">
                     <div class="input-sub-item">
                         <span :class="spanStyleAdd === 1 ? 'span-move-active':''">邮箱</span>
-                        <input type="text" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
+                        <input type="text" maxlength="20" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="input-sub-item">
                         <span :class="spanStyleAdd === 2 ? 'span-move-active':''">密码</span>
-                        <input type="password" v-model="userPwd" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
+                        <input type="password" maxlength="16" v-model="userPwd" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="CAPTCHA">
                         <span :class="spanStyleAdd === 3 ? 'span-move-active':''">验证码</span>
-                        <input type="text" v-model="userPwd" @focus="spanStyleAdd = 3" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
+                        <input type="text" maxlength="4" v-model="CAPTCHACode" @focus="spanStyleAdd = 3" @blur="spanStyleAdd = 0" :style="CAPTCHACode === '' ? 'background-color: transparent;':''"/>
                         <div class="CAPTCHA-picture"></div>
                     </div>
                     <div class="account-func">
@@ -47,6 +47,7 @@ export default {
             spanStyleAdd: 0,
             eMail: '',
             userPwd: '',
+            CAPTCHACode:'',
             remberMe:[]
         }
     }

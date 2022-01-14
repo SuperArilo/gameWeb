@@ -91,20 +91,13 @@ export default {
     },
     methods:{
         windowWidth(){
-            let windowWidth = window.innerWidth
-            if(windowWidth <= 936){
+            if(window.innerWidth <= 936){
                 this.$store.commit('isPhoneSet',true)
             } else {
                 this.$store.commit('isPhoneSet',false)
             }
         },
         menuFunc(id,path){
-            setTimeout(() => {
-                this.$router.push('/' + path)
-                this.openMenu = false
-            },200)
-        },
-        subMenuFunc(id,path){
             setTimeout(() => {
                 this.$router.push('/' + path)
                 this.openMenu = false
@@ -248,7 +241,7 @@ a
             overflow: hidden;
             height: 100%;
             transition: all 0.5s;
-            z-index: 100;
+            z-index: 1000;
             background-color: #ffffff;
             display: flex;
             align-content: flex-start;
@@ -472,5 +465,9 @@ a
 .vip-b-color
 {
     background-color: #a52525;
+}
+.render-by-edit
+{
+    font-size: 0.6rem !important;
 }
 </style>

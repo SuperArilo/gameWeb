@@ -118,7 +118,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),routes
+    history: createWebHistory(process.env.BASE_URL), routes
 })
 router.beforeEach((to, from, next) => {
     window.document.title = to.meta.title == undefined ? '博客' : to.meta.title

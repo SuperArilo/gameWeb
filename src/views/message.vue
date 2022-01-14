@@ -10,25 +10,22 @@
                 </div>
             </div>
             <div class="lingan-div">
-                <div class="sub-item" v-for="(item,index) in titleMdList" :key="index">
-                    {{item.text}}
+                <div class="sub-item render-by-edit" v-html="text">   
                 </div>
             </div>
             <div class="edit-div">
                 <span class="title-span">说点什么</span>
+                <div class="render-edit" ref="dyEditTool"></div>
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
                 <div class="message-content">
-                    <div class="sub-message-item" v-for="(item,index) in 6" :key="index">
+                    <div class="sub-message-item">
                         <div class="left-head">
                             <img src="../views/icon/head/stranger8.jpg"/>
                         </div>
                         <div class="right-content">
-                            <span class="message-title">这是标题</span>
-                            <span class="show-content">
-                                这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容这是要说的留言内容
-                            </span>
+                            <div class="show-content render-by-edit" v-html="text"></div>
                             <div class="show-who">
                                 <div>
                                     <i class="fas fa-paper-plane"></i>
@@ -50,26 +47,49 @@
 </template>
 <script>
 import footerBottom from '../components/footerBottom.vue'
+import E from 'wangeditor'
 export default {
   components: { footerBottom },
     data(){
         return{
-            titleMdList:[
-                {
-                    id: 0,
-                    text: '**Markdown**是一种简单的文本格式语言，以简单的键盘字符编写文档，转换成html后就能显示复杂的页面效果。'
-                },
-                {
-                    id: 1,
-                    text: '**Markdown**是一种简单的文本格式语言，以简单的键盘字符编写文档，转换成html后就能显示复杂的页面效果。'
-                },
-                {
-                    id: 2,
-                    text: '**Markdown**是一种简单的文本格式语言，以简单的键盘字符编写文档，转换成html后就能显示复杂的页面效果。'
-                },
-            ],
-            text: '**Markdown**是一种简单的文本格式语言，以简单的键盘字符编写文档，转换成html后就能显示复杂的页面效果。',
+            text: '',
+            editor: null,
         }
+    },
+    mounted(){
+        const editor = new E(this.$refs.dyEditTool)
+        editor.config.showLinkImg = false
+        editor.config.height = 200
+        editor.config.menus = [
+            'head',
+            'bold',
+            'fontSize',
+            'italic',
+            'underline',
+            'strikeThrough',
+            'indent',
+            'lineHeight',
+            'foreColor',
+            'backColor',
+            'link',
+            'list',
+            'justify',
+            'quote',
+            'emoticon',
+            'image',
+            'table',
+            'splitLine',
+        ]
+        editor.config.onchange = (newHtml) => {
+            this.text = newHtml
+        }
+        editor.create()
+        this.editor = editor
+    },
+    beforeDestroy() {
+        // 销毁编辑器
+        this.editor.destroy()
+        this.editor = null
     }
 }
 </script>
@@ -132,12 +152,12 @@ export default {
             justify-content: center;
             align-items: flex-start;
             flex-wrap:wrap;
-            padding: 0 1rem 0 1rem;
             .sub-item
             {
                 width: 100%;
                 border-left: solid 0.15rem #b1bbd4;
                 margin: 0.2rem 0 0.2rem 0;
+                padding: 0 0.5rem;
             }
         }
         .edit-div , .show-message-div 
@@ -168,6 +188,30 @@ export default {
         .edit-div
         {
             width: 100%;
+            .render-edit
+            {
+                width: 100%;
+            }
+            ::v-deep(.w-e-toolbar)
+            {
+                z-index: 400 !important;
+            }
+            ::v-deep(.w-e-text-container)
+            {
+                z-index: 399 !important;
+            }
+            ::v-deep(i)
+            {
+                font-size: 0.6rem !important;
+            }
+            ::v-deep(.w-e-menu-tooltip)
+            {
+                font-size: 0.6rem;
+            }
+            ::v-deep(.w-e-up-btn)
+            {
+                width: 100%;
+            }
             .buttom
             {
                 width: 100%;
@@ -235,13 +279,12 @@ export default {
                     display: flex;
                     justify-content: space-between;
                     align-items: flex-start;
-                    min-height: 5rem;
                     padding: 0 0.5rem 0 0.5rem;
                     margin-bottom: 1rem;
                     .left-head
                     {
-                        width: 3rem;
-                        min-width: 3rem;
+                        width: 2.5rem;
+                        min-width: 2.5rem;
                         height: 100%;
                         display: flex;
                         justify-content: center;
@@ -256,58 +299,27 @@ export default {
                     {
                         width: 100%;
                         height: 100%;
-                        margin-left: 1.5rem;
+                        margin-left: 1rem;
                         border-left: solid 0.2rem #807fe2;
                         border-right: solid 0.2rem #807fe2;
                         background-color: rgba(255,255,255,0.7);
                         box-shadow: 0 0.1rem 0.8rem -0.6rem black;
                         padding: 0 0.5rem 0 0.5rem;
                         position: relative;
-                        .message-title
-                        {
-                            width: 100%;
-                            display: flex;
-                            flex-direction: column;
-                            font-size: 0.66rem;
-                            color: #757575;
-                            letter-spacing: 0.05rem;
-                            word-break: break-all;
-                            text-align: left;
-                            position: relative;
-                            padding: 0.5rem 0 0.5rem 0;
-                        }
-                        .message-title::after
-                        {
-                            content: "";
-                            position: absolute;
-                            display: block;
-                            width: 2rem;
-                            height: 0.15rem;
-                            left: 0;
-                            bottom: 0;
-                            border-radius: 0.1rem;
-                            background-color: #807fe2;
-                        }
                         .show-content
                         {
                             width: 100%;
-                            padding: 0.5rem 0 0.5rem 0;
-                            min-height: 3rem;
-                            display: flex;
-                            justify-content: flex-start;
-                            align-items: flex-start;
-                            font-size: 0.55rem;
+                            min-height: 2rem;
                             word-break: break-all;
-                            letter-spacing: 0.04rem;
+                            letter-spacing: 0.03rem;
                         }
                         .show-who
                         {
                             width: 100%;
-                            height: 1rem;
+                            height: 1.5rem;
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
-                            margin-bottom: 0.5rem;
                             div
                             {
                                 width: 50%;
@@ -352,7 +364,7 @@ export default {
                         border-right: solid 0.4rem #807fe2;
                         border-bottom: solid 0.3rem transparent;
                         left: -0.6rem;
-                        top: 1.5rem;
+                        top: 1rem;
                     }
                 }
             }

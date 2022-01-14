@@ -37,7 +37,7 @@ const cdn = {
 module.exports = {
     lintOnSave: false,
     publicPath: '/',
-    productionSourceMap: false,
+    productionSourceMap: true,
     chainWebpack: config => {
         // ============注入cdn start============
         config.plugin('html').tap(args => {

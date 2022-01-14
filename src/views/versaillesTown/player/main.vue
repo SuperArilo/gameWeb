@@ -88,12 +88,12 @@
                     <span>暂无留言，说点什么吧~</span>
                     <i class="far fa-dizzy"/>
                 </div>
-                <div class="message-sub-item" v-for="item in 6" :key="item">
+                <div class="message-sub-item">
                     <div class="left-head">
                         <img :src="userHead"/>
                     </div>
                     <div class="right-content">
-                        <div class="main-message-content"></div>
+                        <div class="main-message-content render-by-edit" v-html="text"></div>
                         <div class="data-show">
                             <div class="sub-item">
                                 <i class="fas fa-paper-plane"></i>
@@ -140,7 +140,8 @@ export default {
                 }
             ],
             editor: null,
-            dyAllLoading: false
+            dyAllLoading: false,
+            text: ''
         }
     },
     mounted(){
@@ -168,6 +169,7 @@ export default {
             'splitLine',
         ]
         editor.config.onchange = (newHtml) => {
+            this.text = newHtml
         }
         editor.create()
         this.editor = editor
@@ -182,6 +184,11 @@ export default {
                 })
             }
         }
+    },
+    beforeDestroy() {
+        // 销毁编辑器
+        this.editor.destroy()
+        this.editor = null
     }
 }
 </script>
@@ -479,13 +486,17 @@ export default {
                     align-content: flex-start;
                     flex-wrap: wrap;
                     position: relative;
+                    padding: 0 0.5rem;
                     background-color: rgba(255, 255, 255, 0.7);
                     border-left: solid 0.2rem darkgreen;
                     border-right: solid 0.2rem darkgreen;
+                    box-shadow: 0 0.1rem 0.8rem -0.6rem black;
                     .main-message-content
                     {
                         width: 100%;
-                        min-height: 4rem;
+                        min-height: 2rem;
+                        word-break: break-all;
+                        letter-spacing: 0.03rem;
                     }
                     .data-show
                     {
@@ -494,7 +505,6 @@ export default {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
-                        padding: 0 1rem;
                         .sub-item
                         {
                             height: 100%;
