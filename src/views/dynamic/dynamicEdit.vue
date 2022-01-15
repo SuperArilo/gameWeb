@@ -16,7 +16,7 @@
         </div>
         <div class="edit-dy-content">
             <span class="dy-edit-title">动态标题</span>
-            <input class="title-input" type="text" maxlength="16"/>
+            <input class="title-input" v-model="dyTtitle" type="text" maxlength="16"/>
             <span class="dy-edit-title">动态简介</span>
             <textarea class="inf-textarea" v-model="dyDescribe"/>
             <span class="dy-edit-title">选择标签</span>
@@ -49,19 +49,25 @@
                 <div class="render-edit" ref="dyEditTool"></div>
             </div>
             <div class="md-editor-submit">
-                <span class="buttom-file" @click="dialogVisible = true">媒体文件管理</span>
-                <span class="button-confirm">发布</span>
+                <div class="buttom-file" @click="dialogVisible = true">
+                    <span>媒体文件管理</span>
+                </div>
+                <div class="button-confirm" @click="dyPublish">
+                    <span v-if="!isDyPublishWorkNow">发布</span>
+                    <i v-if="isDyPublishWorkNow" class="fas fa-circle-notch fa-spin"/>
+                </div>
             </div>
         </div>
         <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
-            <media-file @closeWindow="closeWindow"/>
+            <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
         </el-dialog>
     </div>
 </template>
 <script>
-import { ElMessage } from 'element-plus'
+import { ElMessage , ElMessageBox } from 'element-plus'
 import E from 'wangeditor'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
+import {userPublishDynamic} from '@/util/api.js'
 export default {
     components:{
         mediaFile
@@ -149,10 +155,12 @@ export default {
             noHaveTag:[],
             havedTag:[],
             tagTemp:[],
+            dyTtitle: '',
             dyDescribe: '',
             dyContent: '',
             clearTagInput: '',
-            editor: null
+            editor: null,
+            isDyPublishWorkNow: false
         }
     },
     mounted(){
@@ -179,7 +187,7 @@ export default {
             'splitLine',
         ]
         editor.config.onchange = (newHtml) => {
-
+            this.dyContent = newHtml
         }
         editor.create()
         this.editor = editor
@@ -187,9 +195,6 @@ export default {
     methods:{
         routerBackFunc() {
             this.$router.push('/dynamic')
-        },
-        mdEditor(text,html){
-            this.dyContent = text
         },
         tagInputEnter(e){
             if(e.target.value === '') return
@@ -199,7 +204,7 @@ export default {
             }
             let isHave
             this.noHaveTag.forEach(key => {
-                if(key === e.target.value) isHave = true
+                if(key.tagContent === e.target.value) isHave = true
             })
             this.tagTemp.forEach(key => {
                 if(key === e.target.value) isHave = true
@@ -207,7 +212,7 @@ export default {
             if(isHave){
                 ElMessage({message: '添加的标签已经存在了哦！',type: 'warning',})
             } else {
-                this.noHaveTag = this.noHaveTag.concat(e.target.value)
+                this.noHaveTag = this.noHaveTag.concat({tagContent: e.target.value,tagType: ''})
                 this.tagTemp = this.tagTemp.concat(e.target.value)
                 this.clearTagInput = ''
             }
@@ -220,7 +225,7 @@ export default {
             }
             let isHave
             this.noHaveTag.forEach(key => {
-                if(key === title) isHave = true
+                if(key.tagContent === title) isHave = true
             })
             this.havedTag.forEach(key => {
                 if(key === id) isHave = true
@@ -239,6 +244,44 @@ export default {
         },
         closeWindow(value){
             this.dialogVisible = value
+        },
+        imageIntoEdit(value){
+            this.dialogVisible = false
+            value.forEach(key =>{
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:100%;"/>')
+            })
+        },
+        dyPublish(){
+            if(!this.isDyPublishWorkNow){
+                this.isDyPublishWorkNow = true
+                if(this.dyTtitle === '' || this.dyDescribe === '' || this.dyContent === '' || this.noHaveTag.length === 0 || this.havedTag === 0){
+                    ElMessage('所提交的信息有空白！')
+                    this.isDyPublishWorkNow = false
+                } else{
+                    userPublishDynamic({
+                            uid: this.$store.getters.userInfoGet.uid,
+                            dynamicTitle: this.dyTtitle,
+                            dynamicDescribe: this.dyDescribe,
+                            dynamicContent: this.dyContent,
+                            tags: this.noHaveTag,
+                            alreadyExistedTagIds: this.havedTag
+                        }).then(resq => {
+                        if(resq.flag){
+                            ElMessageBox.alert(resq.message, '提示', {confirmButtonText: 'OK',callback: () => {
+                                    this.$router.push('/dynamic')
+                                }
+                            })
+                            this.isDyPublishWorkNow = false
+                        } else {
+                            ElMessage.error('请求发生错误！ ' + resq.message)
+                            this.isDyPublishWorkNow = false
+                        }
+                    }).catch(err => {
+                        ElMessage.error('请求发生错误！ ' + err)
+                        this.isDyPublishWorkNow = false
+                    })
+                }
+            }
         }
     }
 }
@@ -524,7 +567,7 @@ export default {
             justify-content: space-between;
             height: 1.5rem;
             margin-top: 0.5rem;
-            span
+            div
             {
                 height: 100%;
                 display: flex;

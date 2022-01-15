@@ -38,3 +38,11 @@ export const deleteImage = (query) => {
         data: query
     })
 }
+//用户动态发表
+export const userPublishDynamic = (query) => {
+    return request({
+        url: '/dynamic/',
+        method: 'post',
+        data: query
+    })
+}

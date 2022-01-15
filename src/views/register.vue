@@ -36,14 +36,6 @@
                         <input type="text" maxlength="4" v-model="CAPTCHACode" @focus="spanStyleAdd = 5" @blur="spanStyleAdd = 0" :style="CAPTCHACode === '' ? 'background-color: transparent;':''"/>
                         <div class="CAPTCHA-picture"></div>
                     </div>
-                    <div class="account-func">
-                        <div class="rember-me">
-                            <el-checkbox-group v-model="remberMe">
-                                <el-checkbox label="记住我"/>
-                            </el-checkbox-group>
-                        </div>
-                        <span>忘记密码？</span>
-                    </div>
                     <span class="confirm-span">确认</span>
                 </div>
             </div>
@@ -287,46 +279,6 @@ export default {
                 {
                     color: white;
                     background-color: #409eff;
-                }
-                .account-func
-                {
-                    display: flex;
-                    height: 1.5rem;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-top: 1rem;
-                    span
-                    {
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        font-size: 0.55rem;
-                        text-decoration: underline;
-                        cursor: pointer;
-                        transition: all 0.3s;
-                    }
-                    span:hover
-                    {
-                        color: red;
-                    }
-                    .rember-me
-                    {
-                        height: 100%;
-                        ::v-deep(.el-checkbox-group)
-                        {
-                            height: 100%;
-                        }
-                        ::v-deep(.el-checkbox)
-                        {
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            span
-                            {
-                                font-size: 0.55rem;
-                            }
-                        }
-                    }
                 }
             }
         }

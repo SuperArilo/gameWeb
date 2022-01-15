@@ -478,12 +478,13 @@ export default {
         padding-top: 1rem;
         padding: 0.5rem 0.3rem;
         display: flex;
-        flex-direction: column;
+        align-content: flex-start;
         flex-wrap: wrap;
         background-color: rgb(240, 240, 240);
         border-radius:0 0 0.2rem 0.2rem;
         overflow: hidden;
         transition: all 0.3s;
+        position: relative;
         .data-empty
         {
             width: 100%;
@@ -523,9 +524,10 @@ export default {
             width: 100%;
             background-color: #ffffff;
             display: flex;
-            flex-direction: column;
+            align-content: flex-start;
+            flex-wrap: wrap;
             padding: 0.5rem 0.5rem;
-            transition: all 0.3s;
+            transition: all 0.5s;
             margin-bottom: 1rem;
             border-radius: 0.2rem;
             .title-and-user-head
@@ -633,14 +635,14 @@ export default {
                 }
             }
         }
-        .list-enter-active , .list-leave-active
-        {
-            transition: all 0.5s;
-        }
         .list-enter-from , .list-leave-to
         {
             opacity: 0;
-            margin-top: -10rem;
+            transform: translateY(1rem);
+        }
+        .list-leave-active
+        {
+            position: absolute;
         }
         .sub-item:hover
         {

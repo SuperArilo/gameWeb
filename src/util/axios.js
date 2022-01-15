@@ -2,7 +2,12 @@
 axios.defaults.withCredentials = true
 const service = axios.create({
     baseURL: 'https://www.itrong.love:1234/api',
-    timeout: 5000
+    timeout: 5000,
+    headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': 'http://localhost:8080',
+        'Access-Control-Allow-Headers': 'POST,GET',
+    }
 })
 service.interceptors.request.use(config => {
    //  if (localStorage.getItem('token')) {

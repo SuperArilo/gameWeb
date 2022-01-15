@@ -72,15 +72,7 @@
                 <i class="fas fa-sign"/>
             </div>
             <div class="user-message">
-                <div class="user-head-and-edit">
-                    <div class="head">
-                        <img :src="userHead"/>
-                    </div>
-                    <div class="edit-div">
-                        <div class="title-func"></div>
-                        <div class="render-edit" ref="dyEditTool"></div>
-                    </div>
-                </div>
+                <div class="render-edit" ref="dyEditTool"></div>
             </div>
             <span class="line"></span>
             <div class="message-content">
@@ -173,6 +165,7 @@ export default {
         }
         editor.create()
         this.editor = editor
+        console.log(this.editor)
     },
     methods:{
         dropdownMenuFunc(command, number, object){
@@ -236,7 +229,7 @@ export default {
             width: 100%;
             height: 0.03rem;
             background-color: rgba(68, 68, 68, 0.473);
-            margin: 0.3rem 0;
+            margin: 1rem 0;
         }
         .base-info
         {
@@ -401,57 +394,29 @@ export default {
         .user-message
         {
             width: 100%;
-            display: flex;
-            align-content: flex-start;
-            flex-wrap: wrap;
-            .user-head-and-edit
+            .render-edit
             {
                 width: 100%;
-                display: flex;
-                justify-content: space-between;
-                margin: 0.5rem 0;
-                .head
-                {
-                    width: 2.5rem;
-                    height: 2.5rem;
-                    min-width: 2.5rem;
-                    border-radius: 50%;
-                    overflow: hidden;
-                    img
-                    {
-                        width: 100%;
-                        object-fit: cover;
-                    }
-                }
-                .edit-div
-                {
-                    width: 100%;
-                    margin-left: 1rem;
-                    .render-edit
-                    {
-                        width: 100%;
-                    }
-                    ::v-deep(.w-e-toolbar)
-                    {
-                        z-index: 400 !important;
-                    }
-                    ::v-deep(.w-e-text-container)
-                    {
-                        z-index: 399 !important;
-                    }
-                    ::v-deep(i)
-                    {
-                        font-size: 0.6rem !important;
-                    }
-                    ::v-deep(.w-e-menu-tooltip)
-                    {
-                        font-size: 0.6rem;
-                    }
-                    ::v-deep(.w-e-up-btn)
-                    {
-                        width: 100%;
-                    }
-                }
+            }
+            ::v-deep(.w-e-toolbar)
+            {
+                z-index: 400 !important;
+            }
+            ::v-deep(.w-e-text-container)
+            {
+                z-index: 399 !important;
+            }
+            ::v-deep(i)
+            {
+                font-size: 0.6rem !important;
+            }
+            ::v-deep(.w-e-menu-tooltip)
+            {
+                font-size: 0.6rem;
+            }
+            ::v-deep(.w-e-up-btn)
+            {
+                width: 100%;
             }
         }
         .message-content

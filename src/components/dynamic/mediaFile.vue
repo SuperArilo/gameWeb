@@ -4,23 +4,26 @@
             <i class="fas fa-times-circle left-i" @click="closeWindow"/>
             <span class="center-title">媒体管理器</span>
             <div class="right-upload">
-                <input type="file" ref="fileInput" @change="fileBeforeUpload" accept="image/*" multiple title=""/>
-                <i class="fas fa-file-upload"/>
-                <span>上传</span>
+                <i v-if="isUploadToServerWorkNow" class="fas fa-circle-notch fa-spin"/>
+                <input v-if="!isUploadToServerWorkNow" type="file" ref="fileInput" @change="fileBeforeUpload" accept="image/*" multiple title=""/>
+                <i v-if="!isUploadToServerWorkNow" class="fas fa-file-upload"/>
+                <span v-if="!isUploadToServerWorkNow">上传</span>
             </div>
         </div>
-        <div class="media-div" :class="imageList.length === 0 ? 'media-div-style-flex':'media-div-style-grid'">
+        <div class="media-empty" v-if="imageList.length === 0">
             <span v-if="imageList.length === 0 && isGetMediaFileWorkNow === false">您还没有上传过文件哦！</span>
             <i v-if="isGetMediaFileWorkNow" class="fas fa-circle-notch fa-spin"/>
+        </div>
+        <div class="media-div" v-if="imageList.length !== 0">
             <transition-group name="list">
-                <div class="media-sub-item" v-for="(item,index) in imageList" :key="index" :class="imageIsHaveIdList.indexOf(item.id) !== -1 ? 'media-sub-item-active':''"> 
+                <div class="media-sub-item" v-for="item in imageList" :key="item.id"> 
                     <div class="title-func">
                         <div class="is-choice">
                             <i v-show="imageIsHaveIdList.indexOf(item.id) !== -1" class="fas fa-check"/>
                         </div>
                         <i class="fas fa-trash-alt" @click="deleteByOneToOne(item.id)"/>
                     </div>
-                    <img :src="item.mediaHttpUrl" @click="userChoicePicture(item.id)"/>
+                    <img :src="item.mediaHttpUrl" @click="userChoicePicture(item.id,item.mediaHttpUrl)"/>
                     <span class="file-name">{{item.mediaName}}</span>
                 </div>
             </transition-group>
@@ -30,27 +33,29 @@
                 <span v-if="!isDeleteByMultipleWorkNow">删除</span>
                 <i v-if="isDeleteByMultipleWorkNow" class="fas fa-circle-notch fa-spin"/>
             </div>
-            <div class="embed">
+            <div class="embed" @click="embedIntoEdit">
                 <span>嵌入</span>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { uploadImage , userImageGet } from '@/util/api.js'
+import { uploadImage , userImageGet , deleteImage } from '@/util/api.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
 export default {
     data(){
         return{
             imageList:[],
             imageIsHaveIdList:[],
+            intoEditList: [],
+            isUploadToServerWorkNow: false,
             isGetMediaFileWorkNow: false,
-            isDeleteByMultipleWorkNow: false,
+            isDeleteByMultipleWorkNow: false
         }
     },
     async created(){
         this.isGetMediaFileWorkNow = true
-        userImageGet({uid: 11}).then(resq => {
+        userImageGet({uid: this.$store.getters.userInfoGet.uid}).then(resq => {
             if(resq.flag){
                 this.imageList = resq.data
                 this.isGetMediaFileWorkNow = false
@@ -63,29 +68,60 @@ export default {
         closeWindow(){
             this.$emit('closeWindow',false)
         },
-        userChoicePicture(id){
+        userChoicePicture(id,url){
             if(this.imageIsHaveIdList.indexOf(id) === -1){
                 this.imageIsHaveIdList.unshift(id)
+                this.intoEditList.unshift({id: id,url: url})
             } else {
-                this.imageIsHaveIdList.splice(this.imageIsHaveIdList.findIndex(item => item === id), 1)
+                let index = this.imageIsHaveIdList.findIndex(item => item === id)
+                this.imageIsHaveIdList.splice(index, 1)
+                this.intoEditList.splice(index,1)
             }
         },
         fileBeforeUpload(e){
-            let files = [...e.target.files]
-            this.$refs.fileInput.value = ''
-            if(files !== 0){
-                let data = new FormData()
-                data.append('imageFile',files)
-                data.append('uid',10)
-                uploadImage(data).then(resq => {
-                    console.log(resq)
-                })
-                // this.editor.cmd.do('insertHTML', `<img src="${imgUrl}" style="max-width:100%;"/>`)
+            if(!this.isUploadToServerWorkNow){
+                this.isUploadToServerWorkNow = true
+                let files = [...e.target.files]
+                this.$refs.fileInput.value = ''
+                if(files !== 0){
+                    let data = new FormData()
+                    for (let i = 0; i < files.length; i++) {
+                        data.append('imageFiles',files[i])
+                    }
+                    data.append('uid',this.$store.getters.userInfoGet.uid)
+                    uploadImage(data).then(resq => {
+                        if(resq.flag){
+                            ElMessage({type: 'success', message: resq.message})
+                            this.imageList = this.imageList.concat(resq.data)
+                            this.isUploadToServerWorkNow = false
+                        } else {
+                            ElMessage.error(resq.message)
+                            this.isUploadToServerWorkNow = false
+                        }
+                    }).catch(err => {
+                        ElMessage.error('上传图片过程中发生错误！ ' + err)
+                        this.isUploadToServerWorkNow = false
+                    })
+                }
             }
         },
         deleteByOneToOne(id){
             ElMessageBox.confirm( '确定删除选中的文件吗？此操作不可逆', { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning'}).then(() => {
-                ElMessage({  type: 'success', message: '删除成功'})
+                let sendData = new FormData()
+                let ArrayID = []
+                ArrayID.unshift(id)
+                sendData.append('uid', this.$store.getters.userInfoGet.uid)
+                sendData.append('mediaIds', ArrayID)
+                deleteImage(sendData).then(resq => {
+                    if(resq.flag){
+                        ElMessage({type: 'success', message: resq.message})
+                        this.imageList.splice(this.imageList.findIndex(item => item.id === id), 1)
+                    } else {
+                        ElMessage.error(resq.message)
+                    }
+                }).catch(err => {
+                    ElMessage.error('请求发生错误！ ' + err)
+                })
             }).catch(err => {
             })
         },
@@ -97,12 +133,30 @@ export default {
             if(!this.isDeleteByMultipleWorkNow){
                 this.isDeleteByMultipleWorkNow = true
                 ElMessageBox.confirm( '确定删除选中的文件吗？此操作不可逆', { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning'}).then(() => {
-                    ElMessage({  type: 'success', message: '删除成功'})
+                    let data = new FormData()
+                    data.append('uid',this.$store.getters.userInfoGet.uid)
+                    data.append('mediaIds',this.imageIsHaveIdList)
+                    deleteImage(data).then(resq => {
+                        if(resq.flag){
+                            ElMessage({  type: 'success', message: resq.message})
+                            this.imageIsHaveIdList.findIndex(key => {
+                                this.imageList.splice(this.imageList.findIndex(item => item.id === key), 1)
+                            })
+                            this.imageIsHaveIdList = []
+                        } else {
+                            ElMessage.error(resq.message)
+                        }
+                    }).catch(err => {
+                        ElMessage.error('请求发生错误！ ' + err)
+                    })
                     this.isDeleteByMultipleWorkNow = false
                 }).catch(err => {
                     this.isDeleteByMultipleWorkNow = false
                 })
             }
+        },
+        embedIntoEdit(){
+            this.$emit('imageIntoEdit',this.intoEditList)
         }
     }
 }
@@ -169,13 +223,35 @@ export default {
             color: #ffffff;
         }
     }
-    .media-div
+    .media-empty , .media-div
     {
         width: 100%;
         height: 14rem;
-        overflow-y: scroll;
         background-color: #e8ecf3;
+    }
+    .media-empty
+    {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span , i
+        {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+    }
+    .media-div
+    {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 7rem);
+        grid-template-rows: repeat(auto-fill,6rem);
+        grid-row-gap: 0.5rem;
+        justify-content: space-around;
+        overflow-y: scroll;
         padding: 0.8rem 0.8rem 0.8rem 1.4rem;
+        position: relative;
         .media-sub-item
         {
             width: 7rem;
@@ -186,7 +262,7 @@ export default {
             border-radius: 0.2rem;
             overflow: hidden;
             background-color: #ffffff;
-            transition: all 0.2s;
+            transition: all 0.5s;
             .title-func
             {
                 width: 100%;
@@ -198,7 +274,8 @@ export default {
                 {
                     .fa-check
                     {
-                        color: green;
+                        font-size: 0.9rem;
+                        color: rgb(96, 163, 96);
                     }
                 }
                 i
@@ -240,40 +317,14 @@ export default {
                 white-space: nowrap;
             }
         }
-        .media-sub-item-active
-        {
-            box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.767);
-        }
-        .list-enter-active , .list-leave-active
-        {
-            transition: all 0.5s;
-        }
         .list-enter-from , .list-leave-to
         {
             opacity: 0;
-            margin-top: 6rem;
         }
-    }
-    .media-div-style-flex
-    {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        span , i
+        .list-leave-active
         {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-size: 0.7rem;
+            position: absolute;
         }
-    }
-    .media-div-style-grid
-    {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 7rem);
-        grid-template-rows: repeat(auto-fill,6rem);
-        grid-row-gap: 0.5rem;
-        justify-content: space-around;
     }
     .media-bottom
     {
