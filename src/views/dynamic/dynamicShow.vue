@@ -3,7 +3,7 @@
         <div class="top-menu">
             <div class="user-func-div">
                 <div class="left-menu">
-                    <el-dropdown class="dropdown-menu" :hide-on-click="false" @command="dropdownMenuFunc">
+                    <el-dropdown class="dropdown-menu" @command="dropdownMenuFunc">
                         <span>{{dropdownMenuTitle}}
                             <i class="fa fa-chevron-down"/>
                         </span>

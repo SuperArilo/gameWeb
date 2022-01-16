@@ -141,7 +141,7 @@ export default {
     {
         .center-box
         {
-            width: 60%;
+            width: 75%;
         }
     }
 }
@@ -151,7 +151,7 @@ export default {
     {
         .center-box
         {
-            width: 75%;
+            width: 85%;
         }
     }
 }
@@ -161,7 +161,7 @@ export default {
     {
         .center-box
         {
-            width: 90%;
+            width: 95%;
         }
     }
 }

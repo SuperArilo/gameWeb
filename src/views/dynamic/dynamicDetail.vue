@@ -29,8 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="dy-markdown-content">
-            
+        <div class="dy-edit-reshow-content render-by-edit" v-html="text">       
         </div>
         <div class="dy-write-comment">
             <span class="title-span">
@@ -69,7 +68,9 @@
                         </div>
                     </div>
                     <el-collapse-transition>
-                        <dynamic-detail-comment style="padding:0 0.3rem 0 0.3rem;" v-if="isOpenBackComment === item.id"></dynamic-detail-comment>
+                        <div class="fix-edit-to-transition" v-if="isOpenBackComment === item.id">
+                            <dynamic-detail-comment></dynamic-detail-comment>
+                        </div>
                     </el-collapse-transition>
                     <div class="other-user-comment">
                         <div class="sub-other-user-item" v-for="(itemSub,indexSub) in item.commentBack" :key="indexSub">
@@ -95,12 +96,15 @@
                         </div>
                     </div>
                 </div>
+                <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet"/>
             </div>
         </div>
     </div>
 </template>
 <script>
 import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
+import { dynamicDetailGet } from '@/util/api.js'
+import { ElMessage } from 'element-plus'
 export default {
     components:{
         dynamicDetailComment
@@ -179,7 +183,19 @@ export default {
                 },
             ],
             isOpenBackComment: '',
+            text: ''
         }
+    },
+    created(){
+        dynamicDetailGet(this.$route.query.id).then(resq => {
+            if(resq.flag){
+                console.log(resq)
+            } else {
+                ElMessage.error('获取详情发生错误！ ' + resq.message)
+            }
+        }).catch(err => {
+            ElMessage.error('获取详情发生错误！ ' + err)
+        })
     },
     methods:{
         OpenBackComment(id){
@@ -240,12 +256,13 @@ export default {
         align-items: center;
         .title-span
         {
-            width: 100%;
+            width: 70%;
             display: flex;
             justify-content: center;
             text-align: center;
             font-size: 1rem;
             font-weight: 600;
+            text-align: center;
         }
         .data-show
         {
@@ -272,12 +289,10 @@ export default {
             }
         }
     }
-    .dy-markdown-content
+    .dy-edit-reshow-content
     {
         width: 100%;
         margin-top: 0.5rem;
-        height: 20rem;
-        background-color: rgb(95, 95, 95);
     }
     .dy-write-comment , .dy-comment-content
     {
@@ -291,6 +306,7 @@ export default {
             font-size: 0.9rem;
             color: rgb(61, 60, 60);
             border-bottom: solid 0.1rem rgb(206, 206, 206);
+            margin: 0.5rem 0;
             i
             {
                 margin-right: 0.5rem;
@@ -305,8 +321,7 @@ export default {
         justify-content: center;
         align-content: flex-start;
         flex-wrap: wrap;
-        margin-top: 1rem;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
     }
     .dy-comment-content
     {
@@ -315,21 +330,21 @@ export default {
         justify-content: center;
         flex-wrap: wrap;
         align-content: flex-start;
-        padding: 0 1rem;
+        padding: 0 0.5rem;
         .content
         {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
             align-content: flex-start;
-            margin-top: 1rem;
+            justify-content: center;
             .sub-comment-item
             {
                 width: 100%;
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
-                margin-bottom: 1rem;
+                margin: 0.5rem 0;
                 .top-user-box
                 {
                     width: 100%;
@@ -338,6 +353,8 @@ export default {
                     .left-user-head
                     {
                         box-shadow: 0 0 0.2rem rgb(105, 105, 105);
+                        border-radius: 50%;
+                        overflow: hidden;
                         img
                         {
                             width: 100%;
@@ -347,10 +364,15 @@ export default {
                     .right-user-content
                     {
                         width: 100%;
-                        margin-left: 1rem;
                         display: flex;
                         flex-wrap: wrap;
                         align-content: flex-start;
+                        border-left: solid 0.2rem #3773f3;
+                        border-right: solid 0.2rem #3773f3;
+                        padding: 0.3rem;
+                        box-shadow: 0 0.1rem 0.8rem -0.6rem black;
+                        background-color: rgba(255,255,255,0.4);
+                        position: relative;
                         .user-name-div
                         {
                             width: 100%;
@@ -359,7 +381,8 @@ export default {
                             align-items: center;
                             .user-name
                             {
-                                font-size: 0.7rem;
+                                font-size: 0.68rem;
+                                letter-spacing: 0.02rem;
                                 color: rgb(24, 24, 24);
                             }
                             .user-tag
@@ -428,6 +451,21 @@ export default {
                             }
                         }
                     }
+                    .right-user-content::after
+                    {
+                        content: "";
+                        position: absolute;
+                        border-top: solid 0.3rem transparent;
+                        border-right: solid 0.4rem #3773f3;
+                        border-bottom: solid 0.3rem transparent;
+                        left: -0.6rem;
+                        top: 1rem;
+                    }
+                }
+                .fix-edit-to-transition
+                {
+                    width: 100%;
+                    margin-top: 0.5rem;
                 }
                 .other-user-comment
                 {
@@ -435,13 +473,13 @@ export default {
                     display: flex;
                     flex-wrap: wrap;
                     align-content: flex-start;
-                    margin-top: 1rem;
+                    margin-top: 0.5rem;
                     .sub-other-user-item
                     {
                         width: 100%;
                         display: flex;
                         justify-content: space-between;
-                        margin-bottom: 1rem;
+                        margin: 0.25rem 0;
                         .right-other-user-comment
                         {
                             width: 100%;
@@ -466,7 +504,12 @@ export default {
                                 display: flex;
                                 align-content: flex-start;
                                 flex-wrap: wrap;
-                                margin-left: 0.5rem;
+                                border-left: solid 0.2rem #807fe2;
+                                border-right: solid 0.2rem #807fe2;
+                                padding: 0.3rem;
+                                box-shadow: 0 0.1rem 0.8rem -0.6rem black;
+                                background-color: rgba(255,255,255,0.1);
+                                position: relative;
                                 .other-user-name-div
                                 {
                                     width: 100%;
@@ -533,6 +576,16 @@ export default {
                                     }
                                 }
                             }
+                            .other-user-comment-content::after
+                            {
+                                content: "";
+                                position: absolute;
+                                border-top: solid 0.3rem transparent;
+                                border-right: solid 0.4rem #807fe2;
+                                border-bottom: solid 0.3rem transparent;
+                                left: -0.6rem;
+                                top: 1rem;
+                            }
                         }
                     }
                 }
@@ -550,9 +603,13 @@ export default {
             {
                 .left-user-head
                 {
-                    width: 4rem;
-                    min-width: 4rem;
-                    height: 4rem;
+                    width: 3rem;
+                    min-width: 3rem;
+                    height: 3rem;
+                }
+                .right-user-content , .other-user-comment-content
+                {
+                    margin-left: 1rem;
                 }
             }
         }
@@ -568,9 +625,13 @@ export default {
             {
                 .left-user-head
                 {
-                    width: 4rem;
-                    min-width: 4rem;
-                    height: 4rem;
+                    width: 3rem;
+                    min-width: 3rem;
+                    height: 3rem;
+                }
+                .right-user-content , .other-user-comment-content
+                {
+                    margin-left: 1rem;
                 }
             }
         }
@@ -586,9 +647,13 @@ export default {
             {
                 .left-user-head
                 {
-                    width: 3.5rem;
-                    min-width: 3.5rem;
-                    height: 3.5rem;
+                    width: 2.5rem;
+                    min-width: 2.5rem;
+                    height: 2.5rem;
+                }
+                .right-user-content , .other-user-comment-content
+                {
+                    margin-left: 1rem;
                 }
             }
         }
@@ -604,9 +669,13 @@ export default {
             {
                 .left-user-head
                 {
-                    width: 3rem;
-                    min-width: 3rem;
-                    height: 3rem;
+                    width: 2.5rem;
+                    min-width: 2.5rem;
+                    height: 2.5rem;
+                }
+                .right-user-content , .other-user-comment-content
+                {
+                    margin-left: 0.5rem;
                 }
             }
         }
@@ -622,9 +691,13 @@ export default {
             {
                 .left-user-head
                 {
-                    width: 3rem;
-                    min-width: 3rem;
-                    height: 3rem;
+                    width: 2.5rem;
+                    min-width: 2.5rem;
+                    height: 2.5rem;
+                }
+                .right-user-content , .other-user-comment-content
+                {
+                    margin-left: 0.5rem;
                 }
             }
         }
@@ -640,9 +713,13 @@ export default {
             {
                 .left-user-head
                 {
-                    width: 3rem;
-                    min-width: 3rem;
-                    height: 3rem;
+                    width: 2.5rem;
+                    min-width: 2.5rem;
+                    height: 2.5rem;
+                }
+                .right-user-content , .other-user-comment-content
+                {
+                    margin-left: 0.5rem;
                 }
             }
         }

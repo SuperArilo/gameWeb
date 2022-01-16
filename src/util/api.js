@@ -11,6 +11,17 @@ export const dynamicGet = (params) => {
         }
     })
 }
+//根据具体id查询动态
+export const dynamicDetailGet = (params) => {
+    return request({
+        url: '/dynamic/details',
+        method: 'get',
+        params: params,
+        paramsSerializer: params => {
+            return qs.stringify(params, {arrayFormat: 'repeat'})
+        }
+    })
+}
 //媒体管理器获取图片
 export const userImageGet = (params) => {
     return request({

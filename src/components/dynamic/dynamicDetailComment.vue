@@ -1,22 +1,72 @@
 <template>
     <div class="dynamic-detail-comment-box">
         <div class="head-write-box">
-            <div class="user-head">
-                <img :src="head"/>
-            </div>
-            <textarea placeholder="发表你的看法吧"></textarea>
+            <div class="render-edit" ref="dyEditTool"></div>
         </div>
         <div class="dy-buttom">
-            <span class="button-clear">清空</span>
+            <span class="buttom-file" @click="openFile">媒体管理器</span>
             <span class="button-confirm">提交</span>
         </div>
+        <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
+            <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
+        </el-dialog>
     </div>
 </template>
 <script>
+import E from 'wangeditor'
+import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
+    components:{
+        mediaFile
+    },
     data(){
         return{
-            head: require('@/views/icon/head/stranger12.jpg')
+            head: require('@/views/icon/head/stranger12.jpg'),
+            editor: null,
+            dialogVisible: false,
+        }
+    },
+    mounted(){
+        const editor = new E(this.$refs.dyEditTool)
+        editor.config.showLinkImg = false
+        editor.config.menus = [
+            'head',
+            'bold',
+            'fontSize',
+            'italic',
+            'underline',
+            'strikeThrough',
+            'indent',
+            'lineHeight',
+            'foreColor',
+            'backColor',
+            'link',
+            'list',
+            'justify',
+            'quote',
+            'emoticon',
+            'image',
+            'table',
+            'splitLine',
+        ]
+        editor.config.onchange = (newHtml) => {
+            this.dyContent = newHtml
+        }
+        editor.create()
+        this.editor = editor
+    },
+    methods:{
+        closeWindow(value){
+            this.dialogVisible = value
+        },
+        imageIntoEdit(value){
+            this.dialogVisible = false
+            value.forEach(key =>{
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:100%;"/>')
+            })
+        },
+        openFile(){
+            this.dialogVisible = true
         }
     }
 }
@@ -31,37 +81,29 @@ export default {
     .head-write-box
     {
         width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 1rem;
-        .user-head
-        {
-            overflow: hidden;
-            box-shadow: 0 0 0.2rem rgb(105, 105, 105);
-            img
-            {
-                width: 100%;
-                object-fit: cover;
-            }
-        }
-        textarea
+        .render-edit
         {
             width: 100%;
-            border-radius: 0.1rem;
-            min-height: 4rem;
-            outline: none;
-            margin-left: 0.5rem;
-            resize: none;
-            transition: all 0.3s;
-            padding: 0.5rem;
-            font-size: 0.7rem;
-            font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-            letter-spacing: 0.06rem;
         }
-        textarea:focus
+        ::v-deep(.w-e-toolbar)
         {
-            box-shadow: 0 0 0.2rem rgb(68, 112, 148);
+            z-index: 400 !important;
+        }
+        ::v-deep(.w-e-text-container)
+        {
+            z-index: 399 !important;
+        }
+        ::v-deep(i)
+        {
+            font-size: 0.6rem !important;
+        }
+        ::v-deep(.w-e-menu-tooltip)
+        {
+            font-size: 0.6rem;
+        }
+        ::v-deep(.w-e-up-btn)
+        {
+            width: 100%;
         }
     }
     .dy-buttom
@@ -69,7 +111,7 @@ export default {
         width: 100%;
         margin-top: 0.5rem;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         span
         {
             height: 1.5rem;
@@ -82,16 +124,15 @@ export default {
             border-radius: 0.2rem;
             cursor: pointer;
         }
-        .button-clear
+        .buttom-file
         {
-            background-color: #fdf6ec;
-            color:  #e6a23c;
-            border: solid 0.05rem #f5dab1;
+            background-color: #8db0b9;
+            color: #ffffff;
+            border: solid 0.05rem #6c888f;
         }
-        .button-clear:hover
+        .buttom-file:hover
         {
-            color: white;
-            background-color:  #e6a23c;
+            background-color: #407e8d;
         }
         .button-confirm
         {
@@ -106,59 +147,31 @@ export default {
             background-color: #409eff;
         }
     }
+    ::v-deep(.el-dialog__body)
+    {
+        padding: 0;
+    }
+    ::v-deep(.el-dialog__header)
+    {
+        display: none;
+    }
 }
 @media screen and (min-width:1400px)
 {
-    .dynamic-detail-comment-box .head-write-box .user-head
-    {
-        width: 4rem;
-        min-width: 4rem;
-        height: 4rem;
-    }
 }
 @media screen and (max-width:1400px) and (min-width:1200px)
 {
-    .dynamic-detail-comment-box .head-write-box .user-head
-    {
-        width: 4rem;
-        min-width: 4rem;
-        height: 4rem;
-    }
 }
 @media screen and (max-width:1200px) and (min-width:936px)
 {
-    .dynamic-detail-comment-box .head-write-box .user-head
-    {
-        width: 3.5rem;
-        min-width: 3.5rem;
-        height: 3.5rem;
-    }
 }
 @media screen and (max-width:936px) and (min-width:767px)
 {
-    .dynamic-detail-comment-box .head-write-box .user-head
-    {
-        width: 3rem;
-        min-width: 3rem;
-        height: 3rem;
-    }
 }
 @media screen and (max-width:767px) and (min-width:676px)
 {
-    .dynamic-detail-comment-box .head-write-box .user-head
-    {
-        width: 3rem;
-        min-width: 3rem;
-        height: 3rem;
-    }
 }
 @media screen and (max-width:676px)
 {
-    .dynamic-detail-comment-box .head-write-box .user-head
-    {
-        width: 3rem;
-        min-width: 3rem;
-        height: 3rem;
-    }
 }
 </style>
