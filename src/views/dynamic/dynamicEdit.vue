@@ -220,6 +220,7 @@ export default {
         addHavedTag(id,title){
             if(title === '') return
             if(this.noHaveTag.length + this.havedTag.length > 2){
+                console.log(this.havedTag)
                 ElMessage({message: '标签最多添加3个哦！',type: 'warning',})
                 return
             }
@@ -254,32 +255,37 @@ export default {
         dyPublish(){
             if(!this.isDyPublishWorkNow){
                 this.isDyPublishWorkNow = true
-                if(this.dyTtitle === '' || this.dyDescribe === '' || this.dyContent === '' || this.noHaveTag.length === 0 || this.havedTag === 0){
+                if(this.dyTtitle === '' || this.dyDescribe === '' || this.dyContent === ''){
                     ElMessage('所提交的信息有空白！')
                     this.isDyPublishWorkNow = false
                 } else{
-                    userPublishDynamic({
-                            uid: this.$store.getters.userInfoGet.uid,
-                            dynamicTitle: this.dyTtitle,
-                            dynamicDescribe: this.dyDescribe,
-                            dynamicContent: this.dyContent,
-                            tags: this.noHaveTag,
-                            alreadyExistedTagIds: this.havedTag
-                        }).then(resq => {
-                        if(resq.flag){
-                            ElMessageBox.alert(resq.message, '提示', {confirmButtonText: 'OK',callback: () => {
-                                    this.$router.push('/dynamic')
-                                }
-                            })
-                            this.isDyPublishWorkNow = false
-                        } else {
-                            ElMessage.error('请求发生错误！ ' + resq.message)
-                            this.isDyPublishWorkNow = false
-                        }
-                    }).catch(err => {
-                        ElMessage.error('请求发生错误！ ' + err)
+                    if(this.noHaveTag.length + this.havedTag.length === 0){
+                        ElMessage('你还没有选择标签哦！')
                         this.isDyPublishWorkNow = false
-                    })
+                    } else {
+                        userPublishDynamic({
+                                uid: this.$store.getters.userInfoGet.uid,
+                                dynamicTitle: this.dyTtitle,
+                                dynamicDescribe: this.dyDescribe,
+                                dynamicContent: this.dyContent,
+                                tags: this.noHaveTag,
+                                alreadyExistedTagIds: this.havedTag
+                            }).then(resq => {
+                            if(resq.flag){
+                                ElMessageBox.alert(resq.message, '提示', {confirmButtonText: 'OK',callback: () => {
+                                        this.$router.push('/dynamic')
+                                    }
+                                })
+                                this.isDyPublishWorkNow = false
+                            } else {
+                                ElMessage.error('请求发生错误！ ' + resq.message)
+                                this.isDyPublishWorkNow = false
+                            }
+                        }).catch(err => {
+                            ElMessage.error('请求发生错误！ ' + err)
+                            this.isDyPublishWorkNow = false
+                        })
+                    }
                 }
             }
         }

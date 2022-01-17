@@ -68,6 +68,10 @@ export default {
         openFile(){
             this.dialogVisible = true
         }
+    },
+    beforeDestroy() {
+        this.editor.destroy()
+        this.editor = null
     }
 }
 </script>

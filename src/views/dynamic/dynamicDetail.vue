@@ -5,31 +5,31 @@
             <span>Back</span>
         </div>
         <div class="dy-top-content">
-            <div class="title-span">这是标题</div>
+            <div class="title-span">{{dynamicMainContent.dynamicTitle}}</div>
             <div class="data-show">
                 <div class="dy-sub-item">
                     <i class="far fa-calendar-alt"/>
-                    <span>2021-12-22 19:13</span>
+                    <span>{{dynamicMainContent.createTime}}</span>
                 </div>
                 <div class="dy-sub-item">
                     <i class="fas fa-rocket"/>
-                    <span>这次换你听歌</span>
+                    <span>{{dynamicMainContent.username}}</span>
                 </div>
                 <div class="dy-sub-item">
                     <i class="far fa-comment-dots"/>
-                    <span>0 条评论</span>
+                    <span>{{dynamicMainContent.commentNum}} 条评论</span>
                 </div>
                 <div class="dy-sub-item">
                     <i class="fas fa-tag"/>
-                    <span>其他</span>
+                    <span v-for="item in dynamicMainContent.tags" :key="item.id">{{item.tagContent}}</span>
                 </div>
                 <div class="dy-sub-item">
                     <i class="fas fa-eye"/>
-                    <span>0 浏览</span>
+                    <span>{{dynamicMainContent.dynamicPageView}} 浏览</span>
                 </div>
             </div>
         </div>
-        <div class="dy-edit-reshow-content render-by-edit" v-html="text">       
+        <div class="dy-edit-reshow-content render-by-edit" v-html="dynamicMainContent.dynamicContent">       
         </div>
         <div class="dy-write-comment">
             <span class="title-span">
@@ -103,7 +103,7 @@
 </template>
 <script>
 import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
-import { dynamicDetailGet } from '@/util/api.js'
+import { dynamicDetailGet , dynamicCommentGet , dynamicDetailLncrement } from '@/util/api.js'
 import { ElMessage } from 'element-plus'
 export default {
     components:{
@@ -182,19 +182,38 @@ export default {
                     ]
                 },
             ],
+            dynamicMainContent: '',
             isOpenBackComment: '',
             text: ''
         }
     },
-    created(){
-        dynamicDetailGet(this.$route.query.id).then(resq => {
+    async created(){
+        let sendToServerData = {dynamicId: this.$route.query.id}
+        dynamicDetailGet(sendToServerData).then(resq => {
             if(resq.flag){
-                console.log(resq)
+                this.dynamicMainContent = resq.data
+                dynamicDetailLncrement(sendToServerData).then(resq => {
+                    console.log(resq)
+                    if(!resq.flag){
+                        ElMessage.error('浏览量增加发生错误！ ' + resq.message)
+                    }
+                }).catch(err => {
+                    ElMessage.error('浏览量增加发生错误！ ' + err.message)
+                })
             } else {
                 ElMessage.error('获取详情发生错误！ ' + resq.message)
             }
         }).catch(err => {
             ElMessage.error('获取详情发生错误！ ' + err)
+        })
+        dynamicCommentGet(sendToServerData).then(resq => {
+            if(resq.flag){
+                console.log(resq)
+            } else {
+                ElMessage.error('获取动态发生错误！ ' + resq.message)
+            }
+        }).catch(err => {
+            ElMessage.error('获取评论发生错误！ ' + err)
         })
     },
     methods:{
@@ -216,7 +235,7 @@ export default {
     align-content: flex-start;
     flex-wrap: wrap;
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 1rem 0.3rem;
+    padding: 0.5rem 0;
     .dy-back-div
     {
         height: 1.5rem;
@@ -293,6 +312,8 @@ export default {
     {
         width: 100%;
         margin-top: 0.5rem;
+        padding: 0 1rem;
+        min-height: 10rem;
     }
     .dy-write-comment , .dy-comment-content
     {

@@ -165,21 +165,17 @@ export default {
         }
         editor.create()
         this.editor = editor
-        console.log(this.editor)
     },
     methods:{
         dropdownMenuFunc(command, number, object){
             if(!this.dyAllLoading){
                 this.dyAllLoading = true
                 this.dropdownMenuTitle = object.target.textContent
-                setTimeout(() => {
-                    this.dyAllLoading = false
-                })
+                this.dyAllLoading = false
             }
         }
     },
     beforeDestroy() {
-        // 销毁编辑器
         this.editor.destroy()
         this.editor = null
     }

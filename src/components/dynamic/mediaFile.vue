@@ -19,9 +19,9 @@
                 <div class="media-sub-item" v-for="item in imageList" :key="item.id"> 
                     <div class="title-func">
                         <div class="is-choice">
-                            <i v-show="imageIsHaveIdList.indexOf(item.id) !== -1" class="fas fa-check"/>
+                            <i v-if="imageIsHaveIdList.indexOf(item.id) !== -1" class="fas fa-check"/>
                         </div>
-                        <i class="fas fa-trash-alt" @click="deleteByOneToOne(item.id)"/>
+                        <i v-if="imageIsHaveIdList.indexOf(item.id) === -1" class="fas fa-trash-alt" @click="deleteByOneToOne(item.id)"/>
                     </div>
                     <img :src="item.mediaHttpUrl" @click="userChoicePicture(item.id,item.mediaHttpUrl)"/>
                     <span class="file-name">{{item.mediaName}}</span>
@@ -115,7 +115,8 @@ export default {
                 deleteImage(sendData).then(resq => {
                     if(resq.flag){
                         ElMessage({type: 'success', message: resq.message})
-                        this.imageList.splice(this.imageList.findIndex(item => item.id === id), 1)
+                        let index = this.imageList.findIndex(item => item.id === id)
+                        this.imageList.splice(index, 1)
                     } else {
                         ElMessage.error(resq.message)
                     }

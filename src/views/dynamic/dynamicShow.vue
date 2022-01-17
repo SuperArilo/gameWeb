@@ -31,14 +31,14 @@
                 </div>
             </el-collapse-transition>
             <div class="tag-show">
-                <span class="tag-sub-item" v-for="(item,index) in dyTagList" :key="index">
-                    {{item.title}}
+                <div class="tag-sub-item" v-for="item in dyTagList" :key="item.id">
+                    <span>{{item.title}}</span>
                     <i class="fas fa-trash-alt" @click="delTag(item.id)"/>
-                </span>
+                </div>
             </div>
         </div>
         <div class="dy-content">
-            <i class="fas fa-sync-alt refresh-div fa-spin" :class="dyAllLoading ? 'refresh-div-is-loaded':''"/>
+            <i class="fas fa-circle-notch refresh-div" :class="dyAllLoading ? 'refresh-div-is-loaded fa-spin':''"/>
             <transition name="list">
                 <div class="data-empty" v-if="dyContent.length === 0">
                     <span>没有动态数据哦！</span>
@@ -46,7 +46,7 @@
                 </div>
             </transition>
             <transition-group name="list">
-                <div class="sub-item" v-for="(item,index) in dyContent" :key="index" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
+                <div class="sub-item" v-for="item in dyContent" :key="item.id" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
                     <div class="title-and-user-head">
                         <span class="title">{{item.dynamicTitle}}</span>
                         <div class="user-head">
@@ -75,18 +75,12 @@
                             <span>{{item.dynamicPageView}} 浏览</span>
                         </div>
                     </div>
-                    <span class="dy-introduction">
-                        {{item.dynamicDescribe}}
-                    </span>
+                    <span class="dy-introduction">{{item.dynamicDescribe}}</span>
                     <div class="bottom-buttom">
-                        <el-dropdown>
-                            <i class="fas fa-ellipsis-v"/>
-                            <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item v-for="(itemDyFunc,indexDyFunc) in dyFuncList" :key="indexDyFunc">{{itemDyFunc.title}}</el-dropdown-item>
-                            </el-dropdown-menu>
-                            </template>
-                        </el-dropdown>
+                        <div class="func-box">
+                            <i class="far fa-star"/>
+                            <i class="fas fa-exclamation-triangle"/>
+                        </div>
                         <span class="buttom" @click="detailsRouterfunc(item.id)">跃迁</span>
                     </div>
                 </div>
@@ -123,16 +117,6 @@ export default {
                     id: 0,
                     title: '发布时间正序',
                     order: 'DESC'
-                }
-            ],
-            dyFuncList:[
-                {
-                    id: 0,
-                    title: '收藏'
-                },
-                {
-                    id: 1,
-                    title: '举报'
                 }
             ],
             tagList:[
@@ -211,11 +195,8 @@ export default {
             dyAllLoading: false
         }
     },
-    created(){
+    async created(){
         this.sendToServer()
-    },
-    mounted(){
-        
     },
     methods:{
         dropdownMenuFunc(command, number, object){
@@ -223,17 +204,13 @@ export default {
                 this.dyAllLoading = true
                 this.dropdownMenuTitle = object.target.textContent
                 this.dYsendToServerParams.order = command
-                setTimeout(() => {
-                    this.sendToServer()
-                },1500)
+                this.sendToServer()
             }
         },
         refreshFunc(){
             if(!this.dyAllLoading){
                 this.dyAllLoading = true
-                setTimeout(() => {
-                    this.sendToServer()
-                },1500)
+                this.sendToServer()
             }
         },
         editRouter(){
@@ -251,9 +228,7 @@ export default {
                     this.dyAllLoading = true
                     this.dYsendToServerParams.tagIds.unshift(id)
                     this.dyTagList.unshift({id: id, title: title})
-                    setTimeout(() =>{
-                        this.sendToServer()
-                    },1500)
+                    this.sendToServer()
                 } else if (length > 2){
                     ElMessage({message: '最多支持筛选3个标签！'})
                 } else {
@@ -262,9 +237,7 @@ export default {
                         this.dyAllLoading = true
                         this.dYsendToServerParams.tagIds.unshift(id)
                         this.dyTagList.unshift({id: id, title: title})
-                        setTimeout(() =>{
-                            this.sendToServer()
-                        },1500)
+                        this.sendToServer()
                     } else if (isHave === 0){
                         ElMessage({message: title + '标签 已经添加了哦！'})
                     }
@@ -277,9 +250,7 @@ export default {
                 let index = this.dYsendToServerParams.tagIds.indexOf(id)
                 this.dyTagList.splice(index,1)
                 this.dYsendToServerParams.tagIds.splice(index,1)
-                setTimeout(() => {
-                    this.sendToServer()
-                },2000)
+                this.sendToServer()
             }
         },
         detailsRouterfunc(id){
@@ -290,7 +261,7 @@ export default {
             this.dYsendToServerParams.pageNumber = e
             this.sendToServer()
         },
-        sendToServer(){
+        async sendToServer(){
             dynamicGet(this.dYsendToServerParams).then(resq => {
                 if(resq.flag){
                     this.dyContent = resq.data
@@ -313,14 +284,13 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     flex-wrap: wrap;
     align-content: flex-start;
     .top-menu
     {
         width: 100%;
         display: flex;
-        flex-direction: column;
+        align-content: flex-start;
         flex-wrap: wrap;
         background-color: #ffffff;
         padding: 0.3rem 0.5rem;
@@ -455,6 +425,11 @@ export default {
         }
         .tag-show
         {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
             .tag-sub-item
             {
                 i
@@ -475,10 +450,10 @@ export default {
     .dy-content
     {
         width: 100%;
-        padding-top: 1rem;
-        padding: 0.5rem 0.3rem;
+        padding: 0 0.3rem;
         display: flex;
         align-content: flex-start;
+        justify-content: center;
         flex-wrap: wrap;
         background-color: rgb(240, 240, 240);
         border-radius:0 0 0.2rem 0.2rem;
@@ -506,18 +481,16 @@ export default {
         }
         .refresh-div
         {
-            width: 100%;
             height: 3rem;
             margin-top: -3rem;
             display: flex;
-            justify-content: center;
             align-items: center;
             color: #3773f3;
             transition: all 0.3s;
         }
         .refresh-div-is-loaded
         {
-            margin-top: -0.5rem;
+            margin-top: 0;
         }
         .sub-item
         {
@@ -528,7 +501,7 @@ export default {
             flex-wrap: wrap;
             padding: 0.5rem 0.5rem;
             transition: all 0.5s;
-            margin-bottom: 1rem;
+            margin: 0.5rem 0;
             border-radius: 0.2rem;
             .title-and-user-head
             {
@@ -614,6 +587,20 @@ export default {
                 justify-content: space-between;
                 align-items: center;
                 padding: 0 0.5rem;
+                .func-box
+                {
+                    height: 2rem;
+                    display: flex;
+                    align-items: center;
+                    i
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.7rem;
+                        margin: 0 0.3rem;
+                    }
+                }
                 .buttom
                 {
                     width: 4rem;
@@ -643,11 +630,6 @@ export default {
         .list-leave-active
         {
             position: absolute;
-        }
-        .sub-item:hover
-        {
-            transform: translateY(-0.2rem);
-            box-shadow: 0 0.3rem 0.3rem darkgray;
         }
     }
     .dy-change-page

@@ -188,7 +188,7 @@ export default {
                         border: solid 0.05rem darkgray;
                         padding: 0 0.3rem;
                         border-radius: 0.8rem;
-                        transition: all 0.4s;
+                        transition: all 0.3s;
                         font-size: 0.6rem;
                         position: relative;
                         z-index: 10;

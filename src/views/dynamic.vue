@@ -17,32 +17,18 @@
     </div>
 </template>
 <script>
-import loading from '@/components/loading.vue'
 import FooterBottom from '@/components/footerBottom.vue'
 export default {
     components:{
-        loading,
         FooterBottom
     },
     data(){
         return{
-            page: 0,
-            data:[],
-            isCountToPage: true,
-            imageList: [],
-            indexBg: require('@/views/icon/index/index_center.jpg'),
         }
     },
     created(){
     },
     mounted(){
-    },
-    methods:{
-        
-    },
-    computed:{
-    },
-    watch:{
     }
 }
 </script>
@@ -51,8 +37,9 @@ export default {
 {
     width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    align-content: flex-start;
+    flex-wrap:wrap;
     overflow: hidden;
     padding-top: 2rem;
     background-repeat: no-repeat;
@@ -117,12 +104,11 @@ export default {
     }
     .loading_animate-enter-active
     {
-        transition-delay: 0.4s !important;
-        animation: flipInX 0.4s;
+        animation: flipInX 0.3s;
     }
     .loading_animate-leave-active
     {
-        animation: flipOutY 0.4s;
+        animation: flipOutY 0.3s;
     }
 }
 @media screen and (min-width:1400px)
