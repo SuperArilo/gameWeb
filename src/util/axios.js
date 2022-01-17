@@ -2,7 +2,7 @@
 axios.defaults.withCredentials = true
 const service = axios.create({
     baseURL: 'https://www.itrong.love:1234/api',
-    timeout: 10000,
+    timeout: 20000,
     headers: {
         "Content-Type": "application/json",
         'Access-Control-Allow-Origin': 'http://localhost:8080',

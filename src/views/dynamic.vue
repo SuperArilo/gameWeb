@@ -106,44 +106,4 @@ export default {
         animation: flipOutY 0.3s;
     }
 }
-@media screen and (min-width:1400px)
-{
-    .index-box
-    {
-        .center-box
-        {
-            width: 80%;
-        }
-    }
-}
-@media screen and (max-width:1400px) and (min-width:1200px)
-{
-    .index-box
-    {
-        .center-box
-        {
-            width: 70%;
-        }
-    }
-}
-@media screen and (max-width:1200px) and (min-width:936px)
-{
-    .index-box
-    {
-        .center-box
-        {
-            width: 70%;
-        }
-    }
-}
-@media screen and (max-width:936px)
-{
-    .index-box
-    {
-        .center-box
-        {
-            width: 95%;
-        }
-    }
-}
 </style>
