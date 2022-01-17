@@ -1,5 +1,5 @@
 <template>
-    <div class="edit-box">
+    <div class="edit-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
         <div class="title-back" @click="routerBackFunc()">
             <i class="fas fa-chevron-left"/>
             <span>Back</span>
@@ -61,6 +61,7 @@
         <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
             <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
         </el-dialog>
+        <footer-bottom/>
     </div>
 </template>
 <script>
@@ -68,9 +69,10 @@ import { ElMessage , ElMessageBox } from 'element-plus'
 import E from 'wangeditor'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 import {userPublishDynamic} from '@/util/api.js'
+import footerBottom from '@/components/footerBottom.vue'
 export default {
     components:{
-        mediaFile
+        mediaFile , footerBottom
     },
     data(){
         return{
@@ -300,16 +302,18 @@ export default {
     justify-content: flex-start;
     align-content: flex-start;
     flex-wrap: wrap;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 1rem 0.3rem;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+    background-size: cover;
     .title-back
     {
         height: 1.5rem;
         display: flex;
-        justify-content: flex-start;
+        align-items: center;
         padding: 0 0.5rem;
         cursor: pointer;
-        margin-bottom: 0.5rem;
+        margin: 0.5rem 0 0.5rem 0.5rem;
         span , i
         {
             height: 100%;

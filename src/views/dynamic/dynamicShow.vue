@@ -1,5 +1,5 @@
 <template>
-    <div class="content-box">
+    <div class="content-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
         <div class="top-menu">
             <div class="user-func-div">
                 <div class="left-menu">
@@ -89,12 +89,15 @@
         <div class="dy-change-page">
             <el-pagination background layout="prev, pager, next" :total="80" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange" :small="this.$store.getters.isPhoneGet"/>
         </div>
+        <footer-bottom/>
     </div>
 </template>
 <script>
 import { ElMessage } from 'element-plus'
 import { dynamicGet } from '@/util/api.js'
+import footerBottom from '@/components/footerBottom.vue'
 export default {
+  components: { footerBottom },
     data(){
         return{
             dropdownMenu:[
@@ -286,6 +289,10 @@ export default {
     justify-content: center;
     flex-wrap: wrap;
     align-content: flex-start;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+    background-size: cover;
     .top-menu
     {
         width: 100%;

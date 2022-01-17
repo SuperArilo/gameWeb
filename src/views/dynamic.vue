@@ -1,27 +1,22 @@
 <template>
-    <div class="index-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
+    <div class="index-box">
         <div class="center-box">
             <div class="top-tips">
                 <span>动态发表</span>
                 <span>在这里可以发布您的个人动态以及你的日常，如有疑问也可以直接回复</span>
             </div>
             <div class="center-content-box">
-                <router-view v-slot="{ Component }">
-                    <transition mode="out-in" name="router_animate">
+                <router-view v-slot="{ Component }" style="position: absolute;">
+                    <transition name="router_animate">
                         <component :is="Component" />
                     </transition>
                 </router-view>
             </div>
         </div>
-        <footer-bottom/>
     </div>
 </template>
 <script>
-import FooterBottom from '@/components/footerBottom.vue'
 export default {
-    components:{
-        FooterBottom
-    },
     data(){
         return{
         }
@@ -40,11 +35,6 @@ export default {
     justify-content: center;
     align-content: flex-start;
     flex-wrap:wrap;
-    overflow: hidden;
-    background-repeat: no-repeat;
-    background-position: top;
-    background-attachment: fixed;
-    background-size: cover;
     .center-box
     {
         width: 100%;
@@ -86,14 +76,14 @@ export default {
         .center-content-box
         {
             width: 100%;
-            overflow: hidden;
+            position: relative;
             .router_animate-enter-active
             {
-                animation: fadeInLeft 0.4s;
+                animation: slideInLeft 0.4s;
             }
             .router_animate-leave-active
             {
-                animation: fadeOutRight 0.4s;
+                animation: slideOutRight 0.4s;
             }
         }
     }

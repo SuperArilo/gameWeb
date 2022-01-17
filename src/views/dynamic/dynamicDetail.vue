@@ -1,5 +1,5 @@
 <template>
-    <div class="details-box">
+    <div class="details-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
         <div class="dy-back-div" @click="backRouter()">
             <i class="fas fa-chevron-left"/>
             <span>返回上一级</span>
@@ -129,15 +129,18 @@
                 <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet"/>
             </div>
         </div>
+        <footer-bottom/>
     </div>
 </template>
 <script>
+import footerBottom from '@/components/footerBottom.vue'
 import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
 import { dynamicDetailGet , dynamicCommentGet , dynamicDetailLncrement } from '@/util/api.js'
 import { ElMessage } from 'element-plus'
 export default {
     components:{
-        dynamicDetailComment
+        dynamicDetailComment,
+        footerBottom
     },
     data(){
         return{
@@ -256,8 +259,11 @@ export default {
     justify-content: flex-start;
     align-content: flex-start;
     flex-wrap: wrap;
-    background-color: rgba(255, 255, 255, 0.8);
     padding: 0.5rem;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+    background-size: cover;
     .dy-back-div
     {
         height: 1.5rem;
@@ -382,7 +388,7 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            background-color: rgba(243, 243, 243, 0.6);
+            background-color: rgb(240, 240, 240);
             padding: 0.5rem;
             border-radius: 0.2rem;
             margin-left: 0.5rem;
