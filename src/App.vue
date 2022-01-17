@@ -78,6 +78,12 @@ export default {
                     title: '玩家信息',
                     icon: require('@/views/icon/index/player.png'),
                     path: 'player'
+                },
+                {
+                    id: 5,
+                    title: '服务器公约',
+                    icon: require('@/views/icon/index/rule.png'),
+                    path: 'serverule'
                 }
             ]
         }

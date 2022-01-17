@@ -114,6 +114,14 @@ const routes = [
             path: '/register',
             title: '注册'
         }
+    },
+    {
+        path: '/serverule',
+        component: () => import('@/views/rule.vue'),
+        meta:{
+            path: '/serverule',
+            title: '服务公约'
+        }
     }
 ]
 

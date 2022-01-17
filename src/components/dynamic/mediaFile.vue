@@ -10,18 +10,24 @@
                 <span v-if="!isUploadToServerWorkNow">上传</span>
             </div>
         </div>
-        <div class="media-empty" v-if="imageList.length === 0">
+       <div class="media-empty" v-if="imageList.length === 0">
             <span v-if="imageList.length === 0 && isGetMediaFileWorkNow === false">您还没有上传过文件哦！</span>
             <i v-if="isGetMediaFileWorkNow" class="fas fa-circle-notch fa-spin"/>
         </div>
         <div class="media-div" v-if="imageList.length !== 0">
             <transition-group name="list">
-                <div class="media-sub-item" v-for="item in imageList" :key="item.id"> 
+                <div class="media-sub-item" v-for="item in imageList" :key="item.id" :style="imageIsHaveIdList.indexOf(item.id) !== -1 ? 'box-shadow: 0 0 0.2rem rgb(61, 61, 61);':''"> 
                     <div class="title-func">
                         <div class="is-choice">
-                            <i v-if="imageIsHaveIdList.indexOf(item.id) !== -1" class="fas fa-check"/>
+                            <transition name="fade">
+                                <i v-if="imageIsHaveIdList.indexOf(item.id) !== -1" class="fas fa-check"/>
+                            </transition>
                         </div>
-                        <i v-if="imageIsHaveIdList.indexOf(item.id) === -1" class="fas fa-trash-alt" @click="deleteByOneToOne(item.id)"/>
+                        <div class="delete-i">
+                            <transition name="fade">
+                                <i v-if="imageIsHaveIdList.indexOf(item.id) === -1" class="fas fa-trash-alt" @click="deleteByOneToOne(item.id)"/>
+                            </transition>
+                        </div>
                     </div>
                     <img :src="item.mediaHttpUrl" @click="userChoicePicture(item.id,item.mediaHttpUrl)"/>
                     <span class="file-name">{{item.mediaName}}</span>
@@ -166,6 +172,9 @@ export default {
 .media-manager
 {
     width: 100%;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
     .media-title
     {
         width: 100%;
@@ -252,18 +261,17 @@ export default {
         justify-content: space-around;
         overflow-y: scroll;
         padding: 0.8rem 0.8rem 0.8rem 1.4rem;
-        position: relative;
         .media-sub-item
         {
             width: 7rem;
             height: 6rem;
             display: flex;
-            flex-direction: column;
+            align-content: flex-start;
             flex-wrap: wrap;
             border-radius: 0.2rem;
             overflow: hidden;
             background-color: #ffffff;
-            transition: all 0.5s;
+            transition: all 0.25s;
             .title-func
             {
                 width: 100%;
@@ -271,32 +279,46 @@ export default {
                 justify-content: space-between;
                 align-items: center;
                 height: 1.2rem;
-                .is-choice
+                .is-choice , .delete-i
                 {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
                     .fa-check
                     {
-                        font-size: 0.9rem;
+                        font-size: 0.8rem;
                         color: rgb(96, 163, 96);
+                    }
+                }
+                .delete-i
+                {
+                    .fa-trash-alt
+                    {
+                        transition: all 0.3s;
+                        cursor: pointer;
+                    }
+                    .fa-trash-alt:hover
+                    {
+                        background-color: #dddddd;
+                        color: red;
                     }
                 }
                 i
                 {
-                    width: 1.2rem;
+                    width: 1.5rem;
                     border-radius: 0.2rem 0 0 0.2rem;
                     height: 100%;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                 }
-                .fa-trash-alt
+                .fade-enter-active , .fade-leave-active
                 {
-                    transition: all 0.3s;
-                    cursor: pointer;
+                    transition: opacity 0.3s;
                 }
-                .fa-trash-alt:hover
+                .fade-enter-from , .fade-leave-to
                 {
-                    background-color: #dddddd;
-                    color: red;
+                    opacity: 0;
                 }
             }
             img
@@ -321,6 +343,7 @@ export default {
         .list-enter-from , .list-leave-to
         {
             opacity: 0;
+            transform: translateX(1rem);
         }
         .list-leave-active
         {
