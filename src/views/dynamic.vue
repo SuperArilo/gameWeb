@@ -41,20 +41,19 @@ export default {
     align-content: flex-start;
     flex-wrap:wrap;
     overflow: hidden;
-    padding-top: 2rem;
     background-repeat: no-repeat;
     background-position: top;
     background-attachment: fixed;
     background-size: cover;
     .center-box
     {
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: flex-start;
         flex-wrap: wrap;
         align-content: flex-start;
         transition: width 0.3s;
-        margin-bottom: 2rem;
         .top-tips
         {
             width: 100%;
@@ -63,7 +62,6 @@ export default {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 0.5rem;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -77,8 +75,7 @@ export default {
             }
             span:nth-child(1)
             {
-                font-size: 1.4rem;
-                
+                font-size: 1.4rem; 
             }
             span:nth-child(2)
             {
@@ -89,8 +86,6 @@ export default {
         .center-content-box
         {
             width: 100%;
-            margin-top: 1rem;
-            border-radius: 0.2rem;
             overflow: hidden;
             .router_animate-enter-active
             {
@@ -117,7 +112,7 @@ export default {
     {
         .center-box
         {
-            width: 60%;
+            width: 80%;
         }
     }
 }
@@ -127,7 +122,7 @@ export default {
     {
         .center-box
         {
-            width: 75%;
+            width: 70%;
         }
     }
 }
@@ -137,7 +132,7 @@ export default {
     {
         .center-box
         {
-            width: 85%;
+            width: 70%;
         }
     }
 }

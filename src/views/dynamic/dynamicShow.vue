@@ -455,8 +455,7 @@ export default {
         align-content: flex-start;
         justify-content: center;
         flex-wrap: wrap;
-        background-color: rgb(240, 240, 240);
-        border-radius:0 0 0.2rem 0.2rem;
+        background-color: rgba(240, 240, 240, 0.7);
         overflow: hidden;
         transition: all 0.3s;
         position: relative;
@@ -638,10 +637,8 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 1rem 0 0.5rem 0;
         padding: 0.5rem;
-        background-color: rgb(240, 240, 240);
-        border-radius: 0.2rem;
+        background-color: rgba(240, 240, 240, 0.7);
         :deep(.el-pager li)
         {
             background-color: #ffffff;

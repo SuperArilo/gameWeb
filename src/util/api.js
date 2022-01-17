@@ -22,17 +22,6 @@ export const dynamicDetailGet = (params) => {
         }
     })
 }
-//根据用户访问动态来增加浏览量
-export const dynamicDetailLncrement = (params) => {
-    return request({
-        url: '/dynamic/increment',
-        method: 'get',
-        params: params,
-        paramsSerializer: params => {
-            return qs.stringify(params, {arrayFormat: 'repeat'})
-        }
-    })
-}
 //根据当前动态id去查询当前动态下的评论
 export const dynamicCommentGet = (params) => {
     return request({

@@ -192,14 +192,6 @@ export default {
         dynamicDetailGet(sendToServerData).then(resq => {
             if(resq.flag){
                 this.dynamicMainContent = resq.data
-                dynamicDetailLncrement(sendToServerData).then(resq => {
-                    console.log(resq)
-                    if(!resq.flag){
-                        ElMessage.error('浏览量增加发生错误！ ' + resq.message)
-                    }
-                }).catch(err => {
-                    ElMessage.error('浏览量增加发生错误！ ' + err.message)
-                })
             } else {
                 ElMessage.error('获取详情发生错误！ ' + resq.message)
             }
@@ -312,7 +304,7 @@ export default {
     {
         width: 100%;
         margin-top: 0.5rem;
-        padding: 0 1rem;
+        padding: 0 2rem;
         min-height: 10rem;
     }
     .dy-write-comment , .dy-comment-content

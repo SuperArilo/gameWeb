@@ -377,7 +377,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 40rem;
+            width: 55rem;
             padding: 1.5rem 1rem 1rem 1rem;
         }
     }
@@ -388,7 +388,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 35rem;
+            width: 45rem;
             padding: 1.5rem 1rem 1rem 1rem;
         }
     }
@@ -399,7 +399,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 30rem;
+            width: 35rem;
             padding: 1.5rem 0.8rem 0.8rem 0.8rem;
         }
     }
