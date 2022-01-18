@@ -1,8 +1,10 @@
 <template>
     <div class="details-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
-        <div class="dy-back-div" @click="backRouter()">
-            <i class="fas fa-chevron-left"/>
-            <span>返回上一级</span>
+        <div class="dy-title-func-div">
+            <div class="dy-back" @click="backRouter()">
+                <i class="fas fa-chevron-left"/>
+                <span>返回上一级</span>
+            </div>
         </div>
         <div class="dy-top-content">
             <div class="user-data-show">
@@ -126,8 +128,8 @@
                         </div>
                     </div>
                 </div>
-                <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet"/>
             </div>
+            <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
         </div>
         <footer-bottom/>
     </div>
@@ -259,41 +261,50 @@ export default {
     justify-content: flex-start;
     align-content: flex-start;
     flex-wrap: wrap;
-    padding: 0.5rem;
     background-repeat: no-repeat;
     background-position: top;
     background-attachment: fixed;
     background-size: cover;
-    .dy-back-div
+    .dy-title-func-div
     {
-        height: 1.5rem;
+        width: 100%;
+        height: 1.8rem;
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        background-color: rgba(255,255,255,0.8);
         padding: 0 0.5rem;
-        transition: all 0.3s;
-        border-radius: 0.2rem;
-        cursor: pointer;
-        span
+        .dy-back
         {
-            height: 100%;
+            height: 1.5rem;
             display: flex;
+            justify-content: center;
             align-items: center;
-            font-size: 0.65rem;
-            margin-left: 0.5rem;
+            transition: all 0.3s;
+            border-radius: 0.2rem;
+            padding: 0 0.5rem;
+            cursor: pointer;
+            span
+            {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                font-size: 0.65rem;
+                margin-left: 0.5rem;
+            }
+            i
+            {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                font-size: 1rem;
+                color: #3773f3;
+            }
         }
-        i
+        .dy-back:hover
         {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-size: 1rem;
-            color: #3773f3;
+            background-color: rgba(180, 180, 180, 0.555);
         }
-    }
-    .dy-back-div:hover
-    {
-        background-color: rgba(180, 180, 180, 0.555);
     }
     .dy-top-content
     {
@@ -301,6 +312,8 @@ export default {
         min-height: 10rem;
         display: flex;
         justify-content: center;
+        background-color: rgba(255,255,255,0.8);
+        padding: 0 0.5rem;
         .user-data-show
         {
             display: flex;
@@ -434,6 +447,8 @@ export default {
         justify-content: center;
         flex-wrap: wrap;
         align-content: flex-start;
+        background-color: rgba(255,255,255,0.8);
+        padding: 0 0.5rem;
         .title-span
         {
             width: 100%;

@@ -112,7 +112,6 @@ export default {
         align-items: flex-start;
         flex-wrap: wrap;
         background-color: #ffffffd3;
-        margin: 2rem 0 2rem 0;
         .top-tips
         {
             width: 100%;
@@ -379,6 +378,7 @@ export default {
         {
             width: 55rem;
             padding: 1.5rem 1rem 1rem 1rem;
+            margin: 2rem 0 2rem 0;
         }
     }
 }
@@ -390,6 +390,7 @@ export default {
         {
             width: 45rem;
             padding: 1.5rem 1rem 1rem 1rem;
+            margin: 2rem 0 2rem 0;
         }
     }
 }
@@ -401,6 +402,7 @@ export default {
         {
             width: 35rem;
             padding: 1.5rem 0.8rem 0.8rem 0.8rem;
+            margin: 2rem 0 2rem 0;
         }
     }
 }
@@ -410,7 +412,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 95%;
+            width: 100;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
         }
     }
@@ -421,7 +423,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 95%;
+            width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
         }
     }
@@ -432,7 +434,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 95%;
+            width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
         }
     }

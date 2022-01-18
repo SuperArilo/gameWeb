@@ -1,17 +1,9 @@
 <template>
     <div class="edit-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
-        <div class="title-back" @click="routerBackFunc()">
-            <i class="fas fa-chevron-left"/>
-            <span>Back</span>
-        </div>
-        <div class="rule">
-            <span class="inf-tips">发表动态规则以及原则</span>
-            <div class="rule-content">
-                <span class="rule-title">个人信息包括：头像、用户名、签名、自定义头衔等公开展示的信息</span>
-                <span class="rule-title">违反以下规定，管理员将根据情节轻重进行清空个人资料、扣分、警告、封禁、删除账号等处理</span>
-                <span class="rule-item" v-for="(item,indexO) in ruleListO" :key="indexO">{{item}}</span>
-                <span class="rule-title">关于发帖违规</span>
-                <span class="rule-item" v-for="(item,indexT) in ruleListT" :key="indexT">{{item}}</span>
+        <div class="dy-title-func-div">
+            <div class="dy-back" @click="routerBackFunc()">
+                <i class="fas fa-chevron-left"/>
+                <span>返回上一级</span>
             </div>
         </div>
         <div class="edit-dy-content">
@@ -306,75 +298,45 @@ export default {
     background-position: top;
     background-attachment: fixed;
     background-size: cover;
-    .title-back
-    {
-        height: 1.5rem;
-        display: flex;
-        align-items: center;
-        padding: 0 0.5rem;
-        cursor: pointer;
-        margin: 0.5rem 0 0.5rem 0.5rem;
-        span , i
-        {
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-        span
-        {
-            font-size: 0.65rem;
-            margin-left: 0.5rem;
-        }
-        i
-        {
-            font-size: 1rem;
-            color: #3773f3;
-        }
-    }
-    .rule
+    .dy-title-func-div
     {
         width: 100%;
+        height: 1.8rem;
         display: flex;
-        justify-content: center;
-        align-content: flex-start;
-        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: rgba(255,255,255,0.8);
         padding: 0 0.5rem;
-        .inf-tips
+        .dy-back
         {
-            width: 100%;
+            height: 1.5rem;
             display: flex;
             justify-content: center;
-            font-size: 1rem;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 1rem;
+            align-items: center;
+            transition: all 0.3s;
+            border-radius: 0.2rem;
+            padding: 0 0.5rem;
+            cursor: pointer;
+            span
+            {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                font-size: 0.65rem;
+                margin-left: 0.5rem;
+            }
+            i
+            {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                font-size: 1rem;
+                color: #3773f3;
+            }
         }
-        .rule-content
+        .dy-back:hover
         {
-            width: 100%;
-            display: flex;
-            align-content: flex-start;
-            flex-wrap: wrap;
-            .rule-title
-            {
-                width: 100%;
-                display: flex;
-                justify-content: flex-start;
-                align-items: flex-start;
-                text-align: left;
-                font-size: 0.7rem;
-                font-weight: bold;
-            }
-            .rule-item
-            {
-                width: 100%;
-                font-size: 0.64rem;
-                text-align: left;
-                display: flex;
-                justify-content: flex-start;
-                align-items: flex-start;
-                margin: 0.25rem 0 0.25rem 0;
-            }
+            background-color: rgba(180, 180, 180, 0.555);
         }
     }
     .edit-dy-content
@@ -383,7 +345,8 @@ export default {
         display: flex;
         align-content: flex-start;
         flex-wrap: wrap;
-        padding: 0 1rem;
+        padding: 1rem;
+        background-color: rgba(255,255,255,0.8);
         .dy-edit-title
         {
             width: 100%;

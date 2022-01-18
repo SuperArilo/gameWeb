@@ -162,20 +162,44 @@ export default {
 }
 @media screen and (min-width:1400px)
 {
+    ::v-deep(.el-dialog)
+    {
+        width: 50%;
+    }
 }
 @media screen and (max-width:1400px) and (min-width:1200px)
 {
+    ::v-deep(.el-dialog)
+    {
+        width: 50%;
+    }
 }
 @media screen and (max-width:1200px) and (min-width:936px)
 {
+    ::v-deep(.el-dialog)
+    {
+        width: 50%;
+    }
 }
 @media screen and (max-width:936px) and (min-width:767px)
 {
+    ::v-deep(.el-dialog)
+    {
+        width: 80%;
+    }
 }
 @media screen and (max-width:767px) and (min-width:676px)
 {
+    ::v-deep(.el-dialog)
+    {
+        width: 80%;
+    }
 }
 @media screen and (max-width:676px)
 {
+    ::v-deep(.el-dialog)
+    {
+        width: 80%;
+    }
 }
 </style>
