@@ -1,5 +1,5 @@
 // import axios from 'axios'
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = false
 const service = axios.create({
     baseURL: 'https://www.itrong.love:1234/api',
     timeout: 20000,

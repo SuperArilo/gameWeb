@@ -11,7 +11,9 @@ export default createStore({
             eMail: '',
             class: 1,
             className: '腐竹',
-            userHead: require('@/views/icon/head/onLogin.png')
+            userHead: require('@/views/icon/head/onLogin.png'),
+            javaMcId: 'Arilo007',
+            mcUUID: 'e71018558b58497581424ce802bf4252'
         }
     },
     getters:{

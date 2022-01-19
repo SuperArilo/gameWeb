@@ -10,7 +10,7 @@
                     <span>用户组</span>
                     <span>总发表动态</span>
                     <span>MC Java ID</span>
-                    <span>点赞</span>
+                    <span>积分</span>
                     <span>注册时间</span>
                 </div>
                 <div class="sub-item">

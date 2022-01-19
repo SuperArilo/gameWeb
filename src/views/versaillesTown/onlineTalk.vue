@@ -218,8 +218,6 @@ export default {
         justify-content: center;
         flex-wrap: wrap;
         background-color: #ffffffb9;
-        margin: 2rem 0;
-        border-radius: 0.3rem;
         overflow: hidden;
         .talk-title
         {
@@ -492,6 +490,7 @@ export default {
     {
         .talk-div
         {
+            margin: 2rem 0;
             width: 50%;
             .talk-content
             {
@@ -513,7 +512,8 @@ export default {
     {
         .talk-div
         {
-            width: 50%;
+            margin: 2rem 0;
+            width: 65%;
             .talk-content
             {
                 padding: 0.8rem 1rem 0.8rem 1rem;
@@ -534,7 +534,8 @@ export default {
     {
         .talk-div
         {
-            width: 50%;
+            margin: 2rem 0;
+            width: 80%;
             .talk-content
             {
                 padding: 0.8rem 1rem 0.8rem 0.8rem;
@@ -555,7 +556,7 @@ export default {
     {
         .talk-div
         {
-            width: 80%;
+            width: 100%;
             .talk-content
             {
                 padding: 0.8rem 0.5rem 0.8rem 0.5rem;
@@ -576,7 +577,7 @@ export default {
     {
         .talk-div
         {
-            width: 85%;
+            width: 100%;
             .talk-content
             {
                 padding: 0.8rem 0.5rem 0.8rem 0.5rem;
@@ -597,7 +598,7 @@ export default {
     {
         .talk-div
         {
-            width: 90%;
+            width: 100%;
             .talk-content
             {
                 padding: 0.8rem 0.5rem 0.8rem 0.5rem;

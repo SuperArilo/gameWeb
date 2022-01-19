@@ -61,14 +61,7 @@
                 <i class="far fa-comment-alt"/>
                 <span>说点什么</span>
             </div>
-            <div class="user-head-and-edit">
-                <div class="user-data-show">
-                    <div class="user-head">
-                        <img :src="this.$store.getters.userNoLoginGet"/>
-                    </div>
-                </div>
-                <dynamic-detail-comment/>
-            </div>
+            <dynamic-detail-comment/>
         </div>
         <div class="dy-comment-content">
             <span class="title-span">
@@ -137,7 +130,7 @@
 <script>
 import footerBottom from '@/components/footerBottom.vue'
 import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
-import { dynamicDetailGet , dynamicCommentGet , dynamicDetailLncrement } from '@/util/api.js'
+import { dynamicDetailGet , dynamicCommentGet } from '@/util/api.js'
 import { ElMessage } from 'element-plus'
 export default {
     components:{
@@ -321,10 +314,6 @@ export default {
             align-content: flex-start;
             flex-wrap: wrap;
             padding: 0.5rem 0;
-            .user-name , .user-have-props , .user-base-info
-            {
-                width: 100%;
-            }
             .user-head
             {
                 width: 60%;
@@ -341,17 +330,18 @@ export default {
             }
             .user-class
             {
-                padding: 0.1rem 0.4rem;
+                padding: 0.15rem 0.4rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 0.55rem;
+                font-size: 0.52rem;
                 border-radius: 0.2rem;
                 background-color: cornflowerblue;
                 color: #ffffff;
             }
             .user-name
             {
+                width: 100%;
                 text-align: center;
                 word-break: break-all;
                 font-size: 0.6rem;
@@ -360,6 +350,7 @@ export default {
             }
             .user-have-props
             {
+                width: 100%;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -375,6 +366,7 @@ export default {
             }
             .user-base-info
             {
+                width: 100%;
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
@@ -405,6 +397,8 @@ export default {
             padding: 0.5rem;
             border-radius: 0.2rem;
             margin-left: 0.5rem;
+            border-left: solid 0.2rem #3773f3;
+            border-right: solid 0.2rem #3773f3;
             .title-dy-data
             {
                 width: 100%;
@@ -473,36 +467,6 @@ export default {
             {
                 margin-right: 0.5rem;
                 color: rgb(25, 156, 238);
-            }
-        }
-    }
-    .dy-write-comment
-    {
-        .user-head-and-edit
-        {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            .user-data-show
-            {
-                display: flex;
-                justify-content: center;
-                align-content: flex-start;
-                flex-wrap: wrap;
-                .user-head
-                {
-                    width: 60%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    overflow: hidden;
-                    border-radius: 50%;
-                    box-shadow: 0 0 0.1rem black;
-                    img
-                    {
-                        width: 100%;
-                    }
-                }
             }
         }
     }
@@ -781,16 +745,6 @@ export default {
                 width: 7rem;
             }
         }
-        .dy-write-comment
-        {
-            .user-head-and-edit
-            {
-                .user-data-show
-                {
-                    width: 7rem;
-                }
-            }
-        }
         .dy-comment-content .content .sub-comment-item
         {
             .top-user-box , .other-user-comment
@@ -818,16 +772,6 @@ export default {
             .user-data-show
             {
                 width: 6.5rem;
-            }
-        }
-        .dy-write-comment
-        {
-            .user-head-and-edit
-            {
-                .user-data-show
-                {
-                    width: 6.5rem;
-                }
             }
         }
         .dy-comment-content .content .sub-comment-item
@@ -859,16 +803,6 @@ export default {
                 width: 6rem;
             }
         }
-        .dy-write-comment
-        {
-            .user-head-and-edit
-            {
-                .user-data-show
-                {
-                    width: 6rem;
-                }
-            }
-        }
         .dy-comment-content .content .sub-comment-item
         {
             .top-user-box , .other-user-comment
@@ -896,16 +830,6 @@ export default {
             .user-data-show
             {
                 width: 5rem;
-            }
-        }
-        .dy-write-comment
-        {
-            .user-head-and-edit
-            {
-                .user-data-show
-                {
-                    width: 5rem;
-                }
             }
         }
         .dy-comment-content .content .sub-comment-item
@@ -937,16 +861,6 @@ export default {
                 width: 4.5rem;
             }
         }
-        .dy-write-comment
-        {
-            .user-head-and-edit
-            {
-                .user-data-show
-                {
-                    width: 4.5rem;
-                }
-            }
-        }
         .dy-comment-content .content .sub-comment-item
         {
             .top-user-box , .other-user-comment
@@ -974,16 +888,6 @@ export default {
             .user-data-show
             {
                 width: 4.5rem;
-            }
-        }
-        .dy-write-comment
-        {
-            .user-head-and-edit
-            {
-                .user-data-show
-                {
-                    width: 4.5rem;
-                }
             }
         }
         .dy-comment-content .content .sub-comment-item

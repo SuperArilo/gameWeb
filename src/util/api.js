@@ -1,5 +1,4 @@
 import request from '@/util/axios.js'
-import qs from 'qs'
 //查询动态
 export const dynamicGet = (params) => {
     return request({
@@ -7,7 +6,7 @@ export const dynamicGet = (params) => {
         method: 'get',
         params: params,
         paramsSerializer: params => {
-            return qs.stringify(params, {arrayFormat: 'repeat'})
+            return Qs.stringify(params, {arrayFormat: 'repeat'})
         }
     })
 }
@@ -18,7 +17,7 @@ export const dynamicDetailGet = (params) => {
         method: 'get',
         params: params,
         paramsSerializer: params => {
-            return qs.stringify(params, {arrayFormat: 'repeat'})
+            return Qs.stringify(params, {arrayFormat: 'repeat'})
         }
     })
 }
@@ -29,7 +28,7 @@ export const dynamicCommentGet = (params) => {
         method: 'get',
         params: params,
         paramsSerializer: params => {
-            return qs.stringify(params, {arrayFormat: 'repeat'})
+            return Qs.stringify(params, {arrayFormat: 'repeat'})
         }
     })
 }

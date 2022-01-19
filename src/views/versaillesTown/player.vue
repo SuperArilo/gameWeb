@@ -56,6 +56,13 @@ export default {
             playerMenuIndex: 0
         }
     },
+    created(){
+        this.playerMenu.findIndex(key => {
+            if(this.$route.path === '/' + key.path){
+                this.playerMenuIndex = key.id
+            }
+        })
+    },
     methods:{
         menuFunc(id,path){
             this.playerMenuIndex = id
