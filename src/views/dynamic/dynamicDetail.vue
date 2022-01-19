@@ -212,7 +212,6 @@ export default {
             ],
             dynamicMainContent: '',
             isOpenBackComment: '',
-            text: ''
         }
     },
     async created(){
@@ -307,6 +306,7 @@ export default {
         justify-content: center;
         background-color: rgba(255,255,255,0.8);
         padding: 0 0.5rem;
+        transition: all 0.3s;
         .user-data-show
         {
             display: flex;

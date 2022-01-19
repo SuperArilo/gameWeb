@@ -9,7 +9,7 @@
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item v-for="(item,index) in dropdownMenu" :key="index" :command="item.order">{{item.title}}</el-dropdown-item>
+                                <el-dropdown-item v-for="item in dropdownMenu" :key="item.id" :command="item.order">{{item.title}}</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -25,7 +25,7 @@
             </div>
             <el-collapse-transition>
                 <div v-if="openChoiceTags" class="tag-content">
-                    <span class="tag-sub-item" v-for="(item,index) in tagList" :key="index" @click="tagFunc(item.id,item.title)">
+                    <span class="tag-sub-item" v-for="item in tagList" :key="item.id" @click="tagFunc(item.id,item.title)">
                         {{item.title}}
                     </span>
                 </div>
@@ -38,9 +38,9 @@
             </div>
         </div>
         <div class="dy-content">
-            <i class="fas fa-circle-notch refresh-div" :class="dyAllLoading ? 'refresh-div-is-loaded fa-spin':''"/>
+            <i class="fas fa-circle-notch refresh-div" :class="dyAllLoading || firstRequestIsWorkNow ? 'refresh-div-is-loaded fa-spin':''"/>
             <transition name="list">
-                <div class="data-empty" v-if="dyContent.length === 0">
+                <div class="data-empty" v-if="dyContent.length === 0 && firstRequestIsWorkNow === false">
                     <span>没有动态数据哦！</span>
                     <i class="fas fa-inbox"/>
                 </div>
@@ -68,7 +68,7 @@
                         </div>
                         <div class="dy-sub-item">
                             <i class="fas fa-tag"/>
-                            <span v-for="(itemSub,indexSub) in item.tags" :key="indexSub">{{itemSub.tagContent}}</span>
+                            <span v-for="itemSub in item.tags" :key="itemSub.id">{{itemSub.tagContent}}</span>
                         </div>
                         <div class="dy-sub-item">
                             <i class="far fa-eye"/>
@@ -195,11 +195,25 @@ export default {
             //动态标签传入
             dyTagList:[],
             //动态页面检测活动冷却标识
-            dyAllLoading: false
+            dyAllLoading: false,
+            firstRequestIsWorkNow: false,
         }
     },
     async created(){
-        this.sendToServer()
+        this.firstRequestIsWorkNow = true
+        dynamicGet(this.dYsendToServerParams).then(resq => {
+            if(resq.flag){
+                console.log(resq)
+                this.firstRequestIsWorkNow = false
+                this.dyContent = resq.data
+            } else {
+                this.firstRequestIsWorkNow = false
+                ElMessage({ showClose: true, message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！', type: 'warning',})
+            }
+        }).catch(err => {
+            this.firstRequestIsWorkNow = false
+            ElMessage({showClose: true, message: '请求动态发生错误，请稍后重试！' + err, type: 'error', center: false})
+        })
     },
     methods:{
         dropdownMenuFunc(command, number, object){
@@ -260,9 +274,13 @@ export default {
             this.$router.push({path: '/dynamic/details',query: { id: id }})
         },
         pageChange(e){
-            this.currentPage = e
-            this.dYsendToServerParams.pageNumber = e
-            this.sendToServer()
+            if(!this.dyAllLoading){
+                this.dyAllLoading = true
+                this.currentPage = e
+                this.dYsendToServerParams.pageNumber = e
+                document.body.scrollTop = 0
+                this.sendToServer()
+            }
         },
         async sendToServer(){
             dynamicGet(this.dYsendToServerParams).then(resq => {

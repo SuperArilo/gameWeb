@@ -130,7 +130,7 @@ const router = createRouter({
 })
 router.beforeEach((to, from, next) => {
     window.document.title = to.meta.title == undefined ? '博客' : to.meta.title
-    document.body.scrollTop = 0
+    $('html,body').stop().animate({'scrollTop': 0})
     next()
 })
 export default router

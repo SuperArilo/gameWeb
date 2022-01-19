@@ -23,7 +23,7 @@
                     <p class="autograph"></p>
                 </div>
                 <div class="menu-list">
-                    <div class="sub-item" v-for="(item,index) in navMenuList" :key="index">
+                    <div class="sub-item" v-for="item in navMenuList" :key="item.id">
                         <div class="top-func">
                             <div class="img-and-span" @click="menuFunc(item.id,item.path)">
                                 <img :src="item.icon"/>
@@ -41,6 +41,12 @@
                 </router-view>
             </div>
         </div>
+        <transition name="scroll-up" mode="out-in">
+            <div v-show="this.$store.getters.windowScrollValueGet >= 400" class="scroll-up" @click="scrollToTop">
+                <i class="far fa-arrow-alt-circle-up"/>
+                <span>UP</span>
+            </div>
+        </transition>
     </div>
 </template>
 <script>
@@ -104,18 +110,15 @@ export default {
             }
         },
         menuFunc(id,path){
-            setTimeout(() => {
-                this.$router.push('/' + path)
-                this.openMenu = false
-            },200)
+            this.$router.push('/' + path)
+            this.openMenu = false
         },
         scrollValue(e){
             this.$store.commit('windowScrollValueSet',e.target.scrollTop)
+        },
+        scrollToTop(){
+            $('html,body').stop().animate({'scrollTop': 0})
         }
-    },
-    computed:{
-    },
-    watch:{
     },
     unmounted(){
         window.removeEventListener('scroll', this.scrollValue,true)
@@ -164,6 +167,7 @@ a
     display: flex;
     align-content: flex-start;
     flex-wrap: wrap;
+    position: relative;
     .top-nav
     {
         width: 100%;
@@ -172,7 +176,7 @@ a
         display: flex;
         padding-left: 0.5rem;
         position: fixed;
-        z-index: 1000;
+        z-index: 650;
         justify-content: space-between;
         box-shadow: 0 0 0.2rem black;
         .left-func
@@ -388,6 +392,48 @@ a
                 animation: slideOutRight 0.6s;
             }
         }
+    }
+    .scroll-up
+    {
+        display: flex;
+        justify-content: center;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        margin: 2rem 1rem;
+        z-index: 600;
+        color: #3773f3;
+        background-color: #ffffff;
+        padding: 0.4rem 0;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 0.15rem rgba(0, 0, 0, 0.521);
+        cursor: pointer;
+        i , span
+        {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        i
+        {
+            font-size: 2rem;
+        }
+        span
+        {
+            margin-top: 0.2rem;
+            font-size: 0.8rem;
+        }
+    }
+    .scroll-up-enter-active , .scroll-up-leave-active
+    {
+        transition: all 0.3s;
+    }
+    .scroll-up-enter-from , .scroll-up-leave-to
+    {
+        opacity: 0;
+        transform: translateY(1rem);
     }
 }
 @media screen and (min-width:1400px)
