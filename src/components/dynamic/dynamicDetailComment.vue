@@ -33,7 +33,7 @@ export default {
         }
     },
     mounted(){
-        const editor = new E(this.$refs.dyEditTool)
+        const editor = new wangEditor(this.$refs.dyEditTool)
         editor.config.showLinkImg = false
         editor.config.menus = [
             'head',
