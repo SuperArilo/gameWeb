@@ -39,7 +39,7 @@ export const userImageGet = (params) => {
         method: 'get',
         params: params,
         paramsSerializer: params => {
-            return qs.stringify(params, {arrayFormat: 'repeat'})
+            return Qs.stringify(params, {arrayFormat: 'repeat'})
         }
     })
 }
