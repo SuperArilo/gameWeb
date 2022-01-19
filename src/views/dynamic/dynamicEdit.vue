@@ -58,7 +58,6 @@
 </template>
 <script>
 import { ElMessage , ElMessageBox } from 'element-plus'
-import E from 'wangeditor'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 import {userPublishDynamic} from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
@@ -158,7 +157,7 @@ export default {
         }
     },
     mounted(){
-        const editor = new E(this.$refs.dyEditTool)
+        const editor = new wangEditor(this.$refs.dyEditTool)
         editor.config.showLinkImg = false
         editor.config.menus = [
             'head',

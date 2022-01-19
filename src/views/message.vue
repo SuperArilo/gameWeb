@@ -47,7 +47,6 @@
 </template>
 <script>
 import footerBottom from '../components/footerBottom.vue'
-import E from 'wangeditor'
 export default {
   components: { footerBottom },
     data(){
@@ -57,7 +56,7 @@ export default {
         }
     },
     mounted(){
-        const editor = new E(this.$refs.dyEditTool)
+        const editor = new wangEditor(this.$refs.dyEditTool)
         editor.config.showLinkImg = false
         editor.config.height = 200
         editor.config.menus = [

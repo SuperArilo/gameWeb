@@ -20,7 +20,6 @@
     </div>
 </template>
 <script>
-import E from 'wangeditor'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
     components:{

@@ -103,7 +103,6 @@
     </div>
 </template>
 <script>
-import E from 'wangeditor'
 export default {
     data(){
         return{
@@ -137,7 +136,7 @@ export default {
         }
     },
     mounted(){
-        const editor = new E(this.$refs.dyEditTool)
+        const editor = new wangEditor(this.$refs.dyEditTool)
         editor.config.showLinkImg = false
         editor.config.height = 200
         editor.config.menus = [
