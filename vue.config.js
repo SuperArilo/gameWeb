@@ -23,7 +23,7 @@ const cdn = {
     css: [
         'https://unpkg.com/element-plus/dist/index.css',
         'https://unpkg.com/animate.css',
-        'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.3/css/all.min.css'
+        'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css'
     ],
     // cdn的js链接
     js: [
@@ -33,7 +33,7 @@ const cdn = {
         'https://unpkg.com/element-plus',
         'https://unpkg.com/vue-router@4',
         'https://cdn.jsdelivr.net/npm/axios@0.24.0/dist/axios.min.js',
-        'https://cdn.bootcdn.net/ajax/libs/qs/6.10.3/qs.min.js',
+        'https://cdn.jsdelivr.net/npm/qs@6.10.3/dist/qs.js',
         'https://cdn.jsdelivr.net/npm/wangeditor@4.7.11/dist/wangEditor.min.js'
     ]
 }

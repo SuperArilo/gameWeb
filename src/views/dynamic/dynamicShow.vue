@@ -203,7 +203,6 @@ export default {
         this.firstRequestIsWorkNow = true
         dynamicGet(this.dYsendToServerParams).then(resq => {
             if(resq.flag){
-                console.log(resq)
                 this.firstRequestIsWorkNow = false
                 this.dyContent = resq.data
             } else {
