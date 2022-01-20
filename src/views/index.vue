@@ -464,7 +464,6 @@ export default {
                 .picture
                 {
                     border-radius: 0.2rem;
-                    min-height: 3rem;
                     overflow: hidden;
                     box-shadow: 0 0 0.1rem black;
                     img
