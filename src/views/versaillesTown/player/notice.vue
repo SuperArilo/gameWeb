@@ -22,10 +22,15 @@
             </div>
             <el-pagination style="margin: 0.5rem 0;" background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet"/>
         </div>
+        <footer-bottom/>
     </div>
 </template>
 <script>
+import footerBottom from '@/components/footerBottom.vue'
 export default {
+    components:{
+        footerBottom
+    },
     data(){
         return{
             noticeContent:[

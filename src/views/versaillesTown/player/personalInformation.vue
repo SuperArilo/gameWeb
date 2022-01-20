@@ -48,13 +48,15 @@
             </div>
             <span class="line"></span>
         </div>
+        <footer-bottom/>
     </div>
 </template>
 <script>
+import footerBottom from '@/components/footerBottom.vue'
 import myUpload from 'vue-image-crop-upload';
 export default {
     components: {
-		myUpload
+		myUpload,footerBottom
 	},
     data(){
         return{

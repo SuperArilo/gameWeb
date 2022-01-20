@@ -35,11 +35,16 @@
                 <i class="fas fa-diagnoses"/>
             </div>
         </div>
+        <footer-bottom/>
     </div>
 </template>
 <script>
+import footerBottom from '@/components/footerBottom.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 export default {
+    components:{
+        footerBottom
+    },
     data(){
         return{
             playerHead: '',

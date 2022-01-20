@@ -100,10 +100,15 @@
                 </div>
             </div>
         </div>
+        <footer-bottom/>
     </div>
 </template>
 <script>
+import footerBottom from '@/components/footerBottom.vue'
 export default {
+    components:{
+        footerBottom
+    },
     data(){
         return{
             userHead: require('@/views/icon/head/stranger18.jpg'),

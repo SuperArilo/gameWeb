@@ -242,7 +242,7 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key =>{
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:100%;"/>')
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:50%;"/>')
             })
         },
         dyPublish(){

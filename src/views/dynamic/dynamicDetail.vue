@@ -9,7 +9,7 @@
         <div class="dy-top-content">
             <div class="user-data-show">
                 <div class="user-head">
-                    <img :src="this.$store.getters.userNoLoginGet"/>
+                    <img v-lazy="this.$store.getters.userNoLoginGet"/>
                 </div>
                 <span class="user-name">这次换你听歌</span>
                 <span class="user-class">腐竹</span>
@@ -72,7 +72,7 @@
                 <div class="sub-comment-item" v-for="(item,index) in testComment" :key="index">
                     <div class="top-user-box">
                         <div class="left-user-head">
-                            <img :src="item.userHead"/>
+                            <img v-lazy="item.userHead"/>
                         </div>
                         <div class="right-user-content">
                             <div class="user-name-div">
@@ -102,7 +102,7 @@
                             <div class="left-user-head"></div>
                             <div class="right-other-user-comment">
                                 <div class="other-user-head">
-                                    <img :src="itemSub.userHead"/>
+                                    <img v-lazy="itemSub.userHead"/>
                                 </div>
                                 <div class="other-user-comment-content">
                                     <div class="other-user-name-div">

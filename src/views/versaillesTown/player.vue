@@ -12,19 +12,16 @@
             </div>
         </div>
         <div class="player-router">
-            <router-view v-slot="{ Component }">
-                <transition mode="out-in" name="router_animate">
+            <router-view v-slot="{ Component }" style="position: absolute;">
+                <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
                     <component :is="Component" />
                 </transition>
             </router-view>
         </div>
-        <footer-bottom/>
     </div>
 </template>
 <script>
-import footerBottom from '@/components/footerBottom.vue'
 export default {
-  components: { footerBottom },
     data(){
         return{
             playerMenu:[
@@ -75,7 +72,6 @@ export default {
 .index-box
 {
     width: 100%;
-    min-height: 100vh;
     display: flex;
     align-content: flex-start;
     justify-content: center;
@@ -84,7 +80,6 @@ export default {
     background-position: top;
     background-attachment: fixed;
     background-size: cover;
-    overflow: hidden;
     .top-player-div
     {
         width: 100%;
@@ -181,13 +176,14 @@ export default {
     .player-router
     {
         width: 100%;
+        position: relative;
         .router_animate-enter-active
         {
-            animation: fadeInLeft 0.4s;
+            animation: slideInLeft 0.6s;
         }
         .router_animate-leave-active
         {
-            animation: fadeOutRight 0.4s;
+            animation: slideOutRight 0.6s;
         }
     }
 }

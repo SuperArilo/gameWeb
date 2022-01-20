@@ -2,7 +2,7 @@
     <div class="user-head-and-edit">
         <div class="user-data-show">
             <div class="user-head">
-                <img :src="this.$store.getters.userNoLoginGet"/>
+                <img v-lazy="this.$store.getters.userNoLoginGet"/>
             </div>
         </div>
         <div class="dynamic-detail-comment-box">
@@ -68,7 +68,7 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key =>{
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:100%;"/>')
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:50%;"/>')
             })
         },
         openFile(){

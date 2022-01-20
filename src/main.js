@@ -9,7 +9,7 @@ app.use(store)
 app.use(router)
 app.mount('#app')
 app.use(lazyPlugin, {
-    loading: 'loading.png',
-    error: 'error.png'
+    loading: '',
+    error: ''
 })
 app.config.globalProperties.$axios = axios
