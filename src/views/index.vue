@@ -216,6 +216,18 @@ export default {
                 {
                     id: 7,
                     image: require('@/views/icon/index/versaillestown/show7.png')
+                },
+                {
+                    id: 8,
+                    image: require('@/views/icon/index/versaillestown/show8.png')
+                },
+                {
+                    id: 9,
+                    image: require('@/views/icon/index/versaillestown/show9.png')
+                },
+                {
+                    id: 10,
+                    image: require('@/views/icon/index/versaillestown/show10.png')
                 }
             ],
             serverTeamHeadList:[]
