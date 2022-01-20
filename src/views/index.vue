@@ -7,6 +7,7 @@
                 <h2>凡尔赛小镇</h2>
                 <div class="describe">
                     <span>生存、宠物、RPG、领地、养老</span>
+                    <span>Minecraft Java Edition</span>
                     <span>当前服务器版本：1.18.1</span>
                 </div>
             </div>
@@ -88,31 +89,15 @@
                 <span class="line"></span>
                 <span class="english-inf">Play content</span>
             </div>
-            <div class="play-content-div-left-right">
-                <div class="left">
-                    <span>基于原版生存</span>
-                    <span>在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！</span>
-                </div>
-                <div class="right">
-                    <img :src="indexImage"/>
-                </div>
-            </div>
-            <div class="play-content-div-right-left">
-                <div class="left">
-                    <img :src="indexImage"/>
-                </div>
-                <div class="right">
-                    <span>RPG等级玩法</span>
-                    <span>服务器提供RPG升级和技能系统，在这里可以升级刷怪、快速开采、高效种植、和好朋友一起PVP！</span>
-                </div>
-            </div>
-            <div class="play-content-div-left-right">
-                <div class="left">
-                    <span>宠物玩法</span>
-                    <span>服务器提供宠物功能，此插件来源于开源社区的MyPet插件！在这里可以捕捉到宠物，进行升级、培养、选择技能树等等。甚至可以在商店购买！</span>
-                </div>
-                <div class="right">
-                    <img :src="indexImage"/>
+            <div class="play-content-box">
+                <div class="sub-item" v-for="item in playContentList" :key="item.id" :style="this.$store.getters.isPhoneGet ? 'flex-direction: column-reverse;' : item.id % 2 == 0 ? 'flex-direction: row-reverse;' : ''">
+                    <div class="picture">
+                        <img :src="item.image"/>
+                    </div>
+                    <div class="content-describe" :style="this.$store.getters.isPhoneGet ? 'margin-bottom: 1rem;' : item.id % 2 == 0 ? 'margin-right: 1rem;':'margin-left: 1rem;'">
+                        <span class="title">{{item.title}}</span>
+                        <span class="content">{{item.describe}}</span>
+                    </div>
                 </div>
             </div>
             <div class="title-item">
@@ -141,7 +126,15 @@
                 <span class="line"></span>
                 <span class="english-inf">Server management team</span>
             </div>
-            <div class="col-server-team"></div>
+            <div class="col-server-team">
+                <div class="sub-item" v-for="item in serverTeamHeadList" :key="item.id">
+                    <div class="head">
+                        <img :src="item.head"/>
+                    </div>
+                    <span class="name">{{item.name}}</span>
+                    <span class="class">{{item.className}}</span>
+                </div>
+            </div>
             <div class="title-item">
                 <span class="why-inf">截图欣赏</span>
                 <span class="line"></span>
@@ -149,16 +142,17 @@
             </div>
             <div class="town-show-scroll">
                 <el-carousel :height="25 + 'rem'">
-                    <el-carousel-item v-for="(item,index) in testPicture" :key="index">
+                    <el-carousel-item v-for="item in bottomPictureList" :key="item.id">
                         <img :src="item.image"/>
                     </el-carousel-item>
                 </el-carousel>
             </div>
         </div>
-        <footer-bottom></footer-bottom>
+        <footer-bottom/>
     </div>
 </template>
 <script>
+import { ElMessage } from 'element-plus'
 import FooterBottom from '../components/footerBottom.vue'
 export default {
     components:{
@@ -166,7 +160,7 @@ export default {
     },
     data(){
         return{
-            indexImage: require('@/views/icon/index/versaillestown/townIndex1.jpg'),
+            indexImage: require('@/views/icon/index/versaillestown/townBg.png'),
             netWorkShow: require('@/views/icon/index/versaillestown/netWork.png'),
             bbs: require('@/views/icon/index/versaillestown/bbs.png'),
             safe: require('@/views/icon/index/versaillestown/safe.png'),
@@ -174,33 +168,96 @@ export default {
             publicWelfare: require('@/views/icon/index/versaillestown/publicWelfare.png'),
             server: require('@/views/icon/index/versaillestown/server.png'),
             mcbaike: require('@/views/icon/index/versaillestown/mcbaike.gif'),
-            testPicture:[
-                {
-                    id: 0,
-                    image: require('@/views/icon/index/versaillestown/townIndex1.jpg')
-                },
+            playContentList:[
                 {
                     id: 1,
-                    image: require('@/views/icon/index/versaillestown/townIndex2.jpg')
+                    image: require('@/views/icon/index/versaillestown/playContent1.png'),
+                    title: '基于原版生存',
+                    describe: '在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！'
                 },
                 {
                     id: 2,
-                    image: require('@/views/icon/index/versaillestown/townIndex3.jpg')
+                    image: require('@/views/icon/index/versaillestown/playContent2.png'),
+                    title: 'RPG等级玩法',
+                    describe: '服务器提供RPG升级和技能系统，在这里可以升级刷怪、快速开采、高效种植、和好朋友一起PVP！'
                 },
                 {
                     id: 3,
-                    image: require('@/views/icon/index/versaillestown/townIndex4.jpg')
+                    image: require('@/views/icon/index/versaillestown/playContent3.png'),
+                    title: '宠物玩法',
+                    describe: '在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！'
                 }
-            ]
+            ],
+            bottomPictureList:[
+                {
+                    id: 1,
+                    image: require('@/views/icon/index/versaillestown/show1.png')
+                },
+                {
+                    id: 2,
+                    image: require('@/views/icon/index/versaillestown/show2.png')
+                },
+                {
+                    id: 3,
+                    image: require('@/views/icon/index/versaillestown/show3.png')
+                },
+                {
+                    id: 4,
+                    image: require('@/views/icon/index/versaillestown/show4.png')
+                },
+                {
+                    id: 5,
+                    image: require('@/views/icon/index/versaillestown/show5.png')
+                },
+                {
+                    id: 6,
+                    image: require('@/views/icon/index/versaillestown/show6.png')
+                },
+                {
+                    id: 7,
+                    image: require('@/views/icon/index/versaillestown/show7.png')
+                }
+            ],
+            serverTeamHeadList:[]
         }   
     },
     created(){
-
-    },
-    mounted(){
+        this.$store.getters.serverTeamListGet.findIndex(item => {
+            this.mojangApi(item.javaMcId,item.uid,item.className)
+        })
     },
     methods:{
-
+        async mojangApi(javaId,userId,className){
+            this.$axios.get('https://api.ashcon.app/mojang/v2/user/' + javaId).then(resq => {
+                if(resq.status === 200){
+                    this.getAvatars(resq.data.uuid,javaId,userId,className)
+                } else {
+                    ElMessage.error('获取玩家的信息出错,请稍后重试! ' + resq.statusText)
+                }
+            }).catch(err => {
+                ElMessage.error('获取玩家的信息出错,请稍后重试! ' + err)
+            })
+        },
+        arrayBufferToBase64(Buffer){
+            let binary = ''
+            let bytes = new Uint8Array(Buffer)
+            let len = bytes.byteLength
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return 'data:image/png;base64,' + window.btoa(binary)
+        },
+        getAvatars(uuid,javaId,userId,className){
+            this.$axios.get('https://crafatar.com/avatars/' + uuid , { responseType: 'arraybuffer' }).then(subResq => {
+                if(subResq.status === 200){
+                    this.serverTeamHeadList.unshift({id: userId,head: this.arrayBufferToBase64(subResq.data),name: javaId,className: className})
+                } else {
+                    ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
+                }
+            }).catch(subErr => {
+                ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subErr)
+            })
+        },
     }
 }
 </script>
@@ -210,9 +267,8 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-content: flex-start;
     flex-wrap: wrap;
-    position: relative;
     .index-center-show
     {
         width: 100%;
@@ -221,6 +277,7 @@ export default {
         justify-content: center;
         align-items: center;
         position: relative;
+        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.6);
         .back-iamge
         {
             width: 100%;
@@ -228,11 +285,9 @@ export default {
             position: absolute;
             z-index: 1;
             object-fit: cover;
-            filter: brightness(80%)
         }
         .center-text
         {
-            padding: 2rem 3rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -247,8 +302,7 @@ export default {
             }
             h2
             {
-                margin: 0;
-                padding: 1rem 0;
+                margin: 1rem 0;
                 font-size: 2.2rem;
                 text-align: center;
                 color: #ffffff;
@@ -262,8 +316,10 @@ export default {
                 align-items: center;
                 span
                 {
-                    font-size: 0.9rem;
-                    color: #e7e7e7;
+                    font-size: 0.85rem;
+                    color: #c2c2c2;
+                    text-align: center;
+                    margin: 0.1rem 0;
                 }
             }
         }
@@ -382,69 +438,91 @@ export default {
                 }
             }
         }
-        .play-content-div-left-right , .play-content-div-right-left
+        .play-content-box
         {
+            width: 100%;
             display: flex;
-            align-items: center;
-            margin: 2rem 0 2rem 0;
-            .left , .right
+            justify-content: center;
+            align-content: flex-start;
+            flex-wrap: wrap;
+            .sub-item
             {
                 display: flex;
                 justify-content: center;
-                align-items: center;
-                align-content: flex-start;
-                flex-wrap: wrap;
-                img
+                margin: 1rem 0;
+                .picture
                 {
-                    height: 100%;
-                    border-radius: 0.3rem;
-                    object-fit: cover;
+                    border-radius: 0.2rem;
+                    overflow: hidden;
+                    box-shadow: 0 0 0.1rem black;
+                    img
+                    {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
                 }
-                span
+                .content-describe
                 {
+                    width: 100%;
                     display: flex;
-                    align-items: flex-start;
+                    align-content: flex-start;
+                    flex-wrap: wrap;
+                    .title , .content
+                    {
+                        width: 100%;
+                        text-align: center;
+                        letter-spacing: 0.05rem;
+                    }
+                    .title
+                    {
+                        font-size: 0.8rem;
+                        font-weight: bold;
+                    }
+                    .content
+                    {
+                        margin-top: 0.5rem;
+                        font-size: 0.65rem;
+                        color: rgb(65, 65, 65);
+                    }
                 }
-                span:nth-child(1)
-                {
-                    justify-content: center;
-                    font-size: 1rem;
-                }
-                span:nth-child(2)
-                {
-                    justify-content: flex-start;
-                    font-size: 0.65rem;
-                    text-align: left;
-                    color: #4b4b4b;
-                    letter-spacing: 0.08rem;
-                    margin-top: 0.5rem;
-                    word-break: break-all;
-                    word-wrap: break-word;
-                }
-            }
-        }
-        .play-content-div-left-right
-        {
-            .left
-            {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-            }
-        }
-        .play-content-div-right-left
-        {
-            .right
-            {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
             }
         }
         .col-server-team
         {
             width: 100%;
-            margin: 2rem 0 2rem 0;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            .sub-item
+            {
+                width: 6rem;
+                display: flex;
+                justify-content: center;
+                align-content: flex-start;
+                flex-wrap: wrap;
+                margin: 1rem;
+                .head
+                {
+                    width: 3rem;
+                    height: 3rem;
+                    img
+                    {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .name , .class
+                {
+                    width: 100%;
+                    text-align: center;
+                    margin-top: 0.5rem;
+                    font-size: 0.7rem;
+                    letter-spacing: 0.05rem;
+                    word-break: break-all;
+                }
+            }
         }
         .town-show-scroll
         {
@@ -464,17 +542,14 @@ export default {
 {
     .index-div .index-describe
     {
-        .play-content-div-left-right , .play-content-div-right-left
+        .play-content-box
         {
-            width: 80%;
-            justify-content: space-around;
-            .left , .right
+            .sub-item
             {
-                width: 45%;
-                height: 14rem;
-                span
+                width: 70%;
+                .picture
                 {
-                    width: 80%;
+                    width: 40rem;
                 }
             }
         }
@@ -484,61 +559,86 @@ export default {
 {
     .index-div .index-describe
     {
-        .play-content-div-left-right , .play-content-div-right-left
+        .play-content-box
         {
-            width: 80%;
-            justify-content: space-around;
-            .left , .right
+            .sub-item
             {
-                width: 45%;
-                height: 14rem;
-                span
+                width: 75%;
+                .picture
                 {
-                    width: 80%;
+                    width: 35rem;
                 }
             }
         }
     }
 }
-@media screen and (max-width:1200px)
+@media screen and (max-width:1200px) and (min-width:936px)
 {
     .index-div .index-describe
     {
-        .play-content-div-left-right , .play-content-div-right-left
+        .play-content-box
         {
-            width: 100%;
-            flex-direction: column;
-            flex-wrap: wrap;
-            .left , .right
+            .sub-item
             {
-                span
+                width: 80%;
+                .picture
+                {
+                    width: 30rem;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width:936px) and (min-width:767px)
+{
+    .index-div .index-describe
+    {
+        .play-content-box
+        {
+            .sub-item
+            {
+                width: 80%;
+                flex-wrap: wrap;
+                .picture
                 {
                     width: 100%;
                 }
             }
         }
-        .play-content-div-left-right
+    }
+}
+@media screen and (max-width:767px) and (min-width:676px)
+{
+    .index-div .index-describe
+    {
+        .play-content-box
         {
-            .left
+            .sub-item
             {
-                width: 70%;
-            }
-            .right
-            {
-                width: 90%;
-                margin-top: 2rem;
+                width: 80%;
+                flex-wrap: wrap;
+                .picture
+                {
+                    width: 100%;
+                }
             }
         }
-        .play-content-div-right-left
+    }
+}
+@media screen and (max-width:676px)
+{
+    .index-div .index-describe
+    {
+        .play-content-box
         {
-            .left
+            .sub-item
             {
-                width: 90%;
-                margin-bottom: 2rem;
-            }
-            .right
-            {
-                width: 70%;
+                width: 80%;
+                flex-wrap: wrap;
+                .picture
+                {
+                    width: 100%;
+                }
             }
         }
     }

@@ -79,11 +79,6 @@ export default {
     mounted(){
         console.log(1)
     },
-    setup(){
-        onMounted(() => {
-            console.log('Component is mounted!')
-        })
-    },
     methods:{
         cropSuccess(imgDataUrl, field){
             console.log('-------- crop success --------');
