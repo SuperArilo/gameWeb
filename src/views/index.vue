@@ -1,7 +1,7 @@
 <template>
     <div class="index-div">
         <div class="index-center-show">
-            <img class="back-iamge" :src="indexImage"/>
+            <img class="back-iamge" v-lazy="indexImage"/>
             <div class="center-text">
                 <span class="welcome-tips">欢迎来到</span>
                 <h2>凡尔赛小镇</h2>
@@ -92,7 +92,7 @@
             <div class="play-content-box">
                 <div class="sub-item" v-for="item in playContentList" :key="item.id" :style="this.$store.getters.isPhoneGet ? 'flex-direction: column-reverse;' : item.id % 2 == 0 ? 'flex-direction: row-reverse;' : ''">
                     <div class="picture">
-                        <img :src="item.image"/>
+                        <img v-lazy="item.image"/>
                     </div>
                     <div class="content-describe" :style="this.$store.getters.isPhoneGet ? 'margin-bottom: 1rem;' : item.id % 2 == 0 ? 'margin-right: 1rem;':'margin-left: 1rem;'">
                         <span class="title">{{item.title}}</span>
@@ -143,7 +143,7 @@
             <div class="town-show-scroll">
                 <el-carousel :height="25 + 'rem'">
                     <el-carousel-item v-for="item in bottomPictureList" :key="item.id">
-                        <img :src="item.image"/>
+                        <img v-lazy="item.image"/>
                     </el-carousel-item>
                 </el-carousel>
             </div>
@@ -277,7 +277,6 @@ export default {
         justify-content: center;
         align-items: center;
         position: relative;
-        box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.6);
         .back-iamge
         {
             width: 100%;
