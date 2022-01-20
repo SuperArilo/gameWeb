@@ -51,7 +51,6 @@
     </div>
 </template>
 <script>
-import { onMounted } from 'vue'
 import myUpload from 'vue-image-crop-upload';
 export default {
     components: {

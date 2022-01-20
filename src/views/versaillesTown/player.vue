@@ -22,7 +22,7 @@
     </div>
 </template>
 <script>
-import footerBottom from '../../components/footerBottom.vue'
+import footerBottom from '@/components/footerBottom.vue'
 export default {
   components: { footerBottom },
     data(){
