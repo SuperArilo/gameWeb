@@ -1,29 +1,30 @@
 <template>
     <div class="footer-div">
-        <div class="top-div">
-            <img src="../views/icon/index/mmqrcod.png"/>
-            <div class="public-div">
-                <span class="title-span">关于我</span>
-                <div class="contant-div">
-                    <div class="sub-div">
-                        <i class="fab fa-qq"></i>
-                        <span>72815258</span>
-                    </div>
-                    <div class="sub-div">
-                        <i class="fab fa-weixin"></i>
-                        <span>AriloWh</span>
-                    </div>
-                    <div class="sub-div">
-                        <i class="fas fa-envelope"></i>
-                        <span>superarilo@189.cn</span>
-                    </div>
+        <div class="top-info-show">
+            <div class="sub-item">
+                <span class="title">关于我</span>
+                <div class="my-info">
+                    <i class="fab fa-qq"/>
+                    <span>728152568</span>
+                </div>
+                <div class="my-info">
+                    <i class="fab fa-weixin"/>
+                    <span>AriloWh</span>
+                </div>
+                <div class="my-info">
+                    <i class="fas fa-envelope"/>
+                    <span>superarilo@189.cn</span>
                 </div>
             </div>
-            <div class="public-div">
-                <span class="title-span">友情链接</span>
+            <div class="sub-item">
+                <div class="links">
+                    <span class="title">友情链接</span>
+                </div>
             </div>
-            <div class="public-div">
-                <span class="title-span">博客简介</span>
+            <div class="sub-item">
+                <div class="links">
+                    <span class="title">简介</span>
+                </div>
             </div>
         </div>
         <div class="bottom-link">
@@ -43,155 +44,158 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
-    align-content: space-between;
     flex-wrap: wrap;
     background-color: #545c64;
     padding: 1rem;
-    .top-div
+    .top-info-show
     {
-        width: 100%;
         display: flex;
-        img
+        .sub-item
         {
-            height: 5rem;
-            max-height: 100%;
-        }
-        .public-div
-        {
-            width: 20%;
-            height: 100%;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            .title-span
+            justify-content: center;
+            align-content: flex-start;
+            flex-wrap: wrap;
+            .my-info
             {
                 width: 100%;
-                height: 2rem;
+                height: 1.8rem;
+                display: flex;
+                align-items: center;
+                i , span
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                }
+                i
+                {
+                    font-size: 1rem;
+                }
+                span
+                {
+                    font-size: 0.7rem;
+                    color: hsla(0,0%,100%,0.5);
+                    margin-left: 1rem;
+                }
+            }
+            .my-info:nth-child(2) i
+            {
+                color: #4169e1;
+            }
+            .my-info:nth-child(3) i
+            {
+                color: #29c524;
+            }
+            .my-info:nth-child(4) i
+            {
+                color: #b3a529;
+            }
+            .links
+            {
+                width: 100%;
+                display: flex;
+                align-content: flex-start;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .title
+            {
+                width: 100%;
+                height: 1.8rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                color: white;
-                font-weight: 600;
-                font-size: 0.65rem;
-                letter-spacing: 0.1rem;
-            }
-            .contant-div
-            {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                .sub-div
-                {
-                    width: 100%;
-                    height: 1.5rem;
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    i
-                    {
-                        font-size: 0.9rem;
-                    }
-                    span
-                    {
-                        height: 100%;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: 0.7rem;
-                        color: hsla(0,0%,100% , 0.5);
-                    }
-                }
-                .sub-div:nth-child(1) i
-                {
-                    color: royalblue;
-                }
-                .sub-div:nth-child(2) i
-                {
-                    color: rgb(41, 197, 36);
-                }
-                .sub-div:nth-child(3) i
-                {
-                    color: rgb(179, 165, 41);
-                }
+                text-align: center;
+                font-size: 0.7rem;
+                color: #ffffff;
             }
         }
     }
     .bottom-link
     {
         width: 100%;
-        height: auto;
-        margin-top: 1.5rem;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        a , span
+        align-content: flex-start;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1rem;
+        span , a
         {
+            width: 100%;
+            height: 1.4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f3f3f3;
             text-decoration: none;
-            color: rgb(243, 243, 243);
+            outline: none;
             font-size: 0.7rem;
-        }
-        a
-        {
-            margin-top: 0.3rem;
         }
     }
 }
 @media screen and (min-width:1400px)
 {
-    .footer-div .top-div
+    .footer-div .top-info-show
     {
-        justify-content: space-between;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        .public-div .contant-div .sub-div span
+        width: 60%;
+        justify-content: space-around;
+        .sub-item
         {
-            margin-left: 0.6rem;
+            width: calc(100% / 3);
+            .my-info
+            {
+                justify-content: flex-start;
+            }
         }
     }
 }
 @media screen and (max-width:1400px) and (min-width:1200px)
 {
-    .footer-div .top-div
+    .footer-div .top-info-show
     {
-        justify-content: space-between;
-        align-items: flex-start;
-        flex-wrap: wrap;
-        .public-div .contant-div .sub-div span
+        width: 60%;
+        justify-content: space-around;
+        .sub-item
         {
-            margin-left: 0.6rem;
+            width: calc(100% / 3);
+            .my-info
+            {
+                justify-content: flex-start;
+            }
         }
     }
 }
 @media screen and (max-width:1200px) and (min-width:936px)
 {
-    .footer-div .top-div
+    .footer-div .top-info-show
     {
-        justify-content: space-between;
-        align-items: flex-start;
+        width: 80%;
+        justify-content: center;
         flex-wrap: wrap;
-        .public-div .contant-div .sub-div span
+        .sub-item
         {
-            margin-left: 0.6rem;
+            width: 100%;
+            .my-info
+            {
+                justify-content: center;
+            }
         }
     }
 }
 @media screen and (max-width:936px)
 {
-    .footer-div .top-div
+    .footer-div .top-info-show
     {
-        flex-direction: column;
-        align-items: center;
-        justify-items: center;
-        .public-div 
+        width: 80%;
+        justify-content: center;
+        flex-wrap: wrap;
+        .sub-item
         {
-            width: auto !important;
-            .contant-div .sub-div
+            width: 100%;
+            .my-info
             {
-                span
-                {
-                    margin-left: 1rem;
-                }
+                justify-content: center;
             }
         }
     }
