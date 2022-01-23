@@ -1,7 +1,6 @@
-// import axios from 'axios'
 axios.defaults.withCredentials = false
 const service = axios.create({
-    baseURL: 'https://www.itrong.love:1234/api',
+    baseURL: 'https://www.superarilo.icu/api',
     timeout: 20000,
     headers: {
         "Content-Type": "application/json",
