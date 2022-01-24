@@ -6,14 +6,14 @@ export default createStore({
         userNoLogin: require('@/views/icon/head/onLogin.png'),
         indexBg: require('@/views/icon/index/index_center.jpg'),
         userInfo:{
-            uid: 11,
-            userName: '这次换你听歌',
+            uid: 100,
+            userName: '单身狗',
             eMail: '',
-            class: 1,
-            className: '腐竹',
+            class: 2,
+            className: '管理员',
             userHead: require('@/views/icon/head/onLogin.png'),
-            javaMcId: 'Arilo007',
-            mcUUID: 'e71018558b58497581424ce802bf4252'
+            javaMcId: 'Single__290',
+            mcUUID: 'bfc8169a-8630-4075-bbbc-cf35672418b8'
         },
         serverTeamList:[
             {

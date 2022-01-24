@@ -9,12 +9,15 @@
             <div class="talk-content" ref="talkContent" @scroll="talkContentScroll">
                 <i class="fas fa-circle-notch refresh" :class="refreshShow ? 'refresh-is-loaded fa-spin':''" />
                 <transition-group name="list">
-                    <div v-for="(item,index) in test" :key="index" :class="item.isMe ? 'user-message-item-right' : 'user-message-item-left'">
+                    <div v-for="(item,index) in test" :key="index" :class="this.$store.getters.userInfoGet.uid === item.uid ? 'user-message-item-right' : 'user-message-item-left'">
                         <div class="user-head">
-                            <img :src="item.userHead"/>
+                            <img :src="this.$store.getters.userInfoGet.userHead"/>
                         </div>
                         <div class="user-name-and-message">
-                            <span class="user-name">{{item.userName}}</span>
+                            <div class="user-name-box" :style="this.$store.getters.userInfoGet.uid === item.uid ? 'flex-flow: row-reverse;' : 'flex-flow: row;'">
+                                <span :style="this.$store.getters.userInfoGet.uid === item.uid ? 'margin-left:0.5rem;' : 'margin-right:0.5rem;'">{{item.userName}}</span>
+                                <span>MC Java ID：{{item.MCJAVAId}}</span>
+                            </div>
                             <span class="user-message">{{item.content}}</span>
                         </div>
                     </div>
@@ -39,7 +42,7 @@
 </template>
 <script>
 import FooterBottom from '@/components/footerBottom.vue'
-import { ElNotification } from 'element-plus'
+import { ElNotification , ElMessage } from 'element-plus'
 export default {
     components:{
         FooterBottom
@@ -48,109 +51,18 @@ export default {
         return{
             indexBg: require('@/views/icon/index/index_center.jpg'),
             test:[
-                {
-                    id: 0,
-                    userHead: require('@/views/icon/head/stranger6.jpg'),
-                    userName: '这次换你听歌',
-                    content:'服务器要关机维护啦，请大家退出游戏，保存数据',
-                    sendTime: '',
-                    isMe: true,
-                },
-                {
-                    id: 1,
-                    userHead: require('@/views/icon/head/stranger7.jpg'),
-                    userName: '弔人',
-                    content: '萝卜打GoGo天天白给',
-                    sendTime: '',
-                    isMe: false,
-                },
-                {
-                    id: 2,
-                    userHead: require('@/views/icon/head/stranger2.jpg'),
-                    userName: '菜菜',
-                    content: '院子无限咕咕咕',
-                    sendTime: '',
-                    isMe: false,
-                },
-                {
-                    id: 3,
-                    userHead: require('@/views/icon/head/stranger10.jpg'),
-                    userName: 'ALarEr',
-                    content: '我有很多fufu表情包',
-                    sendTime: '',
-                    isMe: false,
-                },
-                {
-                    id: 4,
-                    userHead: require('@/views/icon/head/stranger6.jpg'),
-                    userName: '这次换你听歌',
-                    content: '单身猫，给我变！',
-                    sendTime: '',
-                    isMe: true,
-                },
-                {
-                    id: 5,
-                    userHead: require('@/views/icon/head/stranger19.jpg'),
-                    userName: '酱油',
-                    content: '我被歌谣子了',
-                    sendTime: '',
-                    isMe: false,
-                },
-                {
-                    id: 0,
-                    userHead: require('@/views/icon/head/stranger6.jpg'),
-                    userName: '这次换你听歌',
-                    content:'服务器要关机维护啦，请大家退出游戏，保存数据',
-                    sendTime: '',
-                    isMe: true,
-                },
-                {
-                    id: 1,
-                    userHead: require('@/views/icon/head/stranger7.jpg'),
-                    userName: '弔人',
-                    content: '萝卜打GoGo天天白给',
-                    sendTime: '',
-                    isMe: false,
-                },
-                {
-                    id: 2,
-                    userHead: require('@/views/icon/head/stranger2.jpg'),
-                    userName: '菜菜',
-                    content: '院子无限咕咕咕',
-                    sendTime: '',
-                    isMe: false,
-                },
-                {
-                    id: 3,
-                    userHead: require('@/views/icon/head/stranger10.jpg'),
-                    userName: 'ALarEr',
-                    content: '我有很多fufu表情包',
-                    sendTime: '',
-                    isMe: false,
-                },
-                {
-                    id: 4,
-                    userHead: require('@/views/icon/head/stranger6.jpg'),
-                    userName: '这次换你听歌',
-                    content: '单身猫，给我变！',
-                    sendTime: '',
-                    isMe: true,
-                },
-                {
-                    id: 5,
-                    userHead: require('@/views/icon/head/stranger19.jpg'),
-                    userName: '酱油',
-                    content: '我被歌谣子了',
-                    sendTime: '',
-                    isMe: false,
-                },
             ],
             refreshShow: false,
             userWriteContent: '',
             sentToServerStatu: false,
+            onlineTalkUrl: 'ws://localhost/api/websockets/',
+            websock: null
         }
     },
-    mounted(){
+    created(){
+        this.initWebSocket()
+    },
+    onMounted(){
         this.scrollToBottom()
     },
     methods:{
@@ -169,34 +81,46 @@ export default {
             if(!this.sentToServerStatu){
                 this.sentToServerStatu = true
                 if(this.userWriteContent === ''){
-                    ElNotification({
-                        title: '提示',
-                        message: '发送的信息不能为空！',
-                        type: 'info',
-                    })
+                    ElNotification({title: '提示',message: '发送的信息不能为空！',type: 'info'})
                     this.sentToServerStatu = false
                     return
                 }
-                setTimeout(() => {
-                    this.test = this.test.concat({
-                        userHead: require('@/views/icon/head/stranger6.jpg'),
-                        userName: '这次换你听歌',
-                        content: this.userWriteContent,
-                        sendTime: '',
-                        isMe: true,
-                    })
-                    this.sentToServerStatu = false
-                    this.scrollToBottom()
-                    this.userWriteContent = ''
-                },1000)
+                let sendToServer = {uid: this.$store.getters.userInfoGet.uid,MCJAVAId: this.$store.getters.userInfoGet.javaMcId,userName: this.$store.getters.userInfoGet.userName,uuid: this.$store.getters.userInfoGet.mcUUID,content: this.userWriteContent,fromGame: false}
+                this.websock.send(JSON.stringify(sendToServer))
+                this.sentToServerStatu = false
+                this.scrollToBottom()
+                this.userWriteContent = ''
             }
         },
         scrollToBottom(){
             this.$nextTick(()=>{
                 this.$refs.talkContent.scrollTop = this.$refs.talkContent.scrollHeight
             })
+        },
+        async initWebSocket(){
+            this.websock = new WebSocket(this.onlineTalkUrl + this.$store.getters.userInfoGet.uid)
+            this.websock.onmessage = this.websocketOnMessage
+            this.websock.onopen = this.websocketOnOpen
+            this.websock.onerror = this.websocketOnError
+            this.websock.onclose = this.websocketClose
+        },
+        websocketOnMessage(message){
+            this.test = this.test.concat(JSON.parse(message.data))
+            console.log(JSON.parse(message.data))
+            this.scrollToBottom()
+        },
+        websocketOnOpen(){
+            ElNotification({title: '在线聊天',message: '连接服务器成功！',type: 'success'})            
+        },
+        websocketOnError(){
+            ElMessage.error('连接到服务器出错！')
+        },
+        websocketClose(){
         }
-    }
+    },
+    unmounted() {
+        this.websock.close()
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -312,14 +236,17 @@ export default {
                     align-content: flex-start;
                     flex-wrap: wrap;
                     position: relative;
-                    .user-name
+                    .user-name-box
                     {
                         width: 100%;
                         display: flex;
-                        font-size: 0.6rem;
-                        color: rgb(68, 68, 68);
-                        letter-spacing: 0.02rem;
-                        word-break: keep-all;
+                        span
+                        {
+                            font-size: 0.6rem;
+                            color: rgb(68, 68, 68);
+                            letter-spacing: 0.02rem;
+                            word-break: keep-all;
+                        }
                     }
                     .user-message
                     {

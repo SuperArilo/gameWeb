@@ -75,7 +75,7 @@ export default {
             this.dialogVisible = true
         }
     },
-    beforeDestroy() {
+    unmounted() {
         this.editor.destroy()
         this.editor = null
     }
