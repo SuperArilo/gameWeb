@@ -35,6 +35,7 @@ export default {
     mounted(){
         const editor = new wangEditor(this.$refs.dyEditTool)
         editor.config.showLinkImg = false
+        editor.config.focus = false
         editor.config.menus = [
             'head',
             'bold',
@@ -67,7 +68,7 @@ export default {
         },
         imageIntoEdit(value){
             this.dialogVisible = false
-            value.forEach(key =>{
+            value.forEach(key => {
                 this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:50%;"/>')
             })
         },

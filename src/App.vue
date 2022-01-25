@@ -87,9 +87,9 @@ export default {
                 },
                 {
                     id: 5,
-                    title: '服务器公约',
+                    title: '自助申请白名单',
                     icon: require('@/views/icon/index/rule.png'),
-                    path: 'serverule'
+                    path: 'applicationwhitelist'
                 }
             ]
         }

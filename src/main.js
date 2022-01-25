@@ -12,4 +12,5 @@ app.use(lazyPlugin, {
     loading: '',
     error: ''
 })
+console.log(router)
 app.config.globalProperties.$axios = axios

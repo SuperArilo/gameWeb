@@ -58,6 +58,7 @@ export default {
     mounted(){
         const editor = new wangEditor(this.$refs.dyEditTool)
         editor.config.showLinkImg = false
+        editor.config.focus = false
         editor.config.height = 200
         editor.config.menus = [
             'head',

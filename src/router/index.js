@@ -116,11 +116,11 @@ const routes = [
         }
     },
     {
-        path: '/serverule',
-        component: () => import('@/views/rule.vue'),
+        path: '/applicationwhitelist',
+        component: () => import('@/views/applicationWhiteList.vue'),
         meta:{
-            path: '/serverule',
-            title: '服务公约'
+            path: '/applicationwhitelist',
+            title: '自助申请白名单'
         }
     }
 ]
@@ -129,7 +129,7 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL), routes
 })
 router.beforeEach((to, from, next) => {
-    window.document.title = to.meta.title == undefined ? '博客' : to.meta.title
+    window.document.title = to.meta.title
     $('html,body').stop().animate({'scrollTop': 0})
     next()
 })

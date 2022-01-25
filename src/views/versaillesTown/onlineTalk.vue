@@ -257,7 +257,8 @@ export default {
                         font-size: 0.55rem;
                         color: #ffffff;
                         letter-spacing: 0.02rem;
-                        white-space:pre-wrap;
+                        white-space: pre-wrap;
+                        word-break: break-all;
                     }
                 }
                 .user-name-and-message::before , .user-name-and-message::after
