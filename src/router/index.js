@@ -122,6 +122,18 @@ const routes = [
             path: '/applicationwhitelist',
             title: '自助申请白名单'
         }
+    },
+    {
+        path: '/error',
+        name: '不存在的页面',
+        component: () => import('@/views/errorPage.vue'),
+        meta:{
+            title: '不存在的页面'
+        }
+    },
+    {
+        path: '/:pathMatch(.*)',
+        redirect: '/error'
     }
 ]
 

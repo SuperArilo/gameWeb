@@ -153,7 +153,7 @@
 </template>
 <script>
 import { ElMessage } from 'element-plus'
-import FooterBottom from '../components/footerBottom.vue'
+import FooterBottom from '@/components/footerBottom.vue'
 export default {
     components:{
         FooterBottom
