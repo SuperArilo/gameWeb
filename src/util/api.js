@@ -67,3 +67,39 @@ export const userPublishDynamic = (query) => {
         data: query
     })
 }
+//后台验证码获取，需要发送 6位 随机数
+export const verificationGet = (params , method) => {
+    return request({
+        url: '/verification/image/' + method,
+        method: 'get',
+        params: params,
+        paramsSerializer: params => {
+            return Qs.stringify(params, {arrayFormat: 'repeat'})
+        },
+        // responseType: 'arraybuffer'
+    })
+}
+//邮箱验证码发送
+export const sendMailCode = (query) => {
+    return request({
+        url: '/email/code',
+        method: 'post',
+        data: query
+    })
+}
+//用户注册接口
+export const userRegister = (query) => {
+    return request({
+        url: '/register/user',
+        method: 'post',
+        data: query
+    })
+}
+//用户登录接口
+export const userLogin = (query) => {
+    return request({
+        url: '/blog/login',
+        method: 'post',
+        data: query
+    })
+}

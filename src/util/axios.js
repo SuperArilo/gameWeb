@@ -1,6 +1,6 @@
 axios.defaults.withCredentials = false
 const service = axios.create({
-    baseURL: 'https://www.superarilo.icu/api',
+    baseURL: 'https://www.itrong.love:1234/api',
     timeout: 20000,
     headers: {
         "Content-Type": "application/json",
@@ -18,11 +18,9 @@ service.interceptors.request.use(config => {
 }, error => {
     return Promise.reject(error)
 })
-service.interceptors.response.use(
-    response => {
+service.interceptors.response.use( response => {
         return Promise.resolve(response.data)
-    },
-    error => {
+    }, error => {
         return Promise.reject(error)
     }
 )

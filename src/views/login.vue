@@ -11,17 +11,21 @@
                 </div>
                 <div class="input-box">
                     <div class="input-sub-item">
-                        <span :class="spanStyleAdd === 1 ? 'span-move-active':''">邮箱</span>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 1},{'span-move-active' : spanStyleAdd === 1 || eMail !== ''}]">邮箱</span>
                         <input type="text" maxlength="20" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="input-sub-item">
-                        <span :class="spanStyleAdd === 2 ? 'span-move-active':''">密码</span>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 2},{'span-move-active' : spanStyleAdd === 2 || userPwd !== ''}]">密码</span>
                         <input type="password" maxlength="16" v-model="userPwd" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="CAPTCHA">
-                        <span :class="spanStyleAdd === 3 ? 'span-move-active':''">验证码</span>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 3},{'span-move-active' : spanStyleAdd === 3 || CAPTCHACode !== ''}]">验证码</span>
                         <input type="text" maxlength="4" v-model="CAPTCHACode" @focus="spanStyleAdd = 3" @blur="spanStyleAdd = 0" :style="CAPTCHACode === '' ? 'background-color: transparent;':''"/>
-                        <div class="CAPTCHA-picture"></div>
+                        <div class="CAPTCHA-picture">
+                            <div class="picture" @click="getVerification">
+                                <img :src="'data:image/png;base64,' + CAPTCHACodeImage" alt="验证码" title="点击刷新"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="account-func">
                         <div class="rember-me">
@@ -31,7 +35,10 @@
                         </div>
                         <span>忘记密码？</span>
                     </div>
-                    <span class="confirm-span">确认</span>
+                    <div class="confirm-div" @click="userLoginFunc">
+                        <span v-if="!userLoginWorkNow">确认</span>
+                        <i v-if="userLoginWorkNow" class="fas fa-circle-notch fa-spin"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,6 +47,8 @@
 </template>
 <script>
 import footerBottom from '@/components/footerBottom.vue'
+import { ElMessage , ElMessageBox } from 'element-plus'
+import { verificationGet , userLogin } from '@/util/api.js'
 export default {
     components: { footerBottom },
     data(){
@@ -48,7 +57,71 @@ export default {
             eMail: '',
             userPwd: '',
             CAPTCHACode:'',
-            remberMe:[]
+            remberMe:[],
+            verificationRandomCode: '',  //获取验证码图片时候的随机数
+            CAPTCHACodeImage: '', //从后台获取的验证码图片 base64
+            userLoginWorkNow: false
+        }
+    },
+    async created(){
+        this.getVerification()
+    },
+    methods:{
+        randomGet(length , limit){
+            let randomNumber = ''
+            for(let i = 0;i < length;i++){
+                randomNumber += Math.round(Math.random() * limit)
+            }
+            return randomNumber
+        },
+        getVerification(){
+            let randomNum = this.randomGet(6,9)
+            this.verificationRandomCode = randomNum
+            verificationGet({random: randomNum} , 'login').then(resq => {
+                if(resq.flag){
+                    this.CAPTCHACodeImage = resq.data
+                } else {
+                    ElMessage.error(resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('获取验证码发生错误！ ' + err)
+            })
+        },
+        checkMail(mail){
+            const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+            return regEmail.test(mail)
+        },
+        userLoginFunc(){
+            if(!this.userLoginWorkNow){
+                this.userLoginWorkNow = true
+                if(this.eMail !== '' && this.userPwd !== '' && this.CAPTCHACode !== ''){
+                    if(this.checkMail(this.eMail)){
+                        userLogin({mail: this.eMail,password: this.userPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
+                            if(resq.flag){
+                                ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {} })
+                                this.userLoginWorkNow = false
+                                this.CAPTCHACode = ''
+                            } else {
+                                ElMessage.error(resq.message)
+                                this.CAPTCHACode = ''
+                                this.getVerification()
+                                this.userLoginWorkNow = false
+                            }
+                        }).catch(err => {
+                            ElMessage.error('登录过程中发生错误！ ' + err)
+                            this.CAPTCHACode = ''
+                            this.getVerification()
+                            this.userLoginWorkNow = false
+                        })
+                    } else {
+                        ElMessage({message: '邮箱不合法！请重新确认',type: 'warning'})
+                        this.userLoginWorkNow = false
+                    }
+                } else {
+                    ElMessage({message: '填写的信息有空白，请检查！',type: 'warning'})
+                    this.userLoginWorkNow = false
+                }
+            }
         }
     }
 }
@@ -140,21 +213,24 @@ export default {
                         color: darkgray;
                         position: absolute;
                         bottom: 0;
-                        font-size: 0.6rem;
+                        font-size: 0.55rem;
+                    }
+                    .span-style-actie
+                    {
+                        color: #3773f3;
+                        font-size: 0.55rem;
                     }
                     .span-move-active
                     {
-                        font-size: 0.55rem;
                         margin: 1.5rem 0;
-                        color: #3773f3;
                     }
                     input
                     {
                         height: 1.5rem;
                         outline: none;
                         border: solid 0.05rem darkgray;
-                        padding: 0 0.3rem;
-                        border-radius: 0.8rem;
+                        padding: 0 0.5rem;
+                        border-radius: 0.6rem;
                         transition: all 0.3s;
                         font-size: 0.6rem;
                         position: relative;
@@ -181,10 +257,6 @@ export default {
                 .CAPTCHA
                 {
                     justify-content: space-between;
-                    span
-                    {
-                        width: 45%;
-                    }
                     input
                     {
                         width: 45%;
@@ -192,29 +264,97 @@ export default {
                     .CAPTCHA-picture
                     {
                         width: 50%;
-                        height: 50%;
-                        background-color: wheat;
+                        height: 1.5rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .picture
+                        {
+                            height: 100%;
+                            width: 80%;
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            img
+                            {
+                                height: 100%;
+                                max-height: 100%;
+                            }
+                        }
+                    }
+                    .CAPTCHA-send
+                    {
+                        width: 50%;
+                        height: 1.5rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border-radius: 0.8rem;
+                        background-color: #b3d8ff;
+                        transition: all 0.3s;
+                        cursor: pointer;
+                        .info-span
+                        {
+                            height: 1.5rem;
+                            margin-left: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            text-align: center;
+                            font-size: 0.55rem;
+                            color: #3399ff;
+                        }
+                        i
+                        {
+                            color: #3399ff;
+                        }
+                    }
+                    .CAPTCHA-send:hover
+                    {
+                        .info-span , i
+                        {
+                            color: #ffffff;
+                        }
+                        background-color: #409eff;
                     }
                 }
-                .confirm-span
+                .confirm-div
                 {
-                    padding: 0.3rem 0;
+                    height: 1.5rem;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-size: 0.7rem;
                     margin: 1rem 0;
                     background-color: #b3d8ff;
-                    color: #3399ff;
                     transition: all 0.3s;
                     border-radius: 0.8rem;
                     cursor: pointer;
                     box-shadow: 0 0 0.1rem black;
+                    span , i
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        color: #3399ff;
+                        transition: all 0.3s;
+                    }
+                    span
+                    {
+                        font-size: 0.7rem;
+                        letter-spacing: 0.05rem;
+                    }
+                    i
+                    {
+                        font-size: 0.8rem;
+                    }
                 }
-                .confirm-span:hover
+                .confirm-div:hover
                 {
-                    color: white;
                     background-color: #409eff;
+                    span , i
+                    {
+                        color: white;
+                    }
                 }
                 .account-func
                 {
@@ -267,7 +407,7 @@ export default {
         width: 20rem;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 60%;
             }
@@ -281,7 +421,7 @@ export default {
         width: 20rem;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 60%;
             }
@@ -295,7 +435,7 @@ export default {
         width: 20rem;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 60%;
             }
@@ -309,7 +449,7 @@ export default {
         width: 90%;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 80%;
             }
@@ -323,7 +463,7 @@ export default {
         width: 90%;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 80%;
             }
@@ -337,7 +477,7 @@ export default {
         width: 90%;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 80%;
             }

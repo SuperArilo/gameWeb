@@ -86,8 +86,7 @@ export default {
         editor.create()
         this.editor = editor
     },
-    beforeDestroy() {
-        // 销毁编辑器
+    unmounted() {
         this.editor.destroy()
         this.editor = null
     }

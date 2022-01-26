@@ -180,7 +180,7 @@ export default {
             }
         }
     },
-    beforeDestroy() {
+    unmounted() {
         this.editor.destroy()
         this.editor = null
     }

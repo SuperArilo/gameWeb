@@ -10,12 +10,18 @@
             </div>
             <div class="user-input-box">
                 <div class="title">
-                    <span>ID绑定输入</span>
+                    <span>MCID绑定输入</span>
                     <i class="fas fa-archive"/>
                 </div>
                 <div class="input-sub-item">
-                    <span :class="spanStyleAdd === 1 ? 'span-move-active':''">MC Java Id</span>
+                    <span :class="[{'span-style-actie' : spanStyleAdd === 1},{'span-move-active' : spanStyleAdd === 1 || McJavaId !== ''}]">MC Java Id</span>
                     <input type="text" maxlength="16" v-model="McJavaId" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="McJavaId === '' ? 'background-color: transparent;':''"/>
+                </div>
+                <div class="button-box">
+                    <div class="button-confirm" @click="sendToServerConfirm">
+                        <span v-if="!sendToServerWorkNow">确认</span>
+                        <i v-if="sendToServerWorkNow" class="fas fa-circle-notch fa-spin"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -24,12 +30,29 @@
 </template>
 <script>
 import footerBottom from '@/components/footerBottom.vue'
+import { ElMessage , ElMessageBox } from 'element-plus'
 export default {
     components: { footerBottom },
     data(){
         return{
             McJavaId: '',
-            spanStyleAdd: null
+            spanStyleAdd: null,
+            sendToServerWorkNow: false,
+        }
+    },
+    methods:{
+        sendToServerConfirm(){
+            if(!this.sendToServerWorkNow){
+                this.sendToServerWorkNow = true
+                if(this.McJavaId !== ''){
+                    setTimeout(() => {
+                        this.sendToServerWorkNow = false
+                    },3000)
+                } else {
+                    ElMessage({message: '填写的信息有空白，请检查！',type: 'warning'})
+                    this.sendToServerWorkNow = false
+                }
+            }
         }
     }
 }
@@ -130,7 +153,6 @@ export default {
                 flex-wrap: wrap;
                 span
                 {
-                    width: 100%;
                     height: 1.5rem;
                     margin-left: 0.5rem;
                     display: flex;
@@ -140,22 +162,24 @@ export default {
                     color: darkgray;
                     position: absolute;
                     bottom: 0;
-                    font-size: 0.6rem;
+                    font-size: 0.55rem;
+                }
+                .span-style-actie
+                {
+                    color: #3773f3;
+                    font-size: 0.55rem;
                 }
                 .span-move-active
                 {
-                    font-size: 0.55rem;
                     margin: 1.5rem 0;
-                    color: #3773f3;
                 }
                 input
                 {
-                    width: 100%;
                     height: 1.5rem;
                     outline: none;
                     border: solid 0.05rem darkgray;
-                    padding: 0 0.3rem;
-                    border-radius: 0.8rem;
+                    padding: 0 0.5rem;
+                    border-radius: 0.6rem;
                     transition: all 0.3s;
                     font-size: 0.6rem;
                     position: relative;
@@ -165,6 +189,48 @@ export default {
                 {
                     border: solid 0.05rem #3773f3;
                     border-radius: 0.2rem;
+                }
+            }
+            .button-box
+            {
+                width: 100%;
+                display: flex;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                margin-top: 1rem;
+                padding: 0 0.5rem;
+                .button-confirm
+                {
+                    width: 4rem;
+                    height: 1.5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #b3d8ff;
+                    color: #3399ff;
+                    border: solid 0.05rem #409eff;
+                    border-radius: 0.2rem;
+                    transition: all 0.3s;
+                    cursor: pointer;
+                    span , i
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                    }
+                    span
+                    {
+                        font-size: 0.6rem;
+                    }
+                    i
+                    {
+                        font-size: 0.8rem;
+                    }
+                }
+                .button-confirm:hover
+                {
+                    color: white;
+                    background-color: #409eff;
                 }
             }
         }

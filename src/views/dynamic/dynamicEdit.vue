@@ -283,6 +283,10 @@ export default {
                 }
             }
         }
+    },
+    unmounted() {
+        this.editor.destroy()
+        this.editor = null
     }
 }
 </script>

@@ -55,7 +55,7 @@ export default {
             refreshShow: false,
             userWriteContent: '',
             sentToServerStatu: false,
-            onlineTalkUrl: 'ws://localhost/api/websockets/',
+            onlineTalkUrl: 'wss://www.itrong.love:1234/api/websockets/',
             websock: null
         }
     },

@@ -65,6 +65,9 @@ export default {
             if(resq.flag){
                 this.imageList = resq.data
                 this.isGetMediaFileWorkNow = false
+            } else {
+                ElMessage.error(resq.message)
+                this.isGetMediaFileWorkNow = false
             }
         }).catch(err => {
             ElMessage.error('获取媒体文件出错，请稍后重试！' + err)
@@ -163,7 +166,11 @@ export default {
             }
         },
         embedIntoEdit(){
-            this.$emit('imageIntoEdit',this.intoEditList)
+            if(this.intoEditList.length !== 0){
+                this.$emit('imageIntoEdit',this.intoEditList)
+            } else {
+                ElMessage('您未选中任何选项')
+            }
         }
     }
 }

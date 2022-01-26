@@ -11,19 +11,19 @@
                 </div>
                 <div class="input-box">
                     <div class="input-sub-item">
-                        <span :class="spanStyleAdd === 1 ? 'span-move-active':''">邮箱</span>
-                        <input type="text" maxlength="20" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 1},{'span-move-active' : spanStyleAdd === 1 || eMail !== ''}]">邮箱</span>
+                        <input type="email" maxlength="20" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="input-sub-item">
-                        <span :class="spanStyleAdd === 2 ? 'span-move-active':''">密码</span>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 2},{'span-move-active' : spanStyleAdd === 2 || userPwd !== ''}]">密码</span>
                         <input type="password" maxlength="16" v-model="userPwd" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="input-sub-item">
-                        <span :class="spanStyleAdd === 3 ? 'span-move-active':''">再次输入密码</span>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 3},{'span-move-active' : spanStyleAdd === 3 || userPwdAgain !== ''}]">再次输入密码</span>
                         <input type="password" maxlength="16" v-model="userPwdAgain" @focus="spanStyleAdd = 3" @blur="spanStyleAdd = 0" :style="userPwdAgain === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="CAPTCHA">
-                        <span :class="spanStyleAdd === 4 ? 'span-move-active':''">邮箱验证码</span>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 4},{'span-move-active' : spanStyleAdd === 4 || eMailPwd !== ''}]">邮箱验证码</span>
                         <input type="text" maxlength="6" v-model="eMailPwd" @focus="spanStyleAdd = 4" @blur="spanStyleAdd = 0" :style="eMailPwd === '' ? 'background-color: transparent;':''"/>
                         <div class="CAPTCHA-send" @click="sendToUserEmail">
                             <span v-if="!isClickSend && !isSendCounted" class="info-span">发送验证码</span>
@@ -32,11 +32,18 @@
                         </div>
                     </div>
                     <div class="CAPTCHA">
-                        <span :class="spanStyleAdd === 5 ? 'span-move-active':''">验证码</span>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 5},{'span-move-active' : spanStyleAdd === 5 || CAPTCHACode !== ''}]">验证码</span>
                         <input type="text" maxlength="4" v-model="CAPTCHACode" @focus="spanStyleAdd = 5" @blur="spanStyleAdd = 0" :style="CAPTCHACode === '' ? 'background-color: transparent;':''"/>
-                        <div class="CAPTCHA-picture"></div>
+                        <div class="CAPTCHA-picture">
+                            <div class="picture" @click="getVerification">
+                                <img :src="'data:image/png;base64,' + CAPTCHACodeImage" alt="验证码" title="点击刷新"/>
+                            </div>
+                        </div>
                     </div>
-                    <span class="confirm-span">确认</span>
+                    <div class="confirm-div" @click="sendToServerRegister">
+                        <span v-if="!isSendToServerRegisterWorkNow">确认</span>
+                        <i v-if="isSendToServerRegisterWorkNow" class="fas fa-circle-notch fa-spin"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,43 +51,126 @@
     </div>
 </template>
 <script>
-import { ElNotification } from 'element-plus'
+import { ElNotification , ElMessage , ElMessageBox } from 'element-plus'
 import footerBottom from '@/components/footerBottom.vue'
+import { verificationGet , sendMailCode , userRegister } from '@/util/api.js'
 export default {
     components: { footerBottom },
     data(){
         return{
             spanStyleAdd: 0,
-            eMail: '',
-            eMailPwd: '',
-            userPwd: '',
-            userPwdAgain: '',
-            remberMe:[],
-            CAPTCHACode:'',
-            timeCount: 60,
+            eMail: '', //注册邮箱
+            eMailPwd: '',  //邮箱验证码
+            userPwd: '',  //注册密码
+            userPwdAgain: '',  //注册确认密码
+            remberMe:[],  //记住我选项
+            CAPTCHACode:'',  //用户输入的验证码
+            CAPTCHACodeImage: '', //从后台获取的验证码图片 base64
+            timeCount: 60,  //邮箱获取计数
             isClickSend: false,
             isSendCounted: false,
             timeInterval: null,
+            verificationRandomCode: '',  //获取验证码图片时候的随机数
+            isSendToServerRegisterWorkNow: false,
         }
+    },
+    async created(){
+        this.getVerification()
+    },
+    mounted(){
+        
     },
     methods:{
         sendToUserEmail(){
-            if(!this.isClickSend && !this.isSendCounted){
-                this.isClickSend = true
-                setTimeout(() => {
-                    this.isClickSend = false
-                    ElNotification({ title: '成功', message: '已发送验证码到邮箱', type: 'success', })
-                    this.isSendCounted = true
-                    this.timeInterval = setInterval(() => {
-                        if(this.timeCount <= 60 && this.timeCount > 0){
-                            this.timeCount--
+            if(this.eMail !== ''){
+                if(this.checkMail(this.eMail)){
+                    if(!this.isClickSend && !this.isSendCounted){
+                        this.isClickSend = true
+                        let serverData = new FormData()
+                        serverData.append('to' , this.eMail)
+                        sendMailCode(serverData).then(resq => {
+                            if(resq.flag){
+                                this.isClickSend = false
+                                ElNotification({ title: '成功', message: resq.message , type: 'success', })
+                                this.isSendCounted = true
+                                this.timeInterval = setInterval(() => {
+                                    if(this.timeCount <= 60 && this.timeCount > 0){
+                                        this.timeCount--
+                                    } else {
+                                        clearInterval(this.timeInterval)
+                                        this.timeCount = 60
+                                        this.isSendCounted = false
+                                    }
+                                },1000)
+                            }
+                        }).catch(err => {
+                            ElMessage.error('发送邮箱验证码时候发生错误！ ' + err)
+                        })
+                    }
+                } else {
+                    ElMessage({message: '邮箱不合法！请重新确认',type: 'warning'})
+                }
+            } else {
+                ElNotification({title: '提示',message: '邮箱不能为空！', type: 'warning'})
+            }
+        },
+        randomGet(length , limit){
+            let randomNumber = ''
+            for(let i = 0;i < length;i++){
+                randomNumber += Math.round(Math.random() * limit)
+            }
+            return randomNumber
+        },
+        getVerification(){
+            let randomNum = this.randomGet(6,9)
+            this.verificationRandomCode = randomNum
+            verificationGet({random: randomNum} , 'register').then(resq => {
+                if(resq.flag){
+                    this.CAPTCHACodeImage = resq.data
+                } else {
+                    ElMessage.error(resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('获取验证码发生错误！ ' + err)
+            })
+        },
+        checkMail(mail){
+            const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+            return regEmail.test(mail)
+        },
+        sendToServerRegister(){
+            if(!this.isSendToServerRegisterWorkNow){
+                this.isSendToServerRegisterWorkNow = true
+                if(this.eMail !== '' && this.userPwd !== '' && this.userPwdAgain !== '' && this.eMailPwd !== '' && this.CAPTCHACode !== ''){
+                    if(this.checkMail(this.eMail)){
+                        if(this.userPwd === this.userPwdAgain){
+                            this.isSendToServerRegisterWorkNow = true
+                            userRegister({mail: this.eMail,password: this.userPwd,confirm: this.userPwdAgain,mailVerifyCode: this.eMailPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
+                                if(resq.flag){
+                                    ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {} })
+                                    this.CAPTCHACode = ''
+                                } else {
+                                    ElMessage({message: resq.message,type: 'warning'})
+                                    this.CAPTCHACode = ''
+                                    this.isSendToServerRegisterWorkNow = false
+                                }
+                            }).catch(err => {
+                                ElMessage.error('注册时发生错误！ ' + err)
+                                this.CAPTCHACode = ''
+                                this.isSendToServerRegisterWorkNow = false
+                            })
                         } else {
-                            clearInterval(this.timeInterval)
-                            this.timeCount = 60
-                            this.isSendCounted = false
+                            ElMessage({message: '两次输入的密码不一致，请检查！',type: 'warning'})
+                            this.isSendToServerRegisterWorkNow = false
                         }
-                    },1000)
-                },1500)
+                    } else {
+                        ElMessage({message: '邮箱不合法！请重新确认',type: 'warning'})
+                        this.isSendToServerRegisterWorkNow = false
+                    }
+                } else {
+                    ElMessage({message: '填写的信息有空白，请检查！',type: 'warning'})
+                    this.isSendToServerRegisterWorkNow = false
+                }
             }
         }
     }
@@ -173,21 +263,24 @@ export default {
                         color: darkgray;
                         position: absolute;
                         bottom: 0;
-                        font-size: 0.6rem;
+                        font-size: 0.55rem;
+                    }
+                    .span-style-actie
+                    {
+                        color: #3773f3;
+                        font-size: 0.55rem;
                     }
                     .span-move-active
                     {
-                        font-size: 0.55rem;
                         margin: 1.5rem 0;
-                        color: #3773f3;
                     }
                     input
                     {
                         height: 1.5rem;
                         outline: none;
                         border: solid 0.05rem darkgray;
-                        padding: 0 0.3rem;
-                        border-radius: 0.8rem;
+                        padding: 0 0.5rem;
+                        border-radius: 0.6rem;
                         transition: all 0.3s;
                         font-size: 0.6rem;
                         position: relative;
@@ -222,7 +315,22 @@ export default {
                     {
                         width: 50%;
                         height: 1.5rem;
-                        background-color: wheat;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .picture
+                        {
+                            height: 100%;
+                            width: 80%;
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            img
+                            {
+                                height: 100%;
+                                max-height: 100%;
+                            }
+                        }
                     }
                     .CAPTCHA-send
                     {
@@ -260,25 +368,43 @@ export default {
                         background-color: #409eff;
                     }
                 }
-                .confirm-span
+                .confirm-div
                 {
-                    padding: 0.3rem 0;
+                    height: 1.5rem;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-size: 0.7rem;
                     margin: 1rem 0;
                     background-color: #b3d8ff;
-                    color: #3399ff;
                     transition: all 0.3s;
                     border-radius: 0.8rem;
                     cursor: pointer;
                     box-shadow: 0 0 0.1rem black;
+                    span , i
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        color: #3399ff;
+                        transition: all 0.3s;
+                    }
+                    span
+                    {
+                        font-size: 0.7rem;
+                        letter-spacing: 0.05rem;
+                    }
+                    i
+                    {
+                        font-size: 0.8rem;
+                    }
                 }
-                .confirm-span:hover
+                .confirm-div:hover
                 {
-                    color: white;
                     background-color: #409eff;
+                    span , i
+                    {
+                        color: white;
+                    }
                 }
             }
         }
@@ -291,7 +417,7 @@ export default {
         width: 20rem;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 60%;
             }
@@ -305,7 +431,7 @@ export default {
         width: 20rem;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 60%;
             }
@@ -319,7 +445,7 @@ export default {
         width: 20rem;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 60%;
             }
@@ -333,7 +459,7 @@ export default {
         width: 90%;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 80%;
             }
@@ -347,7 +473,7 @@ export default {
         width: 90%;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 80%;
             }
@@ -361,7 +487,7 @@ export default {
         width: 90%;
         .input-box
         {
-            .CAPTCHA , .input-sub-item , .confirm-span , .account-func
+            .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
                 width: 80%;
             }
