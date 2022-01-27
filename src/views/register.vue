@@ -147,7 +147,9 @@ export default {
                             this.isSendToServerRegisterWorkNow = true
                             userRegister({mail: this.eMail,password: this.userPwd,confirm: this.userPwdAgain,mailVerifyCode: this.eMailPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
                                 if(resq.flag){
-                                    ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {} })
+                                    ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {
+                                        this.$router.push('/login')
+                                    }})
                                     this.CAPTCHACode = ''
                                 } else {
                                     ElMessage({message: resq.message,type: 'warning'})

@@ -16,6 +16,14 @@
             <div class="edit-div">
                 <span class="title-span">说点什么</span>
                 <div class="render-edit" ref="dyEditTool"></div>
+                <div class="buttom">
+                    <div class="buttom-file" @click="dialogVisible = true">
+                        <span>媒体文件管理</span>
+                    </div>
+                    <div class="button-confirm">
+                        <span>发布</span>
+                    </div>
+                </div>
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
@@ -42,17 +50,22 @@
             </div>
             <el-pagination background layout="prev, pager, next" :total="20" :page-size="8"></el-pagination>
         </div>
+        <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
+            <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
+        </el-dialog>
         <footer-bottom></footer-bottom>
     </div>
 </template>
 <script>
-import footerBottom from '../components/footerBottom.vue'
+import footerBottom from '@/components/footerBottom.vue'
+import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
-  components: { footerBottom },
+  components: { footerBottom , mediaFile },
     data(){
         return{
             text: '',
             editor: null,
+            dialogVisible: false,
         }
     },
     mounted(){
@@ -76,7 +89,6 @@ export default {
             'justify',
             'quote',
             'emoticon',
-            'image',
             'table',
             'splitLine',
         ]
@@ -85,6 +97,17 @@ export default {
         }
         editor.create()
         this.editor = editor
+    },
+    methods:{
+        closeWindow(value){
+            this.dialogVisible = value
+        },
+        imageIntoEdit(value){
+            this.dialogVisible = false
+            value.forEach(key =>{
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:50%;"/>')
+            })
+        },
     },
     unmounted() {
         this.editor.destroy()
@@ -136,10 +159,7 @@ export default {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                }
-                span:nth-child(2)
-                {
-                    margin: 0 0.5rem 0 0.5rem;
+                    margin: 0 0.25rem;
                 }
             }
         }
@@ -186,6 +206,9 @@ export default {
         .edit-div
         {
             width: 100%;
+            display: flex;
+            align-content: flex-start;
+            flex-wrap: wrap;
             .render-edit
             {
                 width: 100%;
@@ -213,47 +236,57 @@ export default {
             .buttom
             {
                 width: 100%;
-                height: 1.5rem;
                 display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                margin: 0 1rem 0 1rem;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                transition: all 0.3s;
-                span
+                justify-content: space-between;
+                margin: 1rem 0;
+                span , i
                 {
                     height: 100%;
                     display: flex;
-                    justify-content: center;
                     align-items: center;
-                    font-size: 0.6rem;
-                    width: 4rem;
+                    justify-content: center;
                     transition: all 0.3s;
-                    border-radius: 0.2rem;
                 }
-                .button-clear
+                span
                 {
-                    background-color: #fdf6ec;
-                    color:  #e6a23c;
-                    border: solid 0.05rem #f5dab1;
+                    font-size: 0.6rem;
                 }
-                .button-clear:hover
+                i
                 {
-                    color: white;
-                    background-color:  #e6a23c;
+                    font-size: 0.8rem;
                 }
                 .button-confirm
                 {
-                    margin-left: 1rem;
                     background-color: #b3d8ff;
-                    color: #3399ff;
                     border: solid 0.05rem #409eff;
+                    color: #3399ff;
+                }
+                .buttom-file
+                {
+                    background-color: #8db0b9;
+                    color: #ffffff;
+                    border: solid 0.05rem #6c888f;
+                }
+                .buttom-file:hover
+                {
+                    background-color: #407e8d;
+                }
+                .button-confirm , .buttom-file
+                {
+                    width: 4rem;
+                    height: 1.5rem;
+                    transition: all 0.3s;
+                    border-radius: 0.2rem;
+                    transition: all 0.3s;
+                    cursor: pointer;
                 }
                 .button-confirm:hover
                 {
-                    color: white;
                     background-color: #409eff;
+                    span , i
+                    {
+                        color: white;
+                    }
                 }
             }
         }
@@ -307,7 +340,7 @@ export default {
                         .show-content
                         {
                             width: 100%;
-                            min-height: 2rem;
+                            min-height: 1rem;
                             word-break: break-all;
                             letter-spacing: 0.03rem;
                         }
@@ -368,6 +401,14 @@ export default {
             }
         }
     }
+    ::v-deep(.el-dialog__body)
+    {
+        padding: 0;
+    }
+    ::v-deep(.el-dialog__header)
+    {
+        display: none;
+    }
 }
 @media screen and (min-width:1400px)
 {
@@ -378,6 +419,10 @@ export default {
             width: 55rem;
             padding: 1.5rem 1rem 1rem 1rem;
             margin: 2rem 0 2rem 0;
+        }
+        ::v-deep(.el-dialog)
+        {
+            width: 35rem;
         }
     }
 }
@@ -391,6 +436,10 @@ export default {
             padding: 1.5rem 1rem 1rem 1rem;
             margin: 2rem 0 2rem 0;
         }
+        ::v-deep(.el-dialog)
+        {
+            width: 35rem;
+        }
     }
 }
 @media screen and (max-width:1200px) and (min-width:936px)
@@ -403,6 +452,10 @@ export default {
             padding: 1.5rem 0.8rem 0.8rem 0.8rem;
             margin: 2rem 0 2rem 0;
         }
+        ::v-deep(.el-dialog)
+        {
+            width: 30rem;
+        }
     }
 }
 @media screen and (max-width:936px) and (min-width:767px)
@@ -413,6 +466,10 @@ export default {
         {
             width: 100;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
+        }
+        ::v-deep(.el-dialog)
+        {
+            width: 90%;
         }
     }
 }
@@ -425,6 +482,10 @@ export default {
             width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
         }
+        ::v-deep(.el-dialog)
+        {
+            width: 90%;
+        }
     }
 }
 @media screen and (max-width:676px)
@@ -435,6 +496,10 @@ export default {
         {
             width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
+        }
+        ::v-deep(.el-dialog)
+        {
+            width: 90%;
         }
     }
 }

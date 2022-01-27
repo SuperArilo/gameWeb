@@ -98,7 +98,10 @@ export default {
                     if(this.checkMail(this.eMail)){
                         userLogin({mail: this.eMail,password: this.userPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
                             if(resq.flag){
-                                ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {} })
+                                console.log(resq.data)
+                                ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {
+                                    this.$router.push('/')
+                                }})
                                 this.userLoginWorkNow = false
                                 this.CAPTCHACode = ''
                             } else {
