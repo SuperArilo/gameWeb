@@ -8,8 +8,8 @@
             <div class="setting-content">
                 <div class="sub-user-name-set-div">
                     <div class="user-name-describe">
-                        <span>昵称：</span>
-                        <input type="text" maxlength="8" v-model="userShowName"/>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 1},{'span-move-active' : spanStyleAdd === 1 || userShowName !== ''}]">昵称:</span>
+                        <input type="text" maxlength="16" v-model="userShowName" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="userShowName === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="describe">
                         <span>输入你的个性名称~</span>
@@ -18,8 +18,8 @@
                 </div>
                 <div class="sub-user-name-set-div">
                     <div class="user-name-describe">
-                        <span>签名：</span>
-                        <input type="text" maxlength="8" v-model="userAutograph"/>
+                        <span :class="[{'span-style-actie' : spanStyleAdd === 2},{'span-move-active' : spanStyleAdd === 2 || userAutograph !== ''}]">签名:</span>
+                        <input type="text" maxlength="16" v-model="userAutograph" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userAutograph === '' ? 'background-color: transparent;':''"/>
                     </div>
                     <div class="describe">
                         <span>输入你的个性签名~</span>
@@ -62,6 +62,7 @@ export default {
         return{
             userShowName: '这次换你听歌',
             userAutograph: '单身狗，还我狗子！',
+            spanStyleAdd: '',
             userHead: require('@/views/icon/head/stranger18.jpg'),
             showUploadWindow: false,
 			params: {
@@ -170,30 +171,50 @@ export default {
                 .user-name-describe
                 {
                     width: 100%;
+                    height: 3rem;
                     display: flex;
+                    position: relative;
                     justify-content: flex-start;
-                    align-items: center;
+                    align-items: flex-end;
+                    flex-wrap: wrap;
                     span
                     {
-                        height: 100%;
+                        height: 1.5rem;
+                        margin-left: 0.5rem;
                         display: flex;
                         align-items: center;
-                        font-size: 0.6rem;
+                        justify-content: flex-start;
+                        transition: all 0.4s;
+                        color: darkgray;
+                        position: absolute;
+                        bottom: 0;
+                        font-size: 0.55rem;
+                    }
+                    .span-style-actie
+                    {
+                        color: #3773f3;
+                        font-size: 0.55rem;
+                    }
+                    .span-move-active
+                    {
+                        margin: 1.5rem 0;
                     }
                     input
                     {
-                        width: 10rem;
-                        height: 1.3rem;
+                        height: 1.5rem;
                         outline: none;
                         border: solid 0.05rem darkgray;
-                        padding: 0 0.2rem;
-                        border-radius: 0.2rem;
+                        padding: 0 0.5rem;
+                        border-radius: 0.6rem;
                         transition: all 0.3s;
-                        font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+                        font-size: 0.6rem;
+                        position: relative;
+                        z-index: 10;
                     }
                     input:focus
                     {
-                        box-shadow: 0 0 0.3rem #3773f3;
+                        border: solid 0.05rem #3773f3;
+                        border-radius: 0.2rem;
                     }
                 }
                 .describe

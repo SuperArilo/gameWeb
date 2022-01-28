@@ -486,7 +486,7 @@ export default {
         .data-empty
         {
             width: 100%;
-            height: 10rem;
+            height: 14rem;
             display: flex;
             justify-content: center;
             align-items: center;
