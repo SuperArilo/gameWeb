@@ -148,7 +148,6 @@ export default {
                 justify-content: flex-start;
                 flex-wrap: wrap;
                 margin-top: 1rem;
-                padding: 0 0.5rem;
                 .button-confirm
                 {
                     width: 4rem;

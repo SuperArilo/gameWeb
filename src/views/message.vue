@@ -464,7 +464,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 100;
+            width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
         }
         ::v-deep(.el-dialog)
