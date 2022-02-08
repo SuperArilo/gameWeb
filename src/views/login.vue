@@ -9,18 +9,11 @@
                     </div>
                     <span class="func-box" @click="this.$router.push('/register')">注 册</span>
                 </div>
-                <div class="input-box">
-                    <div class="input-sub-item">
-                        <span :class="[{'span-style-actie' : spanStyleAdd === 1},{'span-move-active' : spanStyleAdd === 1 || eMail !== ''}]">邮箱</span>
-                        <input type="text" maxlength="20" v-model="eMail" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="eMail === '' ? 'background-color: transparent;':''"/>
-                    </div>
-                    <div class="input-sub-item">
-                        <span :class="[{'span-style-actie' : spanStyleAdd === 2},{'span-move-active' : spanStyleAdd === 2 || userPwd !== ''}]">密码</span>
-                        <input type="password" maxlength="16" v-model="userPwd" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userPwd === '' ? 'background-color: transparent;':''"/>
-                    </div>
+                <div class="input-there-box">
+                    <input-box class="input-sub-item" v-model="eMail" title="邮箱" :length="16" inputType="text"/>
+                    <input-box class="input-sub-item" v-model="userPwd" title="密码" :length="16" inputType="password"/>
                     <div class="CAPTCHA">
-                        <span :class="[{'span-style-actie' : spanStyleAdd === 3},{'span-move-active' : spanStyleAdd === 3 || CAPTCHACode !== ''}]">验证码</span>
-                        <input type="text" maxlength="4" v-model="CAPTCHACode" @focus="spanStyleAdd = 3" @blur="spanStyleAdd = 0" :style="CAPTCHACode === '' ? 'background-color: transparent;':''"/>
+                        <input-box v-model="CAPTCHACode" title="验证码" :length="4" inputType="text"/>
                         <div class="CAPTCHA-picture">
                             <div class="picture" @click="getVerification">
                                 <img :src="'data:image/png;base64,' + CAPTCHACodeImage" alt="验证码" title="点击刷新"/>
@@ -47,10 +40,11 @@
 </template>
 <script>
 import footerBottom from '@/components/footerBottom.vue'
+import inputBox from '@/components/inputBox.vue'
 import { ElMessage , ElMessageBox } from 'element-plus'
 import { verificationGet , userLogin } from '@/util/api.js'
 export default {
-    components: { footerBottom },
+    components: { footerBottom , inputBox },
     data(){
         return{
             spanStyleAdd: 0,
@@ -191,76 +185,21 @@ export default {
                     border-radius: 0.6rem 0 0 0 ;
                 }
             }
-            .input-box
+            .input-there-box
             {
                 width: 100%;
                 display: flex;
                 justify-content: center;
                 align-content: flex-start;
                 flex-wrap: wrap;
-                .input-sub-item , .CAPTCHA
-                {
-                    height: 3rem;
-                    display: flex;
-                    position: relative;
-                    align-items: flex-end;
-                    flex-wrap: wrap;
-                    span
-                    {
-                        height: 1.5rem;
-                        margin-left: 0.5rem;
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-start;
-                        transition: all 0.4s;
-                        color: darkgray;
-                        position: absolute;
-                        bottom: 0;
-                        font-size: 0.55rem;
-                    }
-                    .span-style-actie
-                    {
-                        color: #3773f3;
-                        font-size: 0.55rem;
-                    }
-                    .span-move-active
-                    {
-                        margin: 1.5rem 0;
-                    }
-                    input
-                    {
-                        height: 1.5rem;
-                        outline: none;
-                        border: solid 0.05rem darkgray;
-                        padding: 0 0.5rem;
-                        border-radius: 0.6rem;
-                        transition: all 0.3s;
-                        font-size: 0.6rem;
-                        position: relative;
-                        z-index: 10;
-                    }
-                    input:focus
-                    {
-                        border: solid 0.05rem #3773f3;
-                        border-radius: 0.2rem;
-                    }
-                }
-                .input-sub-item
-                {
-                    justify-content: flex-start;
-                    span
-                    {
-                        width: 100%;
-                    }
-                    input
-                    {
-                        width: 100%;
-                    }
-                }
+                position: relative;
                 .CAPTCHA
                 {
+                    width: 100%;
+                    display: flex;
                     justify-content: space-between;
-                    input
+                    align-items: flex-end;
+                    ::v-deep(.input-box)
                     {
                         width: 45%;
                     }
@@ -408,7 +347,7 @@ export default {
     .login-box .center-box .login-window
     {
         width: 20rem;
-        .input-box
+        .input-there-box
         {
             .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
@@ -422,7 +361,7 @@ export default {
     .login-box .center-box .login-window
     {
         width: 20rem;
-        .input-box
+        .input-there-box
         {
             .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
@@ -436,7 +375,7 @@ export default {
     .login-box .center-box .login-window
     {
         width: 20rem;
-        .input-box
+        .input-there-box
         {
             .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
@@ -449,8 +388,8 @@ export default {
 {
     .login-box .center-box .login-window
     {
-        width: 90%;
-        .input-box
+        width: 75%;
+        .input-there-box
         {
             .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
@@ -463,8 +402,8 @@ export default {
 {
     .login-box .center-box .login-window
     {
-        width: 90%;
-        .input-box
+        width: 80%;
+        .input-there-box
         {
             .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {
@@ -477,8 +416,8 @@ export default {
 {
     .login-box .center-box .login-window
     {
-        width: 90%;
-        .input-box
+        width: 85%;
+        .input-there-box
         {
             .CAPTCHA , .input-sub-item , .confirm-div , .account-func
             {

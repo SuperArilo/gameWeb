@@ -7,20 +7,14 @@
             </div>
             <div class="setting-content">
                 <div class="sub-user-name-set-div">
-                    <div class="user-name-describe">
-                        <span :class="[{'span-style-actie' : spanStyleAdd === 1},{'span-move-active' : spanStyleAdd === 1 || userShowName !== ''}]">昵称:</span>
-                        <input type="text" maxlength="16" v-model="userShowName" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="userShowName === '' ? 'background-color: transparent;':''"/>
-                    </div>
+                    <input-box class="input-sub-item" v-model="userShowName" title="昵称" :length="16" inputType="text"/>
                     <div class="describe">
                         <span>输入你的个性名称~</span>
                         <i class="fas fa-highlighter"/>
                     </div>
                 </div>
                 <div class="sub-user-name-set-div">
-                    <div class="user-name-describe">
-                        <span :class="[{'span-style-actie' : spanStyleAdd === 2},{'span-move-active' : spanStyleAdd === 2 || userAutograph !== ''}]">签名:</span>
-                        <input type="text" maxlength="16" v-model="userAutograph" @focus="spanStyleAdd = 2" @blur="spanStyleAdd = 0" :style="userAutograph === '' ? 'background-color: transparent;':''"/>
-                    </div>
+                    <input-box class="input-sub-item" v-model="userAutograph" title="签名" :length="16" inputType="text"/>
                     <div class="describe">
                         <span>输入你的个性签名~</span>
                         <i class="fas fa-info"/>
@@ -52,11 +46,12 @@
     </div>
 </template>
 <script>
+import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
 import myUpload from 'vue-image-crop-upload';
 export default {
     components: {
-		myUpload,footerBottom
+		myUpload,footerBottom , inputBox
 	},
     data(){
         return{
@@ -168,54 +163,9 @@ export default {
                 display: flex;
                 flex-direction: column;
                 margin: 0.3rem 0;
-                .user-name-describe
+                ::v-deep(.input-box)
                 {
-                    width: 100%;
-                    height: 3rem;
-                    display: flex;
-                    position: relative;
-                    justify-content: flex-start;
-                    align-items: flex-end;
-                    flex-wrap: wrap;
-                    span
-                    {
-                        height: 1.5rem;
-                        margin-left: 0.5rem;
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-start;
-                        transition: all 0.4s;
-                        color: darkgray;
-                        position: absolute;
-                        bottom: 0;
-                        font-size: 0.55rem;
-                    }
-                    .span-style-actie
-                    {
-                        color: #3773f3;
-                        font-size: 0.55rem;
-                    }
-                    .span-move-active
-                    {
-                        margin: 1.5rem 0;
-                    }
-                    input
-                    {
-                        height: 1.5rem;
-                        outline: none;
-                        border: solid 0.05rem darkgray;
-                        padding: 0 0.5rem;
-                        border-radius: 0.6rem;
-                        transition: all 0.3s;
-                        font-size: 0.6rem;
-                        position: relative;
-                        z-index: 10;
-                    }
-                    input:focus
-                    {
-                        border: solid 0.05rem #3773f3;
-                        border-radius: 0.2rem;
-                    }
+                    width: 10rem;
                 }
                 .describe
                 {

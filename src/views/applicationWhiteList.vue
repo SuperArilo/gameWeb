@@ -13,10 +13,7 @@
                     <span>MCID绑定输入</span>
                     <i class="fas fa-archive"/>
                 </div>
-                <div class="input-sub-item">
-                    <span :class="[{'span-style-actie' : spanStyleAdd === 1},{'span-move-active' : spanStyleAdd === 1 || McJavaId !== ''}]">MC Java Id</span>
-                    <input type="text" maxlength="16" v-model="McJavaId" @focus="spanStyleAdd = 1" @blur="spanStyleAdd = 0" :style="McJavaId === '' ? 'background-color: transparent;':''"/>
-                </div>
+                <input-box class="input-sub-item" v-model="McJavaId" title="MC Java Id" :length="16" inputType="text"/>
                 <div class="button-box">
                     <div class="button-confirm" @click="sendToServerConfirm">
                         <span v-if="!sendToServerWorkNow">确认</span>
@@ -29,10 +26,11 @@
     </div>
 </template>
 <script>
+import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
 import { ElMessage , ElMessageBox } from 'element-plus'
 export default {
-    components: { footerBottom },
+    components: { footerBottom , inputBox },
     data(){
         return{
             McJavaId: '',
@@ -141,54 +139,6 @@ export default {
                 {
                     font-size: 0.8rem;
                     margin-left: 0.5rem;
-                }
-            }
-            .input-sub-item
-            {
-                height: 3rem;
-                display: flex;
-                position: relative;
-                justify-content: flex-start;
-                align-items: flex-end;
-                flex-wrap: wrap;
-                span
-                {
-                    height: 1.5rem;
-                    margin-left: 0.5rem;
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                    transition: all 0.4s;
-                    color: darkgray;
-                    position: absolute;
-                    bottom: 0;
-                    font-size: 0.55rem;
-                }
-                .span-style-actie
-                {
-                    color: #3773f3;
-                    font-size: 0.55rem;
-                }
-                .span-move-active
-                {
-                    margin: 1.5rem 0;
-                }
-                input
-                {
-                    height: 1.5rem;
-                    outline: none;
-                    border: solid 0.05rem darkgray;
-                    padding: 0 0.5rem;
-                    border-radius: 0.6rem;
-                    transition: all 0.3s;
-                    font-size: 0.6rem;
-                    position: relative;
-                    z-index: 10;
-                }
-                input:focus
-                {
-                    border: solid 0.05rem #3773f3;
-                    border-radius: 0.2rem;
                 }
             }
             .button-box
