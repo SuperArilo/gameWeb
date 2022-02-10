@@ -113,7 +113,7 @@
                     <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
                         <div class="like-link-div">
                             <img :src="mcbaike"/>
-                            <a href="https://play.mcmod.cn/sv20185883.html">点击投票</a>
+                            <a href="https://play.mcmod.cn/sv20185883.html" target="_block">点击投票</a>
                         </div>
                     </el-col>
                     <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">

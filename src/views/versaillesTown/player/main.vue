@@ -8,14 +8,14 @@
             <div class="base-info">
                 <div class="sub-item">
                     <span>用户组</span>
-                    <span>总发表动态</span>
+                    <span>UID</span>
                     <span>MC Java ID</span>
                     <span>积分</span>
                     <span>注册时间</span>
                 </div>
                 <div class="sub-item">
                     <span>腐竹</span>
-                    <span>143</span>
+                    <span>234124124</span>
                     <span>Arilo007</span>
                     <span>114514</span>
                     <span>2022-1-10</span>

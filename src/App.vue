@@ -5,22 +5,31 @@
                 <i class="fas fa-bars" @click="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
             </div>
             <div class="right-func">
-                <div class="login" @click="this.$router.push('/login')">
-                    <span>登录</span>
-                    <i class="fas fa-location-arrow"/>
-                </div>
+                <transition name="content-effects">
+                    <div v-if="this.$store.getters.userInfoGet === null" class="login" @click="this.$router.push('/login')">
+                        <span>登录</span>
+                        <i class="fas fa-location-arrow"/>
+                    </div>
+                </transition>
+                <transition name="content-effects">
+                    <div v-if="this.$store.getters.userInfoGet !== null" class="nav-player-show-box">
+                        <div class="player-head">
+                            <img :src="this.$store.getters.userInfoGet.userhead"/>
+                        </div>
+                        <span class="player-name">{{this.$store.getters.userInfoGet.username}}</span>
+                        <div class="logout" @click="playerLogout">
+                            <span>注销</span>
+                            <i class="fas fa-sign-out-alt"/>
+                        </div>
+                    </div>
+                </transition>
             </div>
         </nav>
         <div class="change-content">
             <div class="change-left-menu" :style="!openMenu ? 'width:0;':''" @mouseleave="openMenu = false">
-                <div class="user-inf-show">
-                    <div class="user-head-name">
-                        <div class="user-content">
-                            <img :src="this.$store.getters.userNoLoginGet"/>
-                            <span>未登录</span>
-                        </div>
-                    </div>
-                    <p class="autograph"></p>
+                <div class="server-info">
+                    <img :src="this.$store.getters.frsIconGet"/>
+                    <span>凡尔赛小镇</span>
                 </div>
                 <div class="menu-list">
                     <div class="sub-item" v-for="item in navMenuList" :key="item.id">
@@ -50,6 +59,8 @@
     </div>
 </template>
 <script>
+import { ElNotification , ElMessageBox } from 'element-plus'
+import { userLognState} from '@/util/api.js'
 export default {
     data(){
         return{
@@ -94,6 +105,37 @@ export default {
             ]
         }
     },
+    async beforeCreate(){
+        if(localStorage.getItem('token')){
+            userLognState().then(resq => {
+                if(resq.flag){
+                    this.$store.commit('userInfoSet', resq.data)
+                } else {
+                    ElNotification({title: '提示',message: resq.message ,type: 'warning'})
+                    this.$store.commit('userInfoSet',null)
+                    localStorage.removeItem('token')
+                }
+            }).catch(err => {
+                ElNotification({title: '错误',message: '用户状态验证接口出错！' + err,type: 'error'})
+                this.$store.commit('userInfoSet',null)
+                localStorage.removeItem('token')
+            })
+        } else if(sessionStorage.getItem('token')){
+            userLognState().then(resq => {
+                if(resq.flag){
+                    this.$store.commit('userInfoSet', resq.data)
+                } else {
+                    ElNotification({title: '提示',message: resq.message ,type: 'warning'})
+                    this.$store.commit('userInfoSet',null)
+                    sessionStorage.removeItem('token')
+                }
+            }).catch(err => {
+                ElNotification({title: '错误',message: '用户状态验证接口出错！' + err,type: 'error'})
+                this.$store.commit('userInfoSet',null)
+                sessionStorage.removeItem('token')
+            })
+        }
+    },
     created(){
         window.addEventListener('resize',this.windowWidth)
         this.windowWidth()
@@ -118,6 +160,15 @@ export default {
         },
         scrollToTop(){
             $('html,body').stop().animate({'scrollTop': 0})
+        },
+        playerLogout(){
+            ElMessageBox.confirm('确定要注销登录吗？','提示',{confirmButtonText: '确认',cancelButtonText: '取消',type: 'warning'}).then(() => {
+                localStorage.removeItem('token')
+                sessionStorage.removeItem('token')
+                this.$store.commit('userInfoSet',null)
+                ElNotification({title: '提示',message: '您已安全退出登录！' ,type: 'success'})
+            }).catch(() => {
+            })
         }
     },
     unmounted(){
@@ -200,6 +251,7 @@ a
             height: 100%;
             display: flex;
             align-items: center;
+            position: relative;
             .login
             {
                 width: 4rem;
@@ -209,7 +261,7 @@ a
                 align-items: center;
                 background-color: #409eff;
                 cursor: pointer;
-                transition: all 0.2s;
+                transition: all 0.4s;
                 span , i
                 {
                     height: 100%;
@@ -236,6 +288,71 @@ a
                     color: #3399ff;
                 }
             }
+            .nav-player-show-box
+            {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                transition: all 0.4s;
+                .player-head
+                {
+                    height: 80%;
+                    display: flex;
+                    align-items: center;
+                    border: solid 0.05rem #99a2aa;
+                    border-radius: 50%;
+                    box-shadow: 0 0 0.2rem black;
+                    overflow: hidden;
+                    img
+                    {
+                        max-height: 100%;
+                    }
+                }
+                .player-name
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    font-size: 0.56rem;
+                    margin: 0 0.5rem;
+                }
+                .logout
+                {
+                    width: 4rem;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #409eff;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    span , i
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        transition: all 0.3s;
+                        color: #ffffff;
+                    }
+                    span
+                    {
+                        font-size: 0.56rem;
+                    }
+                    i
+                    {
+                        font-size: 0.8rem;
+                        margin-left: 0.3rem;
+                    }
+                }
+                .logout:hover
+                {
+                    background-color: #b3d8ff;
+                    span , i
+                    {
+                        color: #3399ff;
+                    }
+                }
+            }
         }
     }
     .change-content
@@ -260,60 +377,28 @@ a
             box-shadow: 0 0.5rem 0.5rem black;
             span
             {
-                word-break:keep-all;
-                white-space:nowrap;
+                word-break: keep-all;
             }
-            .user-inf-show
+            .server-info
             {
                 width: 100%;
-                align-content: flex-start;
-                flex-wrap: wrap;
-                margin-top: 1rem;
-                background-color: rgb(245, 245, 245);
-                padding: 1rem 0;
-                .user-head-name
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5rem 0;
+                background-color: rgb(248, 248, 248);
+                img , span
                 {
-                    width: 100%;
                     height: 2rem;
+                    max-height: 100%;
                     display: flex;
-                    justify-content: flex-start;
-                    padding: 0 1rem;
                     align-items: center;
-                    .user-content
-                    {
-                        height: 2rem;
-                        display: flex;
-                        align-items: center;
-                        img
-                        {
-                            width: 2rem;
-                            height: 2rem;
-                            min-width: 2rem;
-                            border-radius: 50%;
-                            max-height: 100%;
-                        }
-                        span
-                        {
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            text-align: center;
-                            font-size: 0.65rem;
-                            margin-left: 1rem;
-                        }
-                    }
+                    font-size: 0.7rem;
                 }
-                .autograph
+                span
                 {
-                    min-width: 14rem;
-                    display: flex;
-                    justify-content: flex-start;
-                    flex-wrap: wrap;
-                    font-size: 0.52rem;
-                    padding: 0 1rem;
-                    text-align: left;
-                    word-break: break-all;
-                    letter-spacing: 0.04rem;
+                    margin-left: 0.5rem;
+                    letter-spacing: 0.05rem;
                 }
             }
             .menu-list
@@ -521,5 +606,14 @@ a
 .render-by-edit
 {
     font-size: 0.6rem !important;
+}
+.content-effects-enter-from , .content-effects-leave-to
+{
+    opacity: 0;
+    transform: translateX(5rem);
+}
+.content-effects-leave-active
+{
+    position: absolute;
 }
 </style>

@@ -5,7 +5,7 @@
                 <div class="title">
                     <span class="func-box" @click="this.$router.push('/')">首 页</span>
                     <div class="user-head">
-                        <img :src="this.$store.getters.userNoLoginGet"/>
+                        <img :src="this.$store.getters.frsIconGet"/>
                     </div>
                     <span class="func-box" @click="this.$router.push('/register')">注 册</span>
                 </div>
@@ -22,9 +22,7 @@
                     </div>
                     <div class="account-func">
                         <div class="rember-me">
-                            <el-checkbox-group v-model="remberMe">
-                                <el-checkbox label="记住我"/>
-                            </el-checkbox-group>
+                            <el-checkbox v-model="remberMe" label="记住我"/>
                         </div>
                         <span>忘记密码？</span>
                     </div>
@@ -51,7 +49,7 @@ export default {
             eMail: '',
             userPwd: '',
             CAPTCHACode:'',
-            remberMe:[],
+            remberMe: false,
             verificationRandomCode: '',  //获取验证码图片时候的随机数
             CAPTCHACodeImage: '', //从后台获取的验证码图片 base64
             userLoginWorkNow: false
@@ -77,8 +75,6 @@ export default {
                 } else {
                     ElMessage.error(resq.message)
                 }
-            }).catch(err => {
-                ElMessage.error('获取验证码发生错误！ ' + err)
             })
         },
         checkMail(mail){
@@ -92,8 +88,13 @@ export default {
                     if(this.checkMail(this.eMail)){
                         userLogin({mail: this.eMail,password: this.userPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
                             if(resq.flag){
-                                console.log(resq.data)
+                                if(this.remberMe){
+                                    localStorage.setItem('token',resq.data.token)
+                                } else {
+                                    sessionStorage.setItem('token',resq.data.token)
+                                }
                                 ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {
+                                    this.$store.commit('userInfoSet', resq.data.user)
                                     this.$router.push('/')
                                 }})
                                 this.userLoginWorkNow = false
@@ -143,8 +144,7 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            background-color: #ffffff;
-            border-radius: 1rem;
+            background-color: rgba(255,255,255,0.85);
             overflow: hidden;
             .title
             {
@@ -152,7 +152,6 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: flex-end;
-                background-color: #bbdefb;
                 .user-head
                 {
                     padding: 1rem 0;
@@ -175,14 +174,6 @@ export default {
                     color: #ffffff;
                     text-align: center;
                     cursor: pointer;
-                }
-                .func-box:nth-child(1)
-                {
-                    border-radius: 0 0.6rem 0 0 ;
-                }
-                .func-box:nth-child(3)
-                {
-                    border-radius: 0.6rem 0 0 0 ;
                 }
             }
             .input-there-box

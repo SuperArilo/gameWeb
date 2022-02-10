@@ -103,3 +103,10 @@ export const userLogin = (query) => {
         data: query
     })
 }
+//用户登录状态获取
+export const userLognState = () => {
+    return request({
+        url: '/user/information',
+        method: 'get',
+    })
+}

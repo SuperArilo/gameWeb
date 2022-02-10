@@ -28,6 +28,13 @@ const routes = [
                 meta:{
                     path: '/dynamic/edit',
                     title: '新建动态'
+                },
+                beforeEnter(to, from, next){
+                    if(localStorage.getItem('token') === null && sessionStorage.getItem('token') === null){
+                        next('/dynamic')
+                    } else {
+                        next()
+                    }
                 }
             },
             {

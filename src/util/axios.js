@@ -9,12 +9,17 @@ const service = axios.create({
     }
 })
 service.interceptors.request.use(config => {
-   //  if (localStorage.getItem('token')) {
-
-   //     config.headers.ACCESS_TOKEN = localStorage.getItem('token');
-
-  //  }
-    return config
+    if(localStorage.getItem('token') === null && sessionStorage.getItem('token') === null){
+        return config
+    }
+    if (localStorage.getItem('token')) {
+        config.headers.token = localStorage.getItem('token')
+        return config
+    }
+    if(sessionStorage.getItem('token')){
+        config.headers.token = sessionStorage.getItem('token')
+        return config
+    }
 }, error => {
     return Promise.reject(error)
 })

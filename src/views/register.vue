@@ -5,7 +5,7 @@
                 <div class="title">
                     <span class="func-box" @click="this.$router.push('/')">首 页</span>
                     <div class="user-head">
-                        <img :src="this.$store.getters.userNoLoginGet"/>
+                        <img :src="this.$store.getters.frsIconGet"/>
                     </div>
                     <span class="func-box" @click="this.$router.push('/login')">登 录</span>
                 </div>
@@ -188,8 +188,7 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            background-color: #ffffff;
-            border-radius: 1rem;
+            background-color: rgba(255,255,255,0.85);
             overflow: hidden;
             .title
             {
@@ -197,7 +196,6 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: flex-end;
-                background-color: #bbdefb;
                 .user-head
                 {
                     padding: 1rem 0;
@@ -220,14 +218,6 @@ export default {
                     color: #ffffff;
                     text-align: center;
                     cursor: pointer;
-                }
-                .func-box:nth-child(1)
-                {
-                    border-radius: 0 0.6rem 0 0 ;
-                }
-                .func-box:nth-child(3)
-                {
-                    border-radius: 0.6rem 0 0 0 ;
                 }
             }
             .input-there-box

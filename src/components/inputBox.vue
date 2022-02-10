@@ -60,7 +60,7 @@ export default {
         align-items: center;
         justify-content: flex-start;
         transition: all 0.4s;
-        color: darkgray;
+        color: rgb(105, 105, 105);
         position: absolute;
         bottom: 0;
         font-size: 0.55rem;

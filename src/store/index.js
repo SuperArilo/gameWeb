@@ -3,18 +3,9 @@ export default createStore({
     state:{
         isPhone: null,
         windowScrollValue: null,
-        userNoLogin: require('@/views/icon/head/onLogin.png'),
+        frsIcon: require('@/views/icon/index/frs.png'),
         indexBg: require('@/views/icon/index/index_center.jpg'),
-        userInfo:{
-            uid: 100,
-            userName: '单身狗',
-            eMail: '',
-            class: 2,
-            className: '管理员',
-            userHead: require('@/views/icon/head/onLogin.png'),
-            javaMcId: 'Single__290',
-            mcUUID: 'bfc8169a-8630-4075-bbbc-cf35672418b8'
-        },
+        userInfo: null,
         serverTeamList:[
             {
                 uid: 11,
@@ -46,7 +37,7 @@ export default createStore({
     getters:{
         isPhoneGet:state => state.isPhone,
         windowScrollValueGet:state => state.windowScrollValue,
-        userNoLoginGet:state => state.userNoLogin,
+        frsIconGet:state => state.frsIcon,
         indexBgGet:state => state.indexBg,
         userInfoGet:state => state.userInfo,
         serverTeamListGet:state => state.serverTeamList
@@ -57,6 +48,9 @@ export default createStore({
         },
         windowScrollValueSet(state,value){
             state.windowScrollValue = value
+        },
+        userInfoSet(state,value){
+            state.userInfo = value
         }
     },
     actions:{
