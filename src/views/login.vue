@@ -10,7 +10,7 @@
                     <span class="func-box" @click="this.$router.push('/register')">注 册</span>
                 </div>
                 <div class="input-there-box">
-                    <input-box class="input-sub-item" v-model="eMail" title="邮箱" :length="16" inputType="text"/>
+                    <input-box class="input-sub-item" v-model="eMail" title="邮箱" :length="32" inputType="text"/>
                     <input-box class="input-sub-item" v-model="userPwd" title="密码" :length="16" inputType="password"/>
                     <div class="CAPTCHA">
                         <input-box v-model="CAPTCHACode" title="验证码" :length="4" inputType="text"/>
