@@ -37,8 +37,8 @@
     </div>
 </template>
 <script>
-import footerBottom from '@/components/footerBottom.vue'
 import inputBox from '@/components/inputBox.vue'
+import footerBottom from '@/components/footerBottom.vue'
 import { ElMessage , ElMessageBox } from 'element-plus'
 import { verificationGet , userLogin } from '@/util/api.js'
 export default {

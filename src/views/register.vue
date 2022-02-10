@@ -41,9 +41,9 @@
 </template>
 <script>
 import { ElNotification , ElMessage , ElMessageBox } from 'element-plus'
+import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
 import { verificationGet , sendMailCode , userRegister } from '@/util/api.js'
-import inputBox from '@/components/inputBox.vue'
 export default {
     components: { footerBottom , inputBox },
     data(){

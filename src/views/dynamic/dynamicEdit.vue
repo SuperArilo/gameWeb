@@ -58,9 +58,9 @@
 </template>
 <script>
 import { ElMessage , ElMessageBox } from 'element-plus'
-import mediaFile from '@/components/dynamic/mediaFile.vue'
 import {userPublishDynamic} from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
+import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
     components:{
         mediaFile , footerBottom

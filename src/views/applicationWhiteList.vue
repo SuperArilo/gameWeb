@@ -28,7 +28,7 @@
 <script>
 import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
-import { ElMessage , ElMessageBox } from 'element-plus'
+import { ElMessage  } from 'element-plus'
 export default {
     components: { footerBottom , inputBox },
     data(){

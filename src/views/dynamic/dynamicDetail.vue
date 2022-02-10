@@ -128,8 +128,8 @@
     </div>
 </template>
 <script>
-import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
 import footerBottom from '@/components/footerBottom.vue'
+import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
 import { dynamicDetailGet , dynamicCommentGet } from '@/util/api.js'
 import { ElMessage } from 'element-plus'
 export default {
