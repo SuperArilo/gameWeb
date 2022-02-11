@@ -2,8 +2,11 @@
     <div class="index-box">
         <div class="center-box">
             <div class="top-tips">
-                <span>动态发表</span>
-                <span>在这里可以发布您的个人动态以及你的日常，如有疑问也可以直接回复</span>
+                <span class="title-span">🎈 欢迎加入 凡尔赛小镇 玩家社区 🎈</span>
+                <div class="span-line">
+                    首先，我们欢迎您的到来，但在此之前，您的发言需要遵守我们的
+                    <span class="need-tips">《社区发言规范》</span>
+                </div>
             </div>
             <div class="center-content-box">
                 <router-view v-slot="{ Component }" style="position: absolute;">
@@ -27,38 +30,45 @@
     {
         width: 100%;
         display: flex;
-        justify-content: center;
         align-items: flex-start;
         flex-wrap: wrap;
         align-content: flex-start;
-        transition: width 0.3s;
         .top-tips
         {
             width: 100%;
             height: 8rem;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            background-image: url('../views/icon/index/index_center.jpg');
-            padding: 1rem;
-            span
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: flex-start;
+            background-color: #ededed;
+            padding: 0 2rem;
+            .title-span
             {
-                color: #ffffff;
-                letter-spacing: 0.1rem;
+                width: 100%;
+                display: flex;
+                justify-content: center;
                 text-align: center;
+                color: #808080;
+                font-size: 1rem;
+                letter-spacing: 0.05rem;
             }
-            span:nth-child(1)
+            .span-line
             {
-                font-size: 1.4rem; 
-            }
-            span:nth-child(2)
-            {
-                font-size: 0.65rem;
-                margin-top: 0.5rem;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                text-align: center;
+                font-size: 0.68rem;
+                color: #808080;
+                margin: 0.3rem 0;
+                flex-wrap: wrap;
+                .need-tips
+                {
+                    color: #de8e00;
+                    cursor: pointer;
+                }
             }
         }
         .center-content-box

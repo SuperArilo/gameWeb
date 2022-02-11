@@ -176,7 +176,6 @@ export default {
             'justify',
             'quote',
             'emoticon',
-            'image',
             'table',
             'splitLine',
         ]
