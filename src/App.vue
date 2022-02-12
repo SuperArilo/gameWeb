@@ -563,49 +563,28 @@ a
         font-size: 20px;
     }
 }
-.server-own-border
-{
-    border: solid 0.12rem #3773f3;
-}
-.server-own-b-color
-{
-    background-color: #3773f3;
-}
-.admin-border
-{
-    border: solid 0.12rem #4c8f20;
-}
-.admin-b-color
-{
-    background-color: #4c8f20;
-}
-.player-border
-{
-    border: solid 0.12rem #7d208f;
-}
-.player-b-color
-{
-    background-color: #7d208f;
-}
-.builder-border
-{
-    border: solid 0.1rem #8f8820;
-}
-.builder-b-color
-{
-    background-color: #8f8820;
-}
-.vip-border
-{
-    border: solid 0.1rem #a52525;
-}
-.vip-b-color
-{
-    background-color: #a52525;
-}
 .render-by-edit
 {
-    font-size: 0.6rem !important;
+    font-size: 0.68rem !important;
+    blockquote
+    {
+        display: block;
+        border-left: 8px solid #d0e5f2;
+        padding: 5px 10px;
+        margin: 10px 0;
+        line-height: 1.4;
+        font-size: 100%;
+        background-color: #f1f1f1;
+    }
+    hr
+    {
+        cursor: pointer;
+        display: block;
+        height: 0px;
+        border: 0;
+        border-top: 3px solid #ccc;
+        margin: 20px 0;
+    }
 }
 .content-effects-enter-from , .content-effects-leave-to
 {

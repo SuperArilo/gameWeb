@@ -161,9 +161,9 @@ export default {
             'justify',
             'quote',
             'emoticon',
-            'image',
             'table',
             'splitLine',
+            'image',
         ]
         editor.config.onchange = (newHtml) => {
             this.text = newHtml

@@ -178,6 +178,7 @@ export default {
             'emoticon',
             'table',
             'splitLine',
+            'image',
         ]
         editor.config.onchange = (newHtml) => {
             this.dyContent = newHtml

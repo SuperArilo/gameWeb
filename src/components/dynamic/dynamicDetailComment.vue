@@ -1,17 +1,24 @@
 <template>
     <div class="user-head-and-edit">
-        <div class="user-data-show">
+        <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
             <div class="user-head">
-                <img v-lazy="this.$store.getters.userNoLoginGet"/>
+                <img :src="this.$store.getters.userInfoGet.userhead"/>
             </div>
+            <span class="user-name">{{this.$store.getters.userInfoGet.username}}</span>
+            <span class="user-class" :style="{backgroundColor: this.$store.getters.userInfoGet.classColor}">{{this.$store.getters.userInfoGet.className}}</span>
         </div>
-        <div class="dynamic-detail-comment-box">
+        <div class="dynamic-detail-comment-box" :style="!this.$store.getters.isPhoneGet ? 'margin-left: 0.5rem;':''">
             <div class="head-write-box">
                 <div class="render-edit" ref="dyEditTool"></div>
             </div>
             <div class="dy-buttom">
-                <span class="buttom-file" @click="openFile">媒体管理器</span>
-                <span class="button-confirm">提交</span>
+                <div class="buttom-file" @click="openFile">
+                    <span>媒体管理器</span>
+                </div>
+                <div class="button-confirm" @click="sentToServer">
+                    <span v-if="!isSendToServerWorkNow">提交</span>
+                    <i v-else class="fas fa-circle-notch fa-spin"/>
+                </div>
             </div>
             <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
                 <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
@@ -20,16 +27,27 @@
     </div>
 </template>
 <script>
+import { ElMessage  } from 'element-plus'
+import { dynamicCommentSet } from '@/util/api.js'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
     components:{
         mediaFile
     },
+    props:{
+        modelValue: [String,Number,Boolean],
+        fatherId:{
+            type: Number,
+            default: null,
+            required: false
+        }
+    },
     data(){
         return{
-            head: require('@/views/icon/head/stranger12.jpg'),
             editor: null,
             dialogVisible: false,
+            dyContent: '',
+            isSendToServerWorkNow: false,
         }
     },
     mounted(){
@@ -52,9 +70,9 @@ export default {
             'justify',
             'quote',
             'emoticon',
-            'image',
             'table',
             'splitLine',
+            'image',
         ]
         editor.config.onchange = (newHtml) => {
             this.dyContent = newHtml
@@ -69,16 +87,37 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key => {
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:50%;"/>')
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100" "/>')
             })
         },
         openFile(){
             this.dialogVisible = true
-        }
+        },
+        sentToServer(){
+            if(!this.isSendToServerWorkNow){
+                this.isSendToServerWorkNow = true
+                    dynamicCommentSet({commentContent: this.dyContent ,commentParentId: this.fatherId},this.modelValue).then(resq => {
+                    if(resq.flag){
+                        this.$emit('commentStatus', true)
+                        this.editor.txt.clear()
+                        this.isSendToServerWorkNow = false
+                        ElMessage({message: resq.message,type: 'success'})
+                    } else {
+                        ElMessage.error('提交评论发生错误！' + resq.message)
+                        this.isSendToServerWorkNow = false
+                    }
+                }).catch(err => {
+                    ElMessage.error('提交评论发生错误！' + err)
+                    this.isSendToServerWorkNow = false
+                })
+            }
+        },
     },
     unmounted() {
-        this.editor.destroy()
-        this.editor = null
+        setTimeout(() => {
+            this.editor.destroy()
+            this.editor = null
+        },2000)
     }
 }
 </script>
@@ -87,7 +126,7 @@ export default {
 {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     .user-data-show
     {
         display: flex;
@@ -96,7 +135,8 @@ export default {
         flex-wrap: wrap;
         .user-head
         {
-            width: 60%;
+            height: 3.5rem;
+            min-height: 3.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -105,8 +145,30 @@ export default {
             box-shadow: 0 0 0.1rem black;
             img
             {
-                width: 100%;
+                height: 100%;
+                max-height: 100%;
             }
+        }
+        .user-name
+        {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            word-break: break-all;
+            font-size: 0.6rem;
+            color: #2c2c2c;
+            margin: 0.3rem 0;
+        }
+        .user-class
+        {
+            padding: 0.15rem 0.4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.52rem;
+            border-radius: 0.2rem;
+            color: #ffffff;
         }
     }
     .dynamic-detail-comment-box
@@ -153,15 +215,26 @@ export default {
             justify-content: space-between;
             span
             {
+                font-size: 0.6rem;
+            }
+            .buttom-file , .button-confirm
+            {
+                width: 4rem;
                 height: 1.5rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 0.6rem;
-                width: 4rem;
+                transition: all 0.3s;
                 transition: all 0.3s;
                 border-radius: 0.2rem;
                 cursor: pointer;
+                i
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    font-size: 0.8rem;
+                }
             }
             .buttom-file
             {
@@ -175,7 +248,6 @@ export default {
             }
             .button-confirm
             {
-                margin-left: 1rem;
                 background-color: #b3d8ff;
                 color: #3399ff;
                 border: solid 0.05rem #409eff;
@@ -240,13 +312,6 @@ export default {
 }
 @media screen and (max-width:936px) and (min-width:767px)
 {
-    .user-head-and-edit
-    {
-        .user-data-show
-        {
-            width: 5rem;
-        }
-    }
     ::v-deep(.el-dialog)
     {
         width: 80%;
@@ -254,30 +319,16 @@ export default {
 }
 @media screen and (max-width:767px) and (min-width:676px)
 {
-    .user-head-and-edit
-    {
-        .user-data-show
-        {
-            width: 4.5rem;
-        }
-    }
     ::v-deep(.el-dialog)
     {
-        width: 80%;
+        width: 85%;
     }
 }
 @media screen and (max-width:676px)
 {
-    .user-head-and-edit
-    {
-        .user-data-show
-        {
-            width: 4.5rem;
-        }
-    }
     ::v-deep(.el-dialog)
     {
-        width: 80%;
+        width: 90%;
     }
 }
 </style>

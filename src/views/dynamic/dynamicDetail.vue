@@ -3,15 +3,16 @@
         <div class="dy-title-func-div">
             <div class="dy-back" @click="backRouter()">
                 <i class="fas fa-chevron-left"/>
-                <span>返回上一级</span>
+                <span>返回</span>
             </div>
+            <span class="dy-title">标题：{{dynamicMainContent.dynamicTitle}}</span>
         </div>
         <div class="dy-top-content">
-            <div class="user-data-show">
+            <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
                 <div class="user-head">
-                    <img v-lazy="this.$store.getters.userNoLoginGet"/>
+                    <img :src="dynamicMainContent.userHead"/>
                 </div>
-                <span class="user-name">这次换你听歌</span>
+                <span class="user-name">{{dynamicMainContent.username}}</span>
                 <span class="user-class">腐竹</span>
                 <div class="user-have-props">
                     <div class="sub-item"></div>
@@ -29,15 +30,35 @@
                     </div>
                 </div>
             </div>
-            <div class="right">
-                <div class="title-dy-data">
+            <div class="right" :style="this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;'">
+                <div class="title-dy-data" v-if="!this.$store.getters.isPhoneGet">
                     <div class="dy-sub-item">
                         <i class="far fa-calendar-alt"/>
                         <span>{{dynamicMainContent.createTime}}</span>
                     </div>
                     <div class="dy-sub-item">
-                        <i class="fas fa-rocket"/>
-                        <span>{{dynamicMainContent.username}}</span>
+                        <i class="far fa-comment-dots"/>
+                        <span>{{dynamicMainContent.commentNum}} 条评论</span>
+                    </div>
+                    <div class="dy-sub-item">
+                        <i class="fas fa-tag"/>
+                        <span v-for="item in dynamicMainContent.tags" :key="item.id">{{item.tagContent}}</span>
+                    </div>
+                    <div class="dy-sub-item">
+                        <i class="fas fa-eye"/>
+                        <span>{{dynamicMainContent.dynamicPageView}} 浏览</span>
+                    </div>
+                </div>
+                <div class="mobile-show-user" v-else>
+                    <div class="user-head-and-name">
+                        <div class="user-head">
+                            <img :src="dynamicMainContent.userHead"/>
+                        </div>
+                        <span class="user-name">{{dynamicMainContent.username}}</span>
+                    </div>
+                    <div class="dy-sub-item">
+                        <i class="far fa-calendar-alt"/>
+                        <span>{{dynamicMainContent.createTime}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="far fa-comment-dots"/>
@@ -56,71 +77,131 @@
             </div>
         </div>
         </div>
-        <div class="dy-write-comment">
+        <div class="dy-write-comment" v-if="this.$store.getters.userInfoGet !== null">
             <div class="title-span">
                 <i class="far fa-comment-alt"/>
                 <span>说点什么</span>
             </div>
-            <dynamic-detail-comment/>
+            <dynamic-detail-comment v-model="this.$route.query.thread" @commentStatus="commentStatus"/>
         </div>
         <div class="dy-comment-content">
             <span class="title-span">
                 <i class="far fa-comments"/>
                 评论区
             </span>
-            <div class="content">
-                <div class="sub-comment-item" v-for="(item,index) in testComment" :key="index">
-                    <div class="top-user-box">
-                        <div class="left-user-head">
-                            <img v-lazy="item.userHead"/>
-                        </div>
-                        <div class="right-user-content">
-                            <div class="user-name-div">
-                                <span class="user-name">{{item.userName}}</span>
-                                <span class="user-tag" :class="item.class === 1 ? 'server-own-b-color': item.class === 2 ? 'admin-b-color':item.class === 3 ? 'player-b-color':item.class === 4 ? 'builder-b-color':item.class === 5 ? 'vip-b-color':''">{{item.className}}</span>
-                            </div>
-                            <span class="user-say">{{item.inf}}</span>
-                            <div class="user-when">
-                                <div class="sub-item">
-                                    <i class="far fa-clock"/>
-                                    <span>发表于：{{item.time}}</span>
-                                </div>
-                                <div class="sub-item" @click="OpenBackComment(item.id)">
-                                    <i class="fas fa-location-arrow"/>
-                                    <span>回复</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <el-collapse-transition>
-                        <div class="fix-edit-to-transition" v-if="isOpenBackComment === item.id">
-                            <dynamic-detail-comment></dynamic-detail-comment>
-                        </div>
-                    </el-collapse-transition>
-                    <div class="other-user-comment">
-                        <div class="sub-other-user-item" v-for="(itemSub,indexSub) in item.commentBack" :key="indexSub">
-                            <div class="left-user-head"></div>
-                            <div class="right-other-user-comment">
-                                <div class="other-user-head">
-                                    <img v-lazy="itemSub.userHead"/>
-                                </div>
-                                <div class="other-user-comment-content">
-                                    <div class="other-user-name-div">
-                                        <span class="user-name">{{itemSub.userName}}</span>
-                                        <span class="user-tag" :class="itemSub.class === 1 ? 'server-own-b-color': itemSub.class === 2 ? 'admin-b-color':itemSub.class === 3 ? 'player-b-color':itemSub.class === 4 ? 'builder-b-color':itemSub.class === 5 ? 'vip-b-color':''">{{itemSub.className}}</span>
+            <div class="content" v-if="this.commentContent.length !== 0">
+                <transition-group name="list">
+                    <div class="sub-comment-item" v-for="item in commentContent" :key="item.id"> 
+                        <div class="top-comment">
+                            <div class="top">
+                                <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
+                                    <div class="user-head">
+                                        <img :src="item.userHead"/>
                                     </div>
-                                    <span class="other-user-inf">{{itemSub.inf}}</span>
-                                    <div class="other-user-when">
+                                    <span class="user-name">{{item.username}}</span>
+                                    <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
+                                    <div class="user-have-props">
+                                        <div class="sub-item"></div>
+                                        <div class="sub-item"></div>
+                                        <div class="sub-item"></div>
+                                    </div>
+                                    <div class="user-base-info">
+                                        <div class="sub-item">
+                                            <span>积分</span>
+                                            <span>114514</span>
+                                        </div>
+                                        <div class="sub-item">
+                                            <span>小黑屋</span>
+                                            <span>0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${item.classColor}`,borderRight: `solid 0.2rem ${item.classColor}`}]">
+                                    <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
+                                        <div class="user-head-and-name">
+                                            <div class="user-head">
+                                                <img :src="item.userHead"/>
+                                            </div>
+                                            <span class="user-name">{{item.username}}</span>
+                                            <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="comment-show render-by-edit" v-html="item.commentContent"/>
+                                    <div class="function-show">
                                         <div class="sub-item">
                                             <i class="far fa-clock"/>
-                                            <span>发表于：{{itemSub.time}}</span>
+                                            <span>发表于：{{item.createTime}}</span>
+                                        </div>
+                                        <div class="sub-item" @click="OpenBackComment(item.id)" v-if="this.$store.getters.userInfoGet !== null">
+                                            <i class="fas fa-location-arrow"/>
+                                            <span>回复</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <el-collapse-transition>
+                                <div class="fix-edit-to-transition" v-if="OpenBackCommentId === item.id && OpenBackCommentShow === true">
+                                    <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.id" @commentStatus="commentStatus"/>
+                                </div>
+                            </el-collapse-transition>
                         </div>
+                        <transition-group name="list">
+                            <div class="bottom-comment" v-for="itemSub in item.children" :key="itemSub.id">
+                                <div class="top">
+                                    <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
+                                        <div class="user-head">
+                                            <img :src="itemSub.userHead"/>
+                                        </div>
+                                        <span class="user-name">{{itemSub.username}}</span>
+                                        <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
+                                        <div class="user-have-props">
+                                            <div class="sub-item"></div>
+                                            <div class="sub-item"></div>
+                                            <div class="sub-item"></div>
+                                        </div>
+                                        <div class="user-base-info">
+                                            <div class="sub-item">
+                                                <span>积分</span>
+                                                <span>114514</span>
+                                            </div>
+                                            <div class="sub-item">
+                                                <span>小黑屋</span>
+                                                <span>0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="right" :style="this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;'">
+                                        <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
+                                            <div class="user-head-and-name">
+                                                <div class="user-head">
+                                                    <img :src="itemSub.userHead"/>
+                                                </div>
+                                                <span class="user-name">{{itemSub.username}}</span>
+                                                <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="comment-show render-by-edit" v-html="itemSub.commentContent"/>
+                                        <div class="function-show">
+                                            <div class="sub-item">
+                                                <i class="far fa-clock"/>
+                                                <span>发表于：{{itemSub.createTime}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <el-collapse-transition>
+                                    <div class="fix-edit-to-transition" v-if="OpenBackCommentId === itemSub.id && OpenBackCommentShow === true">
+                                        <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.id" @commentStatus="commentStatus"/>
+                                    </div>
+                                </el-collapse-transition>
+                            </div>
+                        </transition-group>
                     </div>
-                </div>
+                </transition-group>
+            </div>
+            <div class="empty-comment" v-else>
+                <span>还没有评论哦，赶快来评论吧！</span>
+                <i class="fas fa-inbox"/>
             </div>
             <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
         </div>
@@ -135,112 +216,53 @@ import { ElMessage } from 'element-plus'
 export default {
     components:{
         dynamicDetailComment,
-        footerBottom
+        footerBottom,
     },
     data(){
         return{
-            testComment:[
-                {
-                    id: 0,
-                    userHead: require('@/views/icon/head/stranger14.jpg'),
-                    userName: '这次换你听歌',
-                    class: 1,
-                    className: '腐竹',
-                    inf: '服务器关机维护通知服务器关机维护通知服务器关机维护通知',
-                    time: '2021-12-24 10:40',
-                    commentBack:[
-                        {
-                            id: 0,
-                            userHead: require('@/views/icon/head/stranger6.jpg'),
-                            userName: '弔人',
-                            class: 3,
-                            className: '玩家',
-                            inf: '单身狗不单身了。',
-                            time: '2021-12-24 10:40',
-                        },
-                        {
-                            id: 1,
-                            userHead: require('@/views/icon/head/stranger9.jpg'),
-                            userName: '有钱人',
-                            class: 5,
-                            className: 'vip',
-                            inf: 'RTX 3090Ti 带不动Minecraft',
-                            time: '2021-12-24 10:40',
-                        }
-                    ]
-                },
-                {
-                    id: 1,
-                    userHead: require('@/views/icon/head/stranger5.jpg'),
-                    userName: '单身狗',
-                    class: 2,
-                    className: '管理员',
-                    inf: '服务器关机维护通知服务器关机维护通知服务器关机维护通知',
-                    time: '2021-12-24 10:40',
-                    commentBack:[
-                        {
-                            id: 0,
-                            userHead: require('@/views/icon/head/stranger18.jpg'),
-                            userName: '弔人',
-                            class: 4,
-                            className: '建筑师',
-                            inf: '单身狗不单身了。',
-                            time: '2021-12-24 10:40',
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    userHead: require('@/views/icon/head/stranger7.jpg'),
-                    userName: '萝卜',
-                    class: 3,
-                    className: '玩家',
-                    inf: '服务器关机维护通知服务器关机维护通知服务器关机维护通知',
-                    time: '2021-12-24 10:40',
-                    commentBack:[
-                        {
-                            id: 0,
-                            userHead: require('@/views/icon/head/stranger6.jpg'),
-                            userName: '弔人',
-                            class: 3,
-                            className: '玩家',
-                            inf: '单身狗不单身了。',
-                            time: '2021-12-24 10:40',
-                        }
-                    ]
-                },
-            ],
             dynamicMainContent: '',
-            isOpenBackComment: '',
+            OpenBackCommentId: '',
+            OpenBackCommentShow: false,
+            //动态评论
+            commentContent: [],
         }
     },
     async created(){
-        let sendToServerData = {dynamicId: this.$route.query.id}
-        dynamicDetailGet(sendToServerData).then(resq => {
+        dynamicDetailGet({dynamicId: this.$route.query.thread}).then(resq => {
             if(resq.flag){
                 this.dynamicMainContent = resq.data
+                this.commentGet()
             } else {
                 ElMessage.error('获取详情发生错误！ ' + resq.message)
             }
         }).catch(err => {
             ElMessage.error('获取详情发生错误！ ' + err)
         })
-        dynamicCommentGet(sendToServerData).then(resq => {
-            if(resq.flag){
-                console.log(resq)
-            } else {
-                ElMessage.error('获取动态发生错误！ ' + resq.message)
-            }
-        }).catch(err => {
-            ElMessage.error('获取评论发生错误！ ' + err)
-        })
     },
     methods:{
         OpenBackComment(id){
-            this.isOpenBackComment = id
+            this.OpenBackCommentShow =! this.OpenBackCommentShow
+            this.OpenBackCommentId = id
         },
         backRouter(){
             this.$router.push('/dynamic')
+        },
+        commentGet(){
+            dynamicCommentGet({dynamicId: this.$route.query.thread}).then(resq => {
+                if(resq.flag){
+                    this.commentContent = resq.data
+                } else {
+                    ElMessage.error('获取评论发生错误！ ' + resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('获取评论发生错误！ ' + err)
+            })
+        },
+        commentStatus(value){
+            if(value){
+                this.commentGet()
+                this.OpenBackCommentShow = false
+            }
         }
     }
 }
@@ -265,16 +287,17 @@ export default {
         justify-content: flex-start;
         align-items: center;
         background-color: rgba(255,255,255,0.8);
-        padding: 0 0.5rem;
         .dy-back
         {
+            width: 5rem;
+            min-width: 5rem;
             height: 1.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 0.3s;
             border-radius: 0.2rem;
-            padding: 0 0.5rem;
+            margin: 0 0.5rem;
             cursor: pointer;
             span
             {
@@ -297,6 +320,16 @@ export default {
         {
             background-color: rgba(180, 180, 180, 0.555);
         }
+        .dy-title
+        {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 0.65rem;
+            text-align: left;
+            padding-left: 1rem;
+        }
     }
     .dy-top-content
     {
@@ -316,7 +349,7 @@ export default {
             padding: 0.5rem 0;
             .user-head
             {
-                width: 60%;
+                height: 3.5rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -325,7 +358,8 @@ export default {
                 box-shadow: 0 0 0.1rem black;
                 img
                 {
-                    width: 100%;
+                    height: 100%;
+                    max-height: 100%;
                 }
             }
             .user-class
@@ -394,12 +428,7 @@ export default {
             align-content: flex-start;
             flex-wrap: wrap;
             background-color: rgb(240, 240, 240);
-            padding: 0.5rem;
-            border-radius: 0.2rem;
-            margin-left: 0.5rem;
-            border-left: solid 0.2rem #3773f3;
-            border-right: solid 0.2rem #3773f3;
-            .title-dy-data
+            .title-dy-data , .mobile-show-user
             {
                 width: 100%;
                 display: flex;
@@ -407,6 +436,7 @@ export default {
                 align-items: center;
                 flex-wrap: wrap;
                 border-bottom: solid 0.05rem rgb(172, 172, 172);
+                padding: 0.3rem;
                 .dy-sub-item
                 {
                     height: 1rem;
@@ -427,10 +457,42 @@ export default {
                     }
                 }
             }
+            .mobile-show-user
+            {
+                .user-head-and-name
+                {
+                    width: 100%;
+                    height: 2rem;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin-bottom: 0.5rem;
+                    .user-head
+                    {
+                        height: 100%;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        box-shadow: 0 0 0.1rem black;
+                        img
+                        {
+                            max-height: 100%;
+                        }
+                    }
+                    .user-name
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.58rem;
+                        text-align: center;
+                        margin-left: 0.5rem;
+                    }
+                }
+            }
             .dy-edit-reshow-content
             {
                 width: 100%;
-                padding: 0 2rem;
+                padding: 0 0.5rem;
             }
         }
     }
@@ -446,7 +508,7 @@ export default {
         .title-span
         {
             width: 100%;
-            height: 1.5rem;
+            height: 2rem;
             display: flex;
             justify-content: flex-start;
             align-items: center;
@@ -479,128 +541,218 @@ export default {
             flex-wrap: wrap;
             align-content: flex-start;
             justify-content: center;
+            position: relative;
+            .list-enter-from , .list-leave-to
+            {
+                opacity: 0;
+                transform: translateY(1rem);
+            }
+            .list-leave-active
+            {
+                position: absolute;
+            }
             .sub-comment-item
             {
                 width: 100%;
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
-                margin: 0.5rem 0;
-                .top-user-box
+                transition: all 0.5s;
+                .top-comment .right
+                {
+                    background-color: rgb(240, 240, 240);
+                    margin: 0.5rem 0;
+                }
+                .bottom-comment 
+                {
+                    margin: 0.5rem 0;
+                    .right
+                    {
+                        background-color: rgb(240, 240, 240 , 0.5);
+                    }
+                }
+                .top-comment , .bottom-comment
                 {
                     width: 100%;
                     display: flex;
-                    justify-content: space-between;
-                    .left-user-head
-                    {
-                        box-shadow: 0 0 0.2rem rgb(105, 105, 105);
-                        border-radius: 50%;
-                        overflow: hidden;
-                        img
-                        {
-                            width: 100%;
-                            object-fit: cover;
-                        }
-                    }
-                    .right-user-content
+                    align-content: flex-start;
+                    flex-wrap: wrap;
+                    transition: all 0.5s;
+                    .top
                     {
                         width: 100%;
+                        min-height: 10rem;
                         display: flex;
-                        flex-wrap: wrap;
-                        align-content: flex-start;
-                        border-left: solid 0.2rem #3773f3;
-                        border-right: solid 0.2rem #3773f3;
-                        padding: 0.3rem;
-                        box-shadow: 0 0.1rem 0.8rem -0.6rem black;
-                        background-color: rgba(255,255,255,0.4);
-                        position: relative;
-                        .user-name-div
+                        justify-content: center;
+                        .user-data-show
                         {
-                            width: 100%;
                             display: flex;
-                            justify-content: flex-start;
-                            align-items: center;
+                            justify-content: center;
+                            align-content: flex-start;
+                            flex-wrap: wrap;
+                            padding: 0.5rem 0;
+                            .user-head
+                            {
+                                height: 3.5rem;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                border-radius: 50%;
+                                overflow: hidden;
+                                box-shadow: 0 0 0.1rem black;
+                                img
+                                {
+                                    height: 100%;
+                                    max-height: 100%;
+                                }
+                            }
+                            .user-class
+                            {
+                                padding: 0.15rem 0.4rem;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-size: 0.52rem;
+                                border-radius: 0.2rem;
+                                color: #ffffff;
+                            }
                             .user-name
                             {
-                                font-size: 0.68rem;
-                                letter-spacing: 0.02rem;
-                                color: rgb(24, 24, 24);
+                                width: 100%;
+                                text-align: center;
+                                word-break: break-all;
+                                font-size: 0.6rem;
+                                color: rgb(44, 44, 44);
+                                margin: 0.3rem 0;
                             }
-                            .user-tag
+                            .user-have-props
                             {
-                                padding: 0.15rem 0.35rem;
-                                font-size: 0.45rem;
-                                border-radius: 0.3rem;
-                                color: #ffffff;
-                                box-shadow: 0 0 0.05rem black;
-                                margin-left: 0.5rem;
-                            }
-                        }
-                        .user-say
-                        {
-                            width: 100%;
-                            display: flex;
-                            justify-content: flex-start;
-                            align-items: flex-start;
-                            text-align: left;
-                            word-break: break-all;
-                            word-spacing: normal;
-                            font-size: 0.6rem;
-                            color: rgb(68, 68, 68);
-                            letter-spacing: 0.03rem;
-                            margin: 0.5rem 0 0.5rem 0;
-                        }
-                        .user-when
-                        {
-                            width: 100%;
-                            display: flex;
-                            justify-content: space-between;
-                            flex-wrap: wrap;
-                            height: 1rem;
-                            .sub-item
-                            {
-                                height: 100%;
+                                width: 100%;
                                 display: flex;
+                                justify-content: space-between;
                                 align-items: center;
-                                i
+                                flex-wrap: wrap;
+                                background-color: rgba(136, 136, 136, 0.5);
+                                border-radius: 0.1rem;
+                                margin: 0.3rem 0;
+                                .sub-item
                                 {
-                                    height: 100%;
-                                    display: flex;
-                                    align-items: center;
-                                    font-size: 0.55rem;
-                                    transition: all 0.3s;
-                                }
-                                span
-                                {
-                                    height: 100%;
-                                    display: flex;
-                                    align-items: center;
-                                    font-size: 0.55rem;
-                                    margin-left: 0.2rem;
+                                    width: calc(100% / 3);
+                                    height: 1.5rem;
                                 }
                             }
-                            .sub-item:nth-child(2)
+                            .user-base-info
                             {
-                                cursor: pointer;
-                            }
-                            .sub-item:nth-child(2):hover
-                            {
-                                i
+                                width: 100%;
+                                display: flex;
+                                align-content: flex-start;
+                                flex-wrap: wrap;
+                                .sub-item
                                 {
-                                    color: #3773f3;
+                                    width: 100%;
+                                    display: flex;
+                                    justify-content: flex-start;
+                                    span
+                                    {
+                                        height: 1rem;
+                                        font-size: 0.5rem;
+                                        width: 50%;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: flex-start;
+                                    }
                                 }
                             }
                         }
-                    }
-                    .right-user-content::after
-                    {
-                        content: "";
-                        position: absolute;
-                        border-top: solid 0.3rem transparent;
-                        border-right: solid 0.4rem #3773f3;
-                        border-bottom: solid 0.3rem transparent;
-                        left: -0.6rem;
-                        top: 1rem;
+                        .right
+                        {
+                            width: 100%;
+                            display: flex;
+                            align-content: space-between;
+                            flex-wrap: wrap;
+                            padding: 0 0.5rem;
+                            .mobile-show-user
+                            {
+                                width: 100%;
+                                display: flex;
+                                justify-content: flex-start;
+                                align-items: center;
+                                flex-wrap: wrap;
+                                border-bottom: solid 0.05rem rgb(172, 172, 172);
+                                .user-head-and-name
+                                {
+                                    width: 100%;
+                                    height: 2rem;
+                                    display: flex;
+                                    justify-content: flex-start;
+                                    align-items: center;
+                                    margin: 0.3rem 0;
+                                    .user-head
+                                    {
+                                        height: 100%;
+                                        border-radius: 50%;
+                                        overflow: hidden;
+                                        box-shadow: 0 0 0.1rem black;
+                                        img
+                                        {
+                                            max-height: 100%;
+                                        }
+                                    }
+                                    .user-name
+                                    {
+                                        height: 100%;
+                                        display: flex;
+                                        align-items: center;
+                                        font-size: 0.58rem;
+                                        text-align: center;
+                                        margin: 0 0.5rem;
+                                    }
+                                    .user-class
+                                    {
+                                        padding: 0.15rem 0.4rem;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        font-size: 0.52rem;
+                                        border-radius: 0.2rem;
+                                        color: #ffffff;
+                                    }
+                                }
+                            }
+                            .comment-show
+                            {
+                                width: 100%;
+                            }
+                            .function-show
+                            {
+                                width: 100%;
+                                height: 1.5rem;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                .sub-item
+                                {
+                                    height: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    span , i
+                                    {
+                                        height: 100%;
+                                        display: flex;
+                                        align-items: center;
+                                        font-size: 0.6rem;
+                                    }
+                                    span
+                                    {
+                                        margin-left: 0.3rem;
+                                    }
+                                }
+                                .sub-item:nth-child(2)
+                                {
+                                    cursor: pointer;
+                                }
+                            }
+                        }
                     }
                 }
                 .fix-edit-to-transition
@@ -608,128 +760,29 @@ export default {
                     width: 100%;
                     margin-top: 0.5rem;
                 }
-                .other-user-comment
-                {
-                    width: 100%;
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-content: flex-start;
-                    margin-top: 0.5rem;
-                    .sub-other-user-item
-                    {
-                        width: 100%;
-                        display: flex;
-                        justify-content: space-between;
-                        margin: 0.25rem 0;
-                        .right-other-user-comment
-                        {
-                            width: 100%;
-                            display: flex;
-                            justify-content: space-between;
-                            .other-user-head
-                            {
-                                width: 2.5rem;
-                                min-width: 2.5rem;
-                                height: 2.5rem;
-                                overflow: hidden;
-                                border-radius: 50%;
-                                img
-                                {
-                                    object-fit: cover;
-                                    width: 100%;
-                                }
-                            }
-                            .other-user-comment-content
-                            {
-                                width: 100%;
-                                display: flex;
-                                align-content: flex-start;
-                                flex-wrap: wrap;
-                                border-left: solid 0.2rem #807fe2;
-                                border-right: solid 0.2rem #807fe2;
-                                padding: 0.3rem;
-                                box-shadow: 0 0.1rem 0.8rem -0.6rem black;
-                                background-color: rgba(255,255,255,0.1);
-                                position: relative;
-                                .other-user-name-div
-                                {
-                                    width: 100%;
-                                    display: flex;
-                                    justify-content: flex-start;
-                                    align-items: center;
-                                    .user-name
-                                    {
-                                        font-size: 0.6rem;
-                                        color: rgb(24, 24, 24);
-                                    }
-                                    .user-tag
-                                    {
-                                        padding: 0.1rem 0.3rem;
-                                        font-size: 0.45rem;
-                                        border-radius: 0.3rem;
-                                        color: #ffffff;
-                                        box-shadow: 0 0 0.05rem black;
-                                        margin-left: 0.5rem;
-                                    }
-                                }
-                                .other-user-inf
-                                {
-                                    width: 100%;
-                                    display: flex;
-                                    justify-content: flex-start;
-                                    align-items: flex-start;
-                                    text-align: left;
-                                    word-break: break-all;
-                                    word-spacing: normal;
-                                    font-size: 0.55rem;
-                                    color: rgb(68, 68, 68);
-                                    letter-spacing: 0.03rem;
-                                    margin: 0.5rem 0 0.5rem 0;
-                                }
-                                .other-user-when
-                                {
-                                    width: 100%;
-                                    display: flex;
-                                    justify-content: space-between;
-                                    flex-wrap: wrap;
-                                    height: 1rem;
-                                    .sub-item
-                                    {
-                                        height: 100%;
-                                        display: flex;
-                                        align-items: center;
-                                        i
-                                        {
-                                            height: 100%;
-                                            display: flex;
-                                            align-items: center;
-                                            font-size: 0.55rem;
-                                            transition: all 0.3s;
-                                        }
-                                        span
-                                        {
-                                            height: 100%;
-                                            display: flex;
-                                            align-items: center;
-                                            font-size: 0.55rem;
-                                            margin-left: 0.2rem;
-                                        }
-                                    }
-                                }
-                            }
-                            .other-user-comment-content::after
-                            {
-                                content: "";
-                                position: absolute;
-                                border-top: solid 0.3rem transparent;
-                                border-right: solid 0.4rem #807fe2;
-                                border-bottom: solid 0.3rem transparent;
-                                left: -0.6rem;
-                                top: 1rem;
-                            }
-                        }
-                    }
-                }
+            }
+        }
+        .empty-comment
+        {
+            width: 100%;
+            height: 6rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            span , i
+            {
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+            span
+            {
+                font-size: 0.7rem;
+            }
+            i
+            {
+                font-size: 0.8rem;
             }
         }
     }
@@ -738,6 +791,10 @@ export default {
 {
     .details-box
     {
+        .dy-title-func-div .dy-back
+        {
+            width: 7rem;
+        }
         .dy-top-content
         {
             .user-data-show
@@ -747,18 +804,9 @@ export default {
         }
         .dy-comment-content .content .sub-comment-item
         {
-            .top-user-box , .other-user-comment
+            .top-comment .user-data-show , .bottom-comment .user-data-show
             {
-                .left-user-head
-                {
-                    width: 3rem;
-                    min-width: 3rem;
-                    height: 3rem;
-                }
-                .right-user-content , .other-user-comment-content
-                {
-                    margin-left: 1rem;
-                }
+                width: 7rem;
             }
         }
     }
@@ -767,6 +815,10 @@ export default {
 {
     .details-box
     {
+        .dy-title-func-div .dy-back
+        {
+            width: 6.5rem;
+        }
         .dy-top-content
         {
             .user-data-show
@@ -776,18 +828,9 @@ export default {
         }
         .dy-comment-content .content .sub-comment-item
         {
-            .top-user-box , .other-user-comment
+            .top-comment .user-data-show , .bottom-comment .user-data-show
             {
-                .left-user-head
-                {
-                    width: 3rem;
-                    min-width: 3rem;
-                    height: 3rem;
-                }
-                .right-user-content , .other-user-comment-content
-                {
-                    margin-left: 1rem;
-                }
+                width: 6.5rem;
             }
         }
     }
@@ -796,6 +839,10 @@ export default {
 {
     .details-box
     {
+        .dy-title-func-div .dy-back
+        {
+            width: 6rem;
+        }
         .dy-top-content
         {
             .user-data-show
@@ -805,105 +852,9 @@ export default {
         }
         .dy-comment-content .content .sub-comment-item
         {
-            .top-user-box , .other-user-comment
+            .top-comment .user-data-show , .bottom-comment .user-data-show
             {
-                .left-user-head
-                {
-                    width: 2.5rem;
-                    min-width: 2.5rem;
-                    height: 2.5rem;
-                }
-                .right-user-content , .other-user-comment-content
-                {
-                    margin-left: 1rem;
-                }
-            }
-        }
-    }
-}
-@media screen and (max-width:936px) and (min-width:767px)
-{
-    .details-box
-    {
-        .dy-top-content
-        {
-            .user-data-show
-            {
-                width: 5rem;
-            }
-        }
-        .dy-comment-content .content .sub-comment-item
-        {
-            .top-user-box , .other-user-comment
-            {
-                .left-user-head
-                {
-                    width: 2.5rem;
-                    min-width: 2.5rem;
-                    height: 2.5rem;
-                }
-                .right-user-content , .other-user-comment-content
-                {
-                    margin-left: 0.5rem;
-                }
-            }
-        }
-    }
-}
-@media screen and (max-width:767px) and (min-width:676px)
-{
-    .details-box
-    {
-        .dy-top-content
-        {
-            .user-data-show
-            {
-                width: 4.5rem;
-            }
-        }
-        .dy-comment-content .content .sub-comment-item
-        {
-            .top-user-box , .other-user-comment
-            {
-                .left-user-head
-                {
-                    width: 2.5rem;
-                    min-width: 2.5rem;
-                    height: 2.5rem;
-                }
-                .right-user-content , .other-user-comment-content
-                {
-                    margin-left: 0.5rem;
-                }
-            }
-        }
-    }
-}
-@media screen and (max-width:676px)
-{
-    .details-box
-    {
-        .dy-top-content
-        {
-            .user-data-show
-            {
-                width: 4.5rem;
-            }
-        }
-        .dy-comment-content .content .sub-comment-item
-        {
-            .top-user-box , .other-user-comment
-            {
-                .left-user-head
-                {
-                    width: 2.5rem;
-                    min-width: 2.5rem;
-                    height: 2.5rem;
-                }
-                .right-user-content , .other-user-comment-content
-                {
-                    margin-left: 0.5rem;
-                }
+                width: 6rem;
             }
         }
     }

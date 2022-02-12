@@ -25,8 +25,8 @@
             </div>
             <el-collapse-transition>
                 <div v-if="openChoiceTags" class="tag-content">
-                    <span class="tag-sub-item" v-for="item in tagList" :key="item.id" @click="tagFunc(item.id,item.title)">
-                        {{item.title}}
+                    <span class="tag-sub-item" v-for="item in tagList" :key="item.id" @click="tagFunc(item.id,item.tagContent)">
+                        {{item.tagContent}}
                     </span>
                 </div>
             </el-collapse-transition>
@@ -87,14 +87,14 @@
             </transition-group>
         </div>
         <div class="dy-change-page">
-            <el-pagination background layout="prev, pager, next" :total="80" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange" :small="this.$store.getters.isPhoneGet"/>
+            <el-pagination background layout="prev, pager, next" :total="dyTotal" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange" :small="this.$store.getters.isPhoneGet"/>
         </div>
         <footer-bottom/>
     </div>
 </template>
 <script>
 import { ElMessage } from 'element-plus'
-import { dynamicGet } from '@/util/api.js'
+import { dynamicGet , dynamicTagsGet } from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
 export default {
   components: { footerBottom },
@@ -122,64 +122,7 @@ export default {
                     order: 'DESC'
                 }
             ],
-            tagList:[
-                {
-                    id: 0,
-                    title: '杰哥'
-                },
-                {
-                    id: 1,
-                    title: 'Van♂'
-                },
-                {
-                    id: 2,
-                    title: 'Deep Dark Fansty'
-                },
-                {
-                    id: 3,
-                    title: "That's Good ♂"
-                },
-                {
-                    id: 4,
-                    title: '单身狗'
-                },
-                {
-                    id: 5,
-                    title: '情投一盒'
-                },
-                {
-                    id: 6,
-                    title: '不要做舔狗'
-                },
-                {
-                    id: 7,
-                    title: '萝卜'
-                },
-                {
-                    id: 8,
-                    title: '菜菜'
-                },
-                {
-                    id: 9,
-                    title: '腐竹通知'
-                },
-                {
-                    id: 10,
-                    title: 'Epic被刺'
-                },
-                {
-                    id: 11,
-                    title: 'Steam宣布破产'
-                },
-                {
-                    id: 12,
-                    title: '服务器维护'
-                },
-                {
-                    id:13,
-                    title: '群主太帅了'
-                }
-            ],
+            tagList:[],
             openChoiceTags: false,
             dropdownMenuTitle: '最新',
             //显示的主要数据
@@ -197,6 +140,7 @@ export default {
             //动态页面检测活动冷却标识
             dyAllLoading: false,
             firstRequestIsWorkNow: false,
+            dyTotal: null
         }
     },
     async created(){
@@ -204,14 +148,24 @@ export default {
         dynamicGet(this.dYsendToServerParams).then(resq => {
             if(resq.flag){
                 this.firstRequestIsWorkNow = false
-                this.dyContent = resq.data
+                this.dyContent = resq.data.data
+                this.dyTotal = resq.data.total
             } else {
                 this.firstRequestIsWorkNow = false
-                ElMessage({ showClose: true, message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！', type: 'warning',})
+                ElMessage({ showClose: true, message: resq.message, type: 'warning',})
             }
         }).catch(err => {
             this.firstRequestIsWorkNow = false
             ElMessage({showClose: true, message: '请求动态发生错误，请稍后重试！' + err, type: 'error', center: false})
+        })
+        dynamicTagsGet().then(resq => {
+            if(resq.flag){
+                this.tagList = resq.data
+            } else {
+                ElMessage({ showClose: true, message: resq.message, type: 'warning',})
+            }
+        }).catch(err => {
+            ElMessage({showClose: true, message: '请求标签发生错误，请稍后重试！' + err, type: 'error', center: false})
         })
     },
     methods:{
@@ -270,21 +224,22 @@ export default {
             }
         },
         detailsRouterfunc(id){
-            this.$router.push({path: '/dynamic/details',query: { id: id }})
+            this.$router.push({path: '/dynamic/details',query: { thread: id }})
         },
         pageChange(e){
             if(!this.dyAllLoading){
                 this.dyAllLoading = true
                 this.currentPage = e
                 this.dYsendToServerParams.pageNumber = e
-                document.body.scrollTop = 0
+                $('html,body').stop().animate({'scrollTop': 0})
                 this.sendToServer()
             }
         },
-        async sendToServer(){
+        sendToServer(){
             dynamicGet(this.dYsendToServerParams).then(resq => {
                 if(resq.flag){
-                    this.dyContent = resq.data
+                    this.dyContent = resq.data.data
+                    this.dyTotal = resq.data.total
                     this.dyAllLoading = false
                 } else {
                     ElMessage({ showClose: true, message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！', type: 'warning',})
@@ -479,7 +434,7 @@ export default {
         align-content: flex-start;
         justify-content: center;
         flex-wrap: wrap;
-        background-color: rgba(240, 240, 240, 0.7);
+        background-color: rgba(240, 240, 240, 0.65);
         overflow: hidden;
         transition: all 0.3s;
         position: relative;
@@ -518,7 +473,7 @@ export default {
         .sub-item
         {
             width: 100%;
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.7);
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;

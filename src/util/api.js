@@ -10,6 +10,17 @@ export const dynamicGet = (params) => {
         }
     })
 }
+//查询动态标签
+export const dynamicTagsGet = () => {
+    return request({
+        url: '/tags/list',
+        method: 'get',
+        // params: params,
+        // paramsSerializer: params => {
+        //     return Qs.stringify(params, {arrayFormat: 'repeat'})
+        // }
+    })
+}
 //根据具体id查询动态
 export const dynamicDetailGet = (params) => {
     return request({
@@ -30,6 +41,14 @@ export const dynamicCommentGet = (params) => {
         paramsSerializer: params => {
             return Qs.stringify(params, {arrayFormat: 'repeat'})
         }
+    })
+}
+//根据当前动态id评论
+export const dynamicCommentSet = (query , dynamicId) => {
+    return request({
+        url: '/dynamic/comments/comment/' + dynamicId,
+        method: 'post',
+        data: query,
     })
 }
 //媒体管理器获取图片
@@ -75,8 +94,7 @@ export const verificationGet = (params , method) => {
         params: params,
         paramsSerializer: params => {
             return Qs.stringify(params, {arrayFormat: 'repeat'})
-        },
-        // responseType: 'arraybuffer'
+        }
     })
 }
 //邮箱验证码发送
