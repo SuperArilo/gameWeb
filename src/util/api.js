@@ -14,11 +14,7 @@ export const dynamicGet = (params) => {
 export const dynamicTagsGet = () => {
     return request({
         url: '/tags/list',
-        method: 'get',
-        // params: params,
-        // paramsSerializer: params => {
-        //     return Qs.stringify(params, {arrayFormat: 'repeat'})
-        // }
+        method: 'get'
     })
 }
 //根据具体id查询动态
@@ -125,6 +121,13 @@ export const userLogin = (query) => {
 export const userLognState = () => {
     return request({
         url: '/user/information',
+        method: 'get',
+    })
+}
+//用户注销登陆
+export const userLogOut = () => {
+    return request({
+        url: '/blog/logout',
         method: 'get',
     })
 }

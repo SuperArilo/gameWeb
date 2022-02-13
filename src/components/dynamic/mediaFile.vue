@@ -265,9 +265,10 @@ export default {
         grid-template-columns: repeat(auto-fill, 7rem);
         grid-template-rows: repeat(auto-fill,6rem);
         grid-row-gap: 0.5rem;
+        grid-column-gap: 0.5rem;
         justify-content: space-around;
-        overflow-y: scroll;
-        padding: 0.8rem 0.8rem 0.8rem 1.4rem;
+        overflow-y: overlay;
+        padding: 0.5rem;
         .media-sub-item
         {
             width: 7rem;

@@ -40,7 +40,7 @@
 import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
 import { ElMessage , ElMessageBox } from 'element-plus'
-import { verificationGet , userLogin } from '@/util/api.js'
+import { verificationGet , userLogin , userLognState } from '@/util/api.js'
 export default {
     components: { footerBottom , inputBox },
     data(){
@@ -75,6 +75,8 @@ export default {
                 } else {
                     ElMessage.error(resq.message)
                 }
+            }).catch(err => {
+                ElMessage.error('获取验证码出错！' + err)
             })
         },
         checkMail(mail){
@@ -94,8 +96,20 @@ export default {
                                     sessionStorage.setItem('token',resq.data.token)
                                 }
                                 ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {
-                                    this.$store.commit('userInfoSet', resq.data.user)
                                     this.$router.push('/')
+                                    userLognState().then(resq => {
+                                        if(resq.flag){
+                                            this.$store.commit('userInfoSet', resq.data)
+                                        } else {
+                                            ElNotification({title: '提示',message: resq.message ,type: 'warning'})
+                                            this.$store.commit('userInfoSet',null)
+                                            sessionStorage.removeItem('token')
+                                        }
+                                    }).catch(err => {
+                                        ElNotification({title: '错误',message: '用户状态验证接口出错！' + err,type: 'error'})
+                                        this.$store.commit('userInfoSet',null)
+                                        sessionStorage.removeItem('token')
+                                    })
                                 }})
                                 this.userLoginWorkNow = false
                                 this.CAPTCHACode = ''
@@ -130,7 +144,6 @@ export default {
     width: 100%;
     background-repeat: no-repeat;
     background-position: top;
-    background-attachment: fixed;
     background-size: cover;
     .center-box
     {

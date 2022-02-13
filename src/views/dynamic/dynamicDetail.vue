@@ -1,5 +1,5 @@
 <template>
-    <div class="details-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
+    <div class="details-box">
         <div class="dy-title-func-div">
             <div class="dy-back" @click="backRouter()">
                 <i class="fas fa-chevron-left"/>
@@ -7,13 +7,13 @@
             </div>
             <span class="dy-title">标题：{{dynamicMainContent.dynamicTitle}}</span>
         </div>
-        <div class="dy-top-content">
+        <div class="dy-top-content" v-loading="dynamicMainContent === ''">
             <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
                 <div class="user-head">
                     <img :src="dynamicMainContent.userHead"/>
                 </div>
                 <span class="user-name">{{dynamicMainContent.username}}</span>
-                <span class="user-class">腐竹</span>
+                <span class="user-class" :style="[{backgroundColor: dynamicMainContent.classColor}]">{{dynamicMainContent.className}}</span>
                 <div class="user-have-props">
                     <div class="sub-item"></div>
                     <div class="sub-item"></div>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            <div class="right" :style="this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;'">
+            <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${dynamicMainContent.classColor}`,borderRight: `solid 0.2rem ${dynamicMainContent.classColor}`}]">
                 <div class="title-dy-data" v-if="!this.$store.getters.isPhoneGet">
                     <div class="dy-sub-item">
                         <i class="far fa-calendar-alt"/>
@@ -89,71 +89,18 @@
                 <i class="far fa-comments"/>
                 评论区
             </span>
-            <div class="content" v-if="this.commentContent.length !== 0">
-                <transition-group name="list">
-                    <div class="sub-comment-item" v-for="item in commentContent" :key="item.id"> 
-                        <div class="top-comment">
-                            <div class="top">
-                                <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
-                                    <div class="user-head">
-                                        <img :src="item.userHead"/>
-                                    </div>
-                                    <span class="user-name">{{item.username}}</span>
-                                    <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
-                                    <div class="user-have-props">
-                                        <div class="sub-item"></div>
-                                        <div class="sub-item"></div>
-                                        <div class="sub-item"></div>
-                                    </div>
-                                    <div class="user-base-info">
-                                        <div class="sub-item">
-                                            <span>积分</span>
-                                            <span>114514</span>
-                                        </div>
-                                        <div class="sub-item">
-                                            <span>小黑屋</span>
-                                            <span>0</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${item.classColor}`,borderRight: `solid 0.2rem ${item.classColor}`}]">
-                                    <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
-                                        <div class="user-head-and-name">
-                                            <div class="user-head">
-                                                <img :src="item.userHead"/>
-                                            </div>
-                                            <span class="user-name">{{item.username}}</span>
-                                            <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="comment-show render-by-edit" v-html="item.commentContent"/>
-                                    <div class="function-show">
-                                        <div class="sub-item">
-                                            <i class="far fa-clock"/>
-                                            <span>发表于：{{item.createTime}}</span>
-                                        </div>
-                                        <div class="sub-item" @click="OpenBackComment(item.id)" v-if="this.$store.getters.userInfoGet !== null">
-                                            <i class="fas fa-location-arrow"/>
-                                            <span>回复</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <el-collapse-transition>
-                                <div class="fix-edit-to-transition" v-if="OpenBackCommentId === item.id && OpenBackCommentShow === true">
-                                    <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.id" @commentStatus="commentStatus"/>
-                                </div>
-                            </el-collapse-transition>
-                        </div>
-                        <transition-group name="list">
-                            <div class="bottom-comment" v-for="itemSub in item.children" :key="itemSub.id">
+            <transition name="list">
+                <div class="content">
+                    <transition-group name="list">
+                        <div class="sub-comment-item" v-for="item in commentContent" :key="item.id"> 
+                            <div class="top-comment">
                                 <div class="top">
                                     <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
                                         <div class="user-head">
-                                            <img :src="itemSub.userHead"/>
+                                            <img :src="item.userHead"/>
                                         </div>
-                                        <span class="user-name">{{itemSub.username}}</span>
-                                        <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
+                                        <span class="user-name">{{item.username}}</span>
+                                        <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
                                         <div class="user-have-props">
                                             <div class="sub-item"></div>
                                             <div class="sub-item"></div>
@@ -170,40 +117,97 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="right" :style="this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;'">
+                                    <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${item.classColor}`,borderRight: `solid 0.2rem ${item.classColor}`}]">
                                         <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
                                             <div class="user-head-and-name">
                                                 <div class="user-head">
-                                                    <img :src="itemSub.userHead"/>
+                                                    <img :src="item.userHead"/>
                                                 </div>
-                                                <span class="user-name">{{itemSub.username}}</span>
-                                                <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
+                                                <span class="user-name">{{item.username}}</span>
+                                                <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
                                             </div>
                                         </div>
-                                        <div class="comment-show render-by-edit" v-html="itemSub.commentContent"/>
+                                        <div class="comment-show render-by-edit" v-html="item.commentContent"/>
                                         <div class="function-show">
                                             <div class="sub-item">
                                                 <i class="far fa-clock"/>
-                                                <span>发表于：{{itemSub.createTime}}</span>
+                                                <span>发表于：{{item.createTime}}</span>
+                                            </div>
+                                            <div class="sub-item" @click="OpenBackComment(item.id)" v-if="this.$store.getters.userInfoGet !== null">
+                                                <i class="fas fa-location-arrow"/>
+                                                <span>回复</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <el-collapse-transition>
-                                    <div class="fix-edit-to-transition" v-if="OpenBackCommentId === itemSub.id && OpenBackCommentShow === true">
+                                    <div class="fix-edit-to-transition" v-if="OpenBackCommentId === item.id && OpenBackCommentShow === true">
                                         <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.id" @commentStatus="commentStatus"/>
                                     </div>
                                 </el-collapse-transition>
                             </div>
-                        </transition-group>
-                    </div>
-                </transition-group>
-            </div>
-            <div class="empty-comment" v-else>
-                <span>还没有评论哦，赶快来评论吧！</span>
-                <i class="fas fa-inbox"/>
-            </div>
-            <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
+                            <transition-group name="list">
+                                <div class="bottom-comment" v-for="itemSub in item.children" :key="itemSub.id">
+                                    <div class="top">
+                                        <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
+                                            <div class="user-head">
+                                                <img :src="itemSub.userHead"/>
+                                            </div>
+                                            <span class="user-name">{{itemSub.username}}</span>
+                                            <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
+                                            <div class="user-have-props">
+                                                <div class="sub-item"></div>
+                                                <div class="sub-item"></div>
+                                                <div class="sub-item"></div>
+                                            </div>
+                                            <div class="user-base-info">
+                                                <div class="sub-item">
+                                                    <span>积分</span>
+                                                    <span>114514</span>
+                                                </div>
+                                                <div class="sub-item">
+                                                    <span>小黑屋</span>
+                                                    <span>0</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${item.classColor}`,borderRight: `solid 0.2rem ${item.classColor}`}]">
+                                            <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
+                                                <div class="user-head-and-name">
+                                                    <div class="user-head">
+                                                        <img :src="itemSub.userHead"/>
+                                                    </div>
+                                                    <span class="user-name">{{itemSub.username}}</span>
+                                                    <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="comment-show render-by-edit" v-html="itemSub.commentContent"/>
+                                            <div class="function-show">
+                                                <div class="sub-item">
+                                                    <i class="far fa-clock"/>
+                                                    <span>发表于：{{itemSub.createTime}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <el-collapse-transition>
+                                        <div class="fix-edit-to-transition" v-if="OpenBackCommentId === itemSub.id && OpenBackCommentShow === true">
+                                            <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.id" @commentStatus="commentStatus"/>
+                                        </div>
+                                    </el-collapse-transition>
+                                </div>
+                            </transition-group>
+                        </div>
+                    </transition-group>
+                </div>
+            </transition>
+            <transition name="list">
+                <div class="empty-comment" v-if="this.commentContent.length === 0">
+                    <span>还没有评论哦，赶快来评论吧！</span>
+                    <i class="fas fa-inbox"/>
+                </div>
+            </transition>
+            <!-- <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/> -->
         </div>
         <footer-bottom/>
     </div>
@@ -275,10 +279,7 @@ export default {
     justify-content: flex-start;
     align-content: flex-start;
     flex-wrap: wrap;
-    background-repeat: no-repeat;
-    background-position: top;
-    background-attachment: fixed;
-    background-size: cover;
+    background-color: rgb(235, 235, 235);
     .dy-title-func-div
     {
         width: 100%;
@@ -286,18 +287,21 @@ export default {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        background-color: rgba(255,255,255,0.8);
+        background-color: rgba(245, 245, 245, 1);
+        box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.384);
+        margin: 0 0.5rem;
+        border-radius: 0.15rem;
+        overflow: hidden;
         .dy-back
         {
             width: 5rem;
             min-width: 5rem;
-            height: 1.5rem;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 0.3s;
-            border-radius: 0.2rem;
-            margin: 0 0.5rem;
+            border-radius: 0.15rem;
             cursor: pointer;
             span
             {
@@ -326,7 +330,7 @@ export default {
             height: 100%;
             display: flex;
             align-items: center;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             text-align: left;
             padding-left: 1rem;
         }
@@ -334,11 +338,11 @@ export default {
     .dy-top-content
     {
         width: 100%;
+        margin-top: 0.3rem;
         min-height: 10rem;
         display: flex;
         justify-content: center;
-        background-color: rgba(255,255,255,0.8);
-        padding: 0 0.5rem;
+        margin: 0.5rem;
         transition: all 0.3s;
         .user-data-show
         {
@@ -370,7 +374,6 @@ export default {
                 align-items: center;
                 font-size: 0.52rem;
                 border-radius: 0.2rem;
-                background-color: cornflowerblue;
                 color: #ffffff;
             }
             .user-name
@@ -427,7 +430,7 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            background-color: rgb(240, 240, 240);
+            background-color: rgb(255, 255, 255);
             .title-dy-data , .mobile-show-user
             {
                 width: 100%;
@@ -503,7 +506,6 @@ export default {
         justify-content: center;
         flex-wrap: wrap;
         align-content: flex-start;
-        background-color: rgba(255,255,255,0.8);
         padding: 0 0.5rem;
         .title-span
         {
@@ -534,6 +536,15 @@ export default {
     }
     .dy-comment-content
     {
+        .list-enter-from , .list-leave-to
+        {
+            opacity: 0;
+            transform: translateY(1rem);
+        }
+        .list-leave-active
+        {
+            position: absolute;
+        }
         .content
         {
             width: 100%;
@@ -542,15 +553,7 @@ export default {
             align-content: flex-start;
             justify-content: center;
             position: relative;
-            .list-enter-from , .list-leave-to
-            {
-                opacity: 0;
-                transform: translateY(1rem);
-            }
-            .list-leave-active
-            {
-                position: absolute;
-            }
+            transition: all 0.3s;
             .sub-comment-item
             {
                 width: 100%;
@@ -560,7 +563,7 @@ export default {
                 transition: all 0.5s;
                 .top-comment .right
                 {
-                    background-color: rgb(240, 240, 240);
+                    background-color: rgb(255, 255, 255);
                     margin: 0.5rem 0;
                 }
                 .bottom-comment 
@@ -568,7 +571,7 @@ export default {
                     margin: 0.5rem 0;
                     .right
                     {
-                        background-color: rgb(240, 240, 240 , 0.5);
+                        background-color: rgb(240, 240, 240 , 0.6);
                     }
                 }
                 .top-comment , .bottom-comment
@@ -770,6 +773,7 @@ export default {
             justify-content: center;
             align-items: center;
             background-color: #ffffff;
+            transition: all 0.3s;
             span , i
             {
                 height: 100%;

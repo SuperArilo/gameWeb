@@ -54,6 +54,7 @@ export default {
         const editor = new wangEditor(this.$refs.dyEditTool)
         editor.config.showLinkImg = false
         editor.config.focus = false
+        editor.config.uploadImgMaxLength = 4
         editor.config.menus = [
             'head',
             'bold',
@@ -76,6 +77,25 @@ export default {
         ]
         editor.config.onchange = (newHtml) => {
             this.dyContent = newHtml
+        }
+        editor.config.customUploadImg = (resultFiles) => {
+            let data = new FormData()
+            resultFiles.forEach(item => {
+                data.append('imageFiles',item)
+            })
+            data.append('uid', this.$store.getters.userInfoGet.uid)
+            uploadImage(data).then(resq => {
+                if(resq.flag){
+                    resq.data.forEach(item => {
+                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
+                    })
+                    ElMessage({type: 'success', message: resq.message})
+                } else {
+                    ElMessage.error(resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('上传图片过程中发生错误！ ' + err)
+            })
         }
         editor.create()
         this.editor = editor

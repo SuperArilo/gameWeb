@@ -59,8 +59,8 @@
     </div>
 </template>
 <script>
-import { ElNotification , ElMessageBox } from 'element-plus'
-import { userLognState} from '@/util/api.js'
+import { ElNotification , ElMessageBox , ElMessage } from 'element-plus'
+import { userLognState , userLogOut } from '@/util/api.js'
 export default {
     data(){
         return{
@@ -163,10 +163,16 @@ export default {
         },
         playerLogout(){
             ElMessageBox.confirm('确定要注销登录吗？','提示',{confirmButtonText: '确认',cancelButtonText: '取消',type: 'warning'}).then(() => {
-                localStorage.removeItem('token')
-                sessionStorage.removeItem('token')
-                this.$store.commit('userInfoSet',null)
-                ElNotification({title: '提示',message: '您已安全退出登录！' ,type: 'success'})
+                userLogOut().then(resq => {
+                    if(resq.flag){
+                        localStorage.removeItem('token')
+                        sessionStorage.removeItem('token')
+                        this.$store.commit('userInfoSet',null)
+                        ElNotification({title: '提示',message: resq.message ,type: 'success'})
+                    }
+                }).catch(err => {
+                    ElMessage.error('注销登陆过程发生错误！ ' + err)
+                })
             }).catch(() => {
             })
         }
@@ -584,6 +590,10 @@ a
         border: 0;
         border-top: 3px solid #ccc;
         margin: 20px 0;
+    }
+    img
+    {
+        height: auto !important;
     }
 }
 .content-effects-enter-from , .content-effects-leave-to

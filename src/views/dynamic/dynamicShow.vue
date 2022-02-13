@@ -46,7 +46,7 @@
                 </div>
             </transition>
             <transition-group name="list">
-                <div class="sub-item" v-for="item in dyContent" :key="item.id" :class="item.clazz === 1 ? 'server-own-border': item.clazz === 2 ? 'admin-border':item.clazz === 3 ? 'player-border':item.clazz === 4 ? 'builder-border':item.clazz === 5 ? 'vip-border':''">
+                <div class="sub-item" v-for="item in dyContent" :key="item.id" :style="[{border: `solid 0.15rem ${item.classColor}`}]">
                     <div class="title-and-user-head">
                         <span class="title">{{item.dynamicTitle}}</span>
                         <div class="user-head">
@@ -263,7 +263,6 @@ export default {
     align-content: flex-start;
     background-repeat: no-repeat;
     background-position: top;
-    background-attachment: fixed;
     background-size: cover;
     .top-menu
     {
@@ -429,7 +428,7 @@ export default {
     .dy-content
     {
         width: 100%;
-        padding: 0 0.3rem;
+        padding: 0 1rem;
         display: flex;
         align-content: flex-start;
         justify-content: center;

@@ -13,7 +13,7 @@
                 <div class="sub-item render-by-edit" v-html="text">   
                 </div>
             </div>
-            <div class="edit-div">
+            <div class="edit-div" v-if="this.$store.getters.userInfoGet !== null">
                 <span class="title-span">说点什么</span>
                 <div class="render-edit" ref="dyEditTool"></div>
                 <div class="buttom">
@@ -57,8 +57,10 @@
     </div>
 </template>
 <script>
+import { uploadImage } from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
+import { ElMessage } from 'element-plus'
 export default {
   components: { footerBottom , mediaFile },
     data(){
@@ -69,35 +71,9 @@ export default {
         }
     },
     mounted(){
-        const editor = new wangEditor(this.$refs.dyEditTool)
-        editor.config.showLinkImg = false
-        editor.config.focus = false
-        editor.config.height = 200
-        editor.config.menus = [
-            'head',
-            'bold',
-            'fontSize',
-            'italic',
-            'underline',
-            'strikeThrough',
-            'indent',
-            'lineHeight',
-            'foreColor',
-            'backColor',
-            'link',
-            'list',
-            'justify',
-            'quote',
-            'emoticon',
-            'table',
-            'splitLine',
-            'image',
-        ]
-        editor.config.onchange = (newHtml) => {
-            this.text = newHtml
+        if(this.$store.getters.userInfoGet !== null){
+            this.createEditor()
         }
-        editor.create()
-        this.editor = editor
     },
     methods:{
         closeWindow(value){
@@ -106,13 +82,82 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key =>{
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:50%;"/>')
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100"/>')
             })
         },
+        createEditor(){
+            const editor = new wangEditor(this.$refs.dyEditTool)
+            editor.config.showLinkImg = false
+            editor.config.focus = false
+            editor.config.uploadImgMaxLength = 4
+            editor.config.menus = [
+                'head',
+                'bold',
+                'fontSize',
+                'italic',
+                'underline',
+                'strikeThrough',
+                'indent',
+                'lineHeight',
+                'foreColor',
+                'backColor',
+                'link',
+                'list',
+                'justify',
+                'quote',
+                'emoticon',
+                'table',
+                'splitLine',
+                'image',
+            ]
+            editor.config.onchange = (newHtml) => {
+                this.text = newHtml
+            }
+            editor.config.customUploadImg = (resultFiles) => {
+                let data = new FormData()
+                resultFiles.forEach(item => {
+                    data.append('imageFiles',item)
+                })
+                data.append('uid', this.$store.getters.userInfoGet.uid)
+                uploadImage(data).then(resq => {
+                    if(resq.flag){
+                        resq.data.forEach(item => {
+                            editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
+                        })
+                        ElMessage({type: 'success', message: resq.message})
+                    } else {
+                        ElMessage.error(resq.message)
+                    }
+                }).catch(err => {
+                    ElMessage.error('上传图片过程中发生错误！ ' + err)
+                })
+            }
+            editor.create()
+            this.editor = editor
+        }
+    },
+    computed:{
+        isHaveUserInfo(){
+            return this.$store.getters.userInfoGet
+        }
+    },
+    watch:{
+        isHaveUserInfo(n , o){
+            if(n !== null){
+                this.$nextTick(() => {
+                    this.createEditor()
+                })
+            } else {
+                this.editor.destroy()
+                this.editor = null
+            }
+        }
     },
     unmounted() {
-        this.editor.destroy()
-        this.editor = null
+        if(this.$store.getters.userInfoGet !== null){
+            this.editor.destroy()
+            this.editor = null
+        }
     }
 }
 </script>
@@ -126,7 +171,6 @@ export default {
     flex-wrap: wrap;
     background-repeat: no-repeat;
     background-position: top;
-    background-attachment: fixed;
     background-size: cover;
     .center-top-inf
     {
@@ -455,7 +499,7 @@ export default {
         }
         ::v-deep(.el-dialog)
         {
-            width: 30rem;
+            width: 35rem;
         }
     }
 }

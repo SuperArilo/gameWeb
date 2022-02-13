@@ -174,7 +174,6 @@ export default {
     width: 100%;
     background-repeat: no-repeat;
     background-position: top;
-    background-attachment: fixed;
     background-size: cover;
     .center-box
     {

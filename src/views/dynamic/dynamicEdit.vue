@@ -24,14 +24,14 @@
                                 <input type="text" v-model="clearTagInput" @keyup.enter="tagInputEnter" placeholder="输入自定义标签"/>
                             </div>
                         </div>
-                        <span class="right-add-haved" @click="showMoreTags =! showMoreTags">
+                        <span class="right-add-haved" @click="openTagsBox">
                             选择更多
                             <i class="fas fa-align-left"/>
                         </span>
                     </div>
                     <el-collapse-transition>
                         <div v-if="showMoreTags" class="drop-menu">
-                            <span class="span-tag" v-for="(item,index) in tagList" :key="index" @click="addHavedTag(item.id,item.title)">{{item.title}}</span>
+                            <span class="span-tag" v-for="item in tagList" :key="item.id" @click="addHavedTag(item.id,item.tagContent)">{{item.tagContent}}</span>
                         </div>
                     </el-collapse-transition>
                 </div>
@@ -58,7 +58,7 @@
 </template>
 <script>
 import { ElMessage , ElMessageBox } from 'element-plus'
-import {userPublishDynamic} from '@/util/api.js'
+import {userPublishDynamic , dynamicTagsGet , uploadImage} from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
@@ -85,64 +85,7 @@ export default {
                 '6. 不得恶意模仿论坛现有用户及站内外团体',
                 '7. 不得包含或暗示管制类精神药品或有类似功效的生物制品的内容。'
             ],
-            tagList:[
-                {
-                    id: 0,
-                    title: '杰哥'
-                },
-                {
-                    id: 1,
-                    title: 'Van♂'
-                },
-                {
-                    id: 2,
-                    title: 'Deep Dark Fansty'
-                },
-                {
-                    id: 3,
-                    title: "That's Good ♂"
-                },
-                {
-                    id: 4,
-                    title: '单身狗'
-                },
-                {
-                    id: 5,
-                    title: '情投一盒'
-                },
-                {
-                    id: 6,
-                    title: '不要做舔狗'
-                },
-                {
-                    id: 7,
-                    title: '萝卜'
-                },
-                {
-                    id: 8,
-                    title: '菜菜'
-                },
-                {
-                    id: 9,
-                    title: '腐竹通知'
-                },
-                {
-                    id: 10,
-                    title: 'Epic被刺'
-                },
-                {
-                    id: 11,
-                    title: 'Steam宣布破产'
-                },
-                {
-                    id: 12,
-                    title: '服务器维护'
-                },
-                {
-                    id:13,
-                    title: '群主太帅了'
-                }
-            ],
+            tagList:[],
             showMoreTags: false,
             dialogVisible: false,
             noHaveTag:[],
@@ -182,6 +125,25 @@ export default {
         ]
         editor.config.onchange = (newHtml) => {
             this.dyContent = newHtml
+        }
+        editor.config.customUploadImg = (resultFiles) => {
+            let data = new FormData()
+            resultFiles.forEach(item => {
+                data.append('imageFiles',item)
+            })
+            data.append('uid', this.$store.getters.userInfoGet.uid)
+            uploadImage(data).then(resq => {
+                if(resq.flag){
+                    resq.data.forEach(item => {
+                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
+                    })
+                    ElMessage({type: 'success', message: resq.message})
+                } else {
+                    ElMessage.error(resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('上传图片过程中发生错误！ ' + err)
+            })
         }
         editor.create()
         this.editor = editor
@@ -232,6 +194,24 @@ export default {
                 this.tagTemp = this.tagTemp.concat(title)
             }
         },
+        openTagsBox(){
+            
+            if(this.tagList.length === 0){
+                dynamicTagsGet().then(resq => {
+                    if(resq.flag){
+                        this.tagList = resq.data
+                        this.showMoreTags = true
+                    } else {
+                        ElMessage.error('获取标签发生错误 ' + resq.message)
+                    }
+                }).catch(err => {
+                    ElMessage.error('获取标签发生错误 ' + err)
+
+                })
+            } else {
+                this.showMoreTags =! this.showMoreTags
+            }
+        },
         tagDel(index){
             this.noHaveTag.splice(index,1)
             this.havedTag.splice(index,1)
@@ -243,7 +223,7 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key =>{
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" style="max-width:50%;"/>')
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100" "/>')
             })
         },
         dyPublish(){
@@ -300,7 +280,6 @@ export default {
     flex-wrap: wrap;
     background-repeat: no-repeat;
     background-position: top;
-    background-attachment: fixed;
     background-size: cover;
     .dy-title-func-div
     {
