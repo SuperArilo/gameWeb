@@ -171,7 +171,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${item.classColor}`,borderRight: `solid 0.2rem ${item.classColor}`}]">
+                                        <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${itemSub.classColor}`,borderRight: `solid 0.2rem ${itemSub.classColor}`}]">
                                             <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
                                                 <div class="user-head-and-name">
                                                     <div class="user-head">
@@ -210,7 +210,6 @@
             <!-- <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/> -->
         </div>
         <footer-bottom/>
-        <el-image style="width: 100px; height: 100px" :preview-src-list="commentIntoImage" fit="cover"></el-image>
     </div>
 </template>
 <script>
