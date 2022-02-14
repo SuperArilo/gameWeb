@@ -1,8 +1,8 @@
 <template>
     <div class="index-box">
         <div class="top-player-div">
-            <img class="player-head" src="../icon/head/stranger21.jpg"/>
-            <span class="player-name">这次换你听歌</span>
+            <img class="player-head" :src="this.$store.getters.userInfoGet.userhead"/>
+            <span class="player-name">{{this.$store.getters.userInfoGet.name}}</span>
             <span class="play-introduce">单身猫，还我狗子</span>
         </div>
         <div class="player-menu">
@@ -53,6 +53,9 @@ export default {
             playerMenuIndex: 0
         }
     },
+    beforeCreate(){
+        console.log(this)
+    },
     created(){
         this.playerMenu.findIndex(key => {
             if(this.$route.path === '/' + key.path){
@@ -76,10 +79,6 @@ export default {
     align-content: flex-start;
     justify-content: center;
     flex-wrap: wrap;
-    background-repeat: no-repeat;
-    background-position: top;
-    background-attachment: fixed;
-    background-size: cover;
     .top-player-div
     {
         width: 100%;
@@ -92,7 +91,6 @@ export default {
         background-image: url('../icon/index/versaillestown/player/playerBg.jpg');
         background-repeat: no-repeat;
         background-position: top;
-        background-attachment: fixed;
         background-size: cover;
         .player-head
         {

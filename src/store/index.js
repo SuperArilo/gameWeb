@@ -32,7 +32,11 @@ export default createStore({
                 javaMcId: 'aom4399',
                 className: '管理员',
             }
-        ]
+        ],
+        OpenWatchImageBox: {
+            isOpen: false,
+            image: ''
+        }
     },
     getters:{
         isPhoneGet:state => state.isPhone,
@@ -40,7 +44,8 @@ export default createStore({
         frsIconGet:state => state.frsIcon,
         indexBgGet:state => state.indexBg,
         userInfoGet:state => state.userInfo,
-        serverTeamListGet:state => state.serverTeamList
+        serverTeamListGet:state => state.serverTeamList,
+        OpenWatchImageBoxGet:state => state.OpenWatchImageBox
     },
     mutations:{
         isPhoneSet(state,value){
@@ -51,6 +56,9 @@ export default createStore({
         },
         userInfoSet(state,value){
             state.userInfo = value
+        },
+        OpenWatchImageBoxSet(state,value){
+            state.OpenWatchImageBox = value
         }
     },
     actions:{

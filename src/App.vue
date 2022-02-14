@@ -26,7 +26,7 @@
             </div>
         </nav>
         <div class="change-content">
-            <div class="change-left-menu" :style="!openMenu ? 'width:0;':''" @mouseleave="openMenu = false">
+            <div class="change-left-menu" :style="[!openMenu ? 'width: 0;':'width: 14rem;']" @mouseleave="openMenu = false">
                 <div class="server-info">
                     <img :src="this.$store.getters.frsIconGet"/>
                     <span>凡尔赛小镇</span>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="router-content">
+            <div class="router-content" :style="[openMenu && this.$store.getters.isPhoneGet !== true ? 'margin-left: 14rem;':'']">
                 <router-view v-slot="{ Component }" style="position: absolute;">
                     <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
                         <component :is="Component" />
@@ -141,6 +141,10 @@ export default {
         this.windowWidth()
     },
     mounted(){
+        $('.comment-image').click(function() {
+            console.log(1111)
+            console.log(this)
+        })
         window.addEventListener('scroll', this.scrollValue,true)
     },
     methods:{
@@ -217,112 +221,47 @@ a
 #app
 {
     width: 100%;
-}
-.main-container
-{
-    width: 100%;
-    display: flex;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    position: relative;
-    .top-nav
+    .main-container
     {
         width: 100%;
-        height: 2.2rem;
-        background-color: #3d6cd1;
         display: flex;
-        padding-left: 0.5rem;
-        position: fixed;
-        z-index: 650;
-        justify-content: space-between;
-        box-shadow: 0 0 0.2rem black;
-        .left-func
+        align-content: flex-start;
+        flex-wrap: wrap;
+        position: relative;
+        .top-nav
         {
-            height: 100%;
+            width: 100%;
+            height: 2.2rem;
+            background-color: #3d6cd1;
             display: flex;
-            align-items: center;
-            i
+            padding-left: 0.5rem;
+            position: fixed;
+            z-index: 650;
+            justify-content: space-between;
+            box-shadow: 0 0 0.2rem black;
+            .left-func
             {
                 height: 100%;
                 display: flex;
                 align-items: center;
-                font-size: 1.2rem;
-                color: #ffffff;
-                cursor: pointer;
-                transition: all 0.3s;
-            }
-        }
-        .right-func
-        {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            position: relative;
-            .login
-            {
-                width: 4rem;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: #409eff;
-                cursor: pointer;
-                transition: all 0.4s;
-                span , i
-                {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    color: white;
-                }
-                span
-                {
-                    font-size: 0.58rem;
-                    letter-spacing: 0.05rem;
-                }
                 i
                 {
-                    font-size: 0.7rem;
-                    margin-left: 0.3rem;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.2rem;
+                    color: #ffffff;
+                    cursor: pointer;
+                    transition: all 0.3s;
                 }
             }
-            .login:hover
-            {
-                background-color: #b3d8ff;
-                span , i
-                {
-                    color: #3399ff;
-                }
-            }
-            .nav-player-show-box
+            .right-func
             {
                 height: 100%;
                 display: flex;
                 align-items: center;
-                transition: all 0.4s;
-                .player-head
-                {
-                    height: 80%;
-                    display: flex;
-                    align-items: center;
-                    border: solid 0.05rem #99a2aa;
-                    border-radius: 50%;
-                    box-shadow: 0 0 0.2rem black;
-                    overflow: hidden;
-                    img
-                    {
-                        max-height: 100%;
-                    }
-                }
-                .player-name
-                {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    font-size: 0.56rem;
-                    margin: 0 0.5rem;
-                }
-                .logout
+                position: relative;
+                .login
                 {
                     width: 4rem;
                     height: 100%;
@@ -331,26 +270,26 @@ a
                     align-items: center;
                     background-color: #409eff;
                     cursor: pointer;
-                    transition: all 0.3s;
+                    transition: all 0.4s;
                     span , i
                     {
                         height: 100%;
                         display: flex;
                         align-items: center;
-                        transition: all 0.3s;
-                        color: #ffffff;
+                        color: white;
                     }
                     span
                     {
-                        font-size: 0.56rem;
+                        font-size: 0.58rem;
+                        letter-spacing: 0.05rem;
                     }
                     i
                     {
-                        font-size: 0.8rem;
+                        font-size: 0.7rem;
                         margin-left: 0.3rem;
                     }
                 }
-                .logout:hover
+                .login:hover
                 {
                     background-color: #b3d8ff;
                     span , i
@@ -358,173 +297,238 @@ a
                         color: #3399ff;
                     }
                 }
-            }
-        }
-    }
-    .change-content
-    {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin-top: 2.2rem;
-        .change-left-menu
-        {
-            width: 14rem;
-            overflow: hidden;
-            height: 100%;
-            transition: all 0.5s;
-            z-index: 1000;
-            background-color: #ffffff;
-            display: flex;
-            align-content: flex-start;
-            flex-wrap: wrap;
-            position: fixed;
-            box-shadow: 0 0.5rem 0.5rem black;
-            span
-            {
-                word-break: keep-all;
-            }
-            .server-info
-            {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 0.5rem 0;
-                background-color: rgb(248, 248, 248);
-                img , span
+                .nav-player-show-box
                 {
-                    height: 2rem;
-                    max-height: 100%;
+                    height: 100%;
                     display: flex;
                     align-items: center;
-                    font-size: 0.7rem;
-                }
-                span
-                {
-                    margin-left: 0.5rem;
-                    letter-spacing: 0.05rem;
+                    transition: all 0.4s;
+                    .player-head
+                    {
+                        height: 80%;
+                        display: flex;
+                        align-items: center;
+                        border: solid 0.05rem #99a2aa;
+                        border-radius: 50%;
+                        box-shadow: 0 0 0.2rem black;
+                        overflow: hidden;
+                        img
+                        {
+                            max-height: 100%;
+                        }
+                    }
+                    .player-name
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.56rem;
+                        margin: 0 0.5rem;
+                    }
+                    .logout
+                    {
+                        width: 4rem;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: #409eff;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        span , i
+                        {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            transition: all 0.3s;
+                            color: #ffffff;
+                        }
+                        span
+                        {
+                            font-size: 0.56rem;
+                        }
+                        i
+                        {
+                            font-size: 0.8rem;
+                            margin-left: 0.3rem;
+                        }
+                    }
+                    .logout:hover
+                    {
+                        background-color: #b3d8ff;
+                        span , i
+                        {
+                            color: #3399ff;
+                        }
+                    }
                 }
             }
-            .menu-list
+        }
+        .change-content
+        {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-top: 2.2rem;
+            .change-left-menu
             {
-                width: 100%;
+                overflow: hidden;
+                height: 100%;
+                transition: all 0.5s;
+                z-index: 1000;
+                background-color: #ffffff;
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
-                margin-top: 0.5rem;
-                .sub-item
+                position: fixed;
+                box-shadow: 0 0.5rem 0.5rem black;
+                span
+                {
+                    word-break: keep-all;
+                }
+                .server-info
+                {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 0.5rem 0;
+                    background-color: rgb(248, 248, 248);
+                    img , span
+                    {
+                        height: 2rem;
+                        max-height: 100%;
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.7rem;
+                    }
+                    span
+                    {
+                        margin-left: 0.5rem;
+                        letter-spacing: 0.05rem;
+                    }
+                }
+                .menu-list
                 {
                     width: 100%;
                     display: flex;
                     align-content: flex-start;
                     flex-wrap: wrap;
-                    .top-func
+                    margin-top: 0.5rem;
+                    .sub-item
                     {
                         width: 100%;
-                        height: 2.5rem;
                         display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        cursor: pointer;
-                        transition: all 0.3s;
-                        .img-and-span
+                        align-content: flex-start;
+                        flex-wrap: wrap;
+                        .top-func
                         {
                             width: 100%;
-                            height: 100%;
+                            height: 2.5rem;
                             display: flex;
+                            justify-content: space-between;
                             align-items: center;
-                            img
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            .img-and-span
                             {
-                                height: 60%;
-                                max-height: 60%;
-                                margin: 0 1rem;
-                            }
-                            span
-                            {
-                                font-size: 0.62rem;
                                 width: 100%;
                                 height: 100%;
                                 display: flex;
                                 align-items: center;
-                                letter-spacing: 0.1rem;
+                                img
+                                {
+                                    height: 60%;
+                                    max-height: 60%;
+                                    margin: 0 1rem;
+                                }
+                                span
+                                {
+                                    font-size: 0.62rem;
+                                    width: 100%;
+                                    height: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    letter-spacing: 0.1rem;
+                                }
+                            }
+                            i
+                            {
+                                width: 3rem;
+                                min-width: 3rem;
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
                             }
                         }
-                        i
-                        {
-                            width: 3rem;
-                            min-width: 3rem;
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        }
+                    }
+                    .sub-item:hover
+                    {
+                        background-color: rgb(226, 226, 226);
                     }
                 }
-                .sub-item:hover
+            }
+            .router-content
+            {
+                width: 100%;
+                transition: all 0.5s;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                .router_animate-enter-active
                 {
-                    background-color: rgb(226, 226, 226);
+                    animation: slideInLeft 0.6s;
+                }
+                .router_animate-leave-active
+                {
+                    animation: slideOutRight 0.6s;
                 }
             }
         }
-        .router-content
+        .scroll-up
         {
-            width: 100%;
-            position: relative;
             display: flex;
             justify-content: center;
-            .router_animate-enter-active
+            align-content: flex-start;
+            flex-wrap: wrap;
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            margin: 2rem 1rem;
+            z-index: 600;
+            color: #3773f3;
+            background-color: #ffffff;
+            padding: 0.4rem 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 0.15rem rgba(0, 0, 0, 0.521);
+            cursor: pointer;
+            i , span
             {
-                animation: slideInLeft 0.6s;
+                width: 100%;
+                display: flex;
+                justify-content: center;
             }
-            .router_animate-leave-active
+            i
             {
-                animation: slideOutRight 0.6s;
+                font-size: 2rem;
+            }
+            span
+            {
+                margin-top: 0.2rem;
+                font-size: 0.8rem;
             }
         }
-    }
-    .scroll-up
-    {
-        display: flex;
-        justify-content: center;
-        align-content: flex-start;
-        flex-wrap: wrap;
-        position: fixed;
-        right: 0;
-        bottom: 0;
-        margin: 2rem 1rem;
-        z-index: 600;
-        color: #3773f3;
-        background-color: #ffffff;
-        padding: 0.4rem 0;
-        border-radius: 0.5rem;
-        box-shadow: 0 0 0.15rem rgba(0, 0, 0, 0.521);
-        cursor: pointer;
-        i , span
+        .scroll-up-enter-active , .scroll-up-leave-active
         {
-            width: 100%;
-            display: flex;
-            justify-content: center;
+            transition: all 0.3s;
         }
-        i
+        .scroll-up-enter-from , .scroll-up-leave-to
         {
-            font-size: 2rem;
+            opacity: 0;
+            transform: translateY(1rem);
         }
-        span
-        {
-            margin-top: 0.2rem;
-            font-size: 0.8rem;
-        }
-    }
-    .scroll-up-enter-active , .scroll-up-leave-active
-    {
-        transition: all 0.3s;
-    }
-    .scroll-up-enter-from , .scroll-up-leave-to
-    {
-        opacity: 0;
-        transform: translateY(1rem);
     }
 }
 @media screen and (min-width:1400px)
@@ -571,7 +575,7 @@ a
 }
 .render-by-edit
 {
-    font-size: 0.68rem !important;
+    font-size: 0.6rem !important;
     blockquote
     {
         display: block;
@@ -594,6 +598,7 @@ a
     img
     {
         height: auto !important;
+        cursor: pointer;
     }
 }
 .content-effects-enter-from , .content-effects-leave-to

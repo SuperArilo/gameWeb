@@ -210,6 +210,7 @@
             <!-- <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/> -->
         </div>
         <footer-bottom/>
+        <el-image style="width: 100px; height: 100px" :preview-src-list="commentIntoImage" fit="cover"></el-image>
     </div>
 </template>
 <script>
@@ -229,6 +230,8 @@ export default {
             OpenBackCommentShow: false,
             //动态评论
             commentContent: [],
+            //预览的图片
+            commentIntoImage: [],
         }
     },
     async created(){
@@ -242,6 +245,16 @@ export default {
         }).catch(err => {
             ElMessage.error('获取详情发生错误！ ' + err)
         })
+    },
+    mounted(){
+        window.showImageEnlarge = (e) => {
+            let grandpa = $(e).parent().parent()
+            if(!grandpa.hasClass('w-e-text')){
+                grandpa.find('img').each((index,item) => {
+                    this.commentIntoImage.unshift($(item).attr('src'))
+                })
+            }
+        }
     },
     methods:{
         OpenBackComment(id){
@@ -267,7 +280,7 @@ export default {
                 this.commentGet()
                 this.OpenBackCommentShow = false
             }
-        }
+        },
     }
 }
 </script>

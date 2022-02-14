@@ -28,7 +28,7 @@
 </template>
 <script>
 import { ElMessage  } from 'element-plus'
-import { dynamicCommentSet } from '@/util/api.js'
+import { dynamicCommentSet , uploadImage  } from '@/util/api.js'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
     components:{
@@ -87,7 +87,7 @@ export default {
             uploadImage(data).then(resq => {
                 if(resq.flag){
                     resq.data.forEach(item => {
-                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
+                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" onclick="showImageEnlarge(this)"/>')
                     })
                     ElMessage({type: 'success', message: resq.message})
                 } else {
@@ -107,7 +107,7 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key => {
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100" "/>')
+                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100" onclick="showImageEnlarge(this)"/>')
             })
         },
         openFile(){

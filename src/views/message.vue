@@ -461,7 +461,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 55rem;
+            width: 60%;
             padding: 1.5rem 1rem 1rem 1rem;
             margin: 2rem 0 2rem 0;
         }
@@ -477,7 +477,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 45rem;
+            width: 65%;
             padding: 1.5rem 1rem 1rem 1rem;
             margin: 2rem 0 2rem 0;
         }
@@ -493,7 +493,7 @@ export default {
     {
         .center-top-inf
         {
-            width: 35rem;
+            width: 70%;
             padding: 1.5rem 0.8rem 0.8rem 0.8rem;
             margin: 2rem 0 2rem 0;
         }
