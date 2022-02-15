@@ -248,23 +248,6 @@ export default {
             ElMessage.error('获取详情发生错误！ ' + err)
         })
     },
-    mounted(){
-        // window.showImageEnlarge = (e) => {
-        //     let grandpa = $(e).parent().parent()
-        //     if(!grandpa.hasClass('w-e-text')){
-        //         let imageIndex
-        //         grandpa.find('img').each((index,item) => {
-        //             if($(e).attr('src') === $(item).attr('src')){
-        //                 imageIndex = index
-        //             }
-        //             this.commentImage.push($(item).attr('src'))
-        //         })
-        //         showImages({urls: this.commentImage,initialIndex: imageIndex , onClose: () => {
-        //             this.commentImage = []
-        //         }})
-        //     }
-        // }
-    },
     methods:{
         OpenBackComment(id){
             this.OpenBackCommentShow =! this.OpenBackCommentShow
@@ -476,6 +459,7 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
+            border-radius: 0.3rem;
             background-color: rgb(255, 255, 255);
             .title-dy-data , .mobile-show-user
             {
@@ -720,6 +704,7 @@ export default {
                             align-content: space-between;
                             flex-wrap: wrap;
                             padding: 0 0.5rem;
+                            border-radius: 0.3rem;
                             .mobile-show-user
                             {
                                 width: 100%;

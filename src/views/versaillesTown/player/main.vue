@@ -163,6 +163,7 @@ export default {
             'table',
             'splitLine',
             'image',
+            'video',
         ]
         editor.config.onchange = (newHtml) => {
             this.text = newHtml
