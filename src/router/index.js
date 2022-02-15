@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ElMessage , ElMessageBox , ElNotification } from 'element-plus'
 const routes = [
     {
         path: '/',
@@ -70,6 +71,13 @@ const routes = [
         meta:{
             path: '/player',
             title: '玩家信息'
+        },
+        beforeEnter(to, from, next){
+            if(localStorage.getItem('token') !== null || sessionStorage.getItem('token') !== null){
+                next()
+            } else {
+                ElNotification({title: '提示',message: '你尚未登录！' ,type: 'info'})
+            }
         },
         children:[
             {

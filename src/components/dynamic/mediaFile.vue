@@ -79,8 +79,8 @@ export default {
         },
         userChoicePicture(id,url){
             if(this.imageIsHaveIdList.indexOf(id) === -1){
-                this.imageIsHaveIdList.unshift(id)
-                this.intoEditList.unshift({id: id,url: url})
+                this.imageIsHaveIdList.push(id)
+                this.intoEditList.push({id: id,url: url})
             } else {
                 let index = this.imageIsHaveIdList.findIndex(item => item === id)
                 this.imageIsHaveIdList.splice(index, 1)

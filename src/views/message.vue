@@ -28,7 +28,7 @@
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
                 <div class="message-content">
-                    <div class="sub-message-item">
+                    <!-- <div class="sub-message-item">
                         <div class="left-head">
                             <img src="../views/icon/head/stranger8.jpg"/>
                         </div>
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <el-pagination background layout="prev, pager, next" :total="20" :page-size="8"></el-pagination>

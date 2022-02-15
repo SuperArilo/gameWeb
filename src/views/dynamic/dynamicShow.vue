@@ -60,7 +60,7 @@
                         </div>
                         <div class="dy-sub-item">
                             <i class="fas fa-rocket"/>
-                            <span>{{item.username}}</span>
+                            <span>{{item.nickname}}</span>
                         </div>
                         <div class="dy-sub-item">
                             <i class="far fa-comment-dots"/>

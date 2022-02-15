@@ -39,7 +39,7 @@
 <script>
 import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
-import { ElMessage , ElMessageBox } from 'element-plus'
+import { ElMessage , ElMessageBox , ElNotification } from 'element-plus'
 import { verificationGet , userLogin , userLognState } from '@/util/api.js'
 export default {
     components: { footerBottom , inputBox },

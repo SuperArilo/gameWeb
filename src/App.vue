@@ -16,7 +16,7 @@
                         <div class="player-head">
                             <img :src="this.$store.getters.userInfoGet.userhead"/>
                         </div>
-                        <span class="player-name">{{this.$store.getters.userInfoGet.username}}</span>
+                        <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
                         <div class="logout" @click="playerLogout">
                             <span>注销</span>
                             <i class="fas fa-sign-out-alt"/>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="router-content" :style="[openMenu && this.$store.getters.isPhoneGet !== true ? 'margin-left: 14rem;':'']">
+            <div class="router-content">
                 <router-view v-slot="{ Component }" style="position: absolute;">
                     <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
                         <component :is="Component" />
@@ -169,6 +169,7 @@ export default {
             ElMessageBox.confirm('确定要注销登录吗？','提示',{confirmButtonText: '确认',cancelButtonText: '取消',type: 'warning'}).then(() => {
                 userLogOut().then(resq => {
                     if(resq.flag){
+                        this.$router.push('/')
                         localStorage.removeItem('token')
                         sessionStorage.removeItem('token')
                         this.$store.commit('userInfoSet',null)
@@ -201,6 +202,10 @@ body, html
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     overflow-x: hidden;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    .img-viewr__body-lock
+    {
+        overflow: auto !important;
+    }
 }
 *
 {
@@ -236,7 +241,7 @@ a
             display: flex;
             padding-left: 0.5rem;
             position: fixed;
-            z-index: 650;
+            z-index: 1000;
             justify-content: space-between;
             box-shadow: 0 0 0.2rem black;
             .left-func
@@ -321,9 +326,11 @@ a
                     {
                         height: 100%;
                         display: flex;
+                        justify-content: center;
                         align-items: center;
                         font-size: 0.56rem;
                         margin: 0 0.5rem;
+                        min-width: 3rem;
                     }
                     .logout
                     {
@@ -376,7 +383,7 @@ a
                 overflow: hidden;
                 height: 100%;
                 transition: all 0.5s;
-                z-index: 1000;
+                z-index: 999;
                 background-color: #ffffff;
                 display: flex;
                 align-content: flex-start;
@@ -473,8 +480,6 @@ a
             .router-content
             {
                 width: 100%;
-                transition: all 0.5s;
-                position: relative;
                 display: flex;
                 justify-content: center;
                 .router_animate-enter-active
@@ -599,6 +604,30 @@ a
     {
         height: auto !important;
         cursor: pointer;
+    }
+    h1 , h2 , h3 , h4 , h5 , p , table , pre
+    {
+        margin: 0.5rem 0;
+        line-height: 1.5;
+    }
+    table
+    {
+        border-top: 0.08rem solid #ccc;
+        border-left: 0.08rem solid #ccc;
+        th , td
+        {
+            border-bottom: 0.08rem solid #ccc;
+            border-right: 0.08rem solid #ccc;
+            padding: 0.1rem 0.3rem;
+            min-height: 1.2rem;
+            height: 1.2rem;
+        }
+        th
+        {
+            border-bottom: 0.1rem solid #ccc;
+            text-align: center;
+            background-color: #f1f1f1;
+        }
     }
 }
 .content-effects-enter-from , .content-effects-leave-to

@@ -14,11 +14,11 @@
                     <span>注册时间</span>
                 </div>
                 <div class="sub-item">
-                    <span>腐竹</span>
-                    <span>234124124</span>
+                    <span>{{this.$store.getters.userInfoGet.className}}</span>
+                    <span>{{this.$store.getters.userInfoGet.uid}}</span>
                     <span>Arilo007</span>
                     <span>114514</span>
-                    <span>2022-1-10</span>
+                    <span>{{this.$store.getters.userInfoGet.registertime}}</span>
                 </div>
             </div>
             <span class="line"></span>
@@ -76,11 +76,11 @@
             </div>
             <span class="line"></span>
             <div class="message-content">
-                <div class="no-message" v-if="false">
+                <div class="no-message" v-if="true">
                     <span>暂无留言，说点什么吧~</span>
                     <i class="far fa-dizzy"/>
                 </div>
-                <div class="message-sub-item">
+                <!-- <div class="message-sub-item">
                     <div class="left-head">
                         <img :src="userHead"/>
                     </div>
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <footer-bottom/>
@@ -111,7 +111,6 @@ export default {
     },
     data(){
         return{
-            userHead: require('@/views/icon/head/stranger18.jpg'),
             dropdownMenuTitle: '最新',
             dropdownMenu:[
                 {

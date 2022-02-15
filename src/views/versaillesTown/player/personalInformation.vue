@@ -7,14 +7,14 @@
             </div>
             <div class="setting-content">
                 <div class="sub-user-name-set-div">
-                    <input-box class="input-sub-item" v-model="userShowName" title="昵称" :length="16" inputType="text"/>
+                    <input-box class="input-sub-item" v-model="this.$store.getters.userInfoGet.nickname" title="昵称" :length="16" inputType="text"/>
                     <div class="describe">
                         <span>输入你的个性名称~</span>
                         <i class="fas fa-highlighter"/>
                     </div>
                 </div>
                 <div class="sub-user-name-set-div">
-                    <input-box class="input-sub-item" v-model="userAutograph" title="签名" :length="16" inputType="text"/>
+                    <input-box class="input-sub-item" v-model="this.$store.getters.userInfoGet.nickname" title="签名" :length="16" inputType="text"/>
                     <div class="describe">
                         <span>输入你的个性签名~</span>
                         <i class="fas fa-info"/>
@@ -29,11 +29,11 @@
             <div class="setting-content">
                 <div class="user-head-cropper">
                     <div class="user-head-show">
-                        <img :src="userHead"/>
+                        <img :src="this.$store.getters.userhead"/>
                         <span>x128</span>
                     </div>
                     <div class="user-head-show">
-                        <img :src="userHead"/>
+                        <img :src="this.$store.getters.userhead"/>
                         <span>x64</span>
                     </div>
                     <span class="upload-buttom" @click="showUploadWindow =! showUploadWindow">上传图片</span>
@@ -58,7 +58,6 @@ export default {
             userShowName: '这次换你听歌',
             userAutograph: '单身狗，还我狗子！',
             spanStyleAdd: '',
-            userHead: require('@/views/icon/head/stranger18.jpg'),
             showUploadWindow: false,
 			params: {
 				token: '123456798',
@@ -74,7 +73,6 @@ export default {
 
     },
     mounted(){
-        console.log(1)
     },
     methods:{
         cropSuccess(imgDataUrl, field){

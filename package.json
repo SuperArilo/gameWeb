@@ -12,6 +12,7 @@
     "core-js": "^3.20.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "vue-image-crop-upload": "^3.0.3",
+    "vue-img-viewr": "^2.0.8",
     "vue3-lazy": "^1.0.0-alpha.1"
   },
   "devDependencies": {

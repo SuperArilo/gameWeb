@@ -2,7 +2,7 @@
     <div class="index-box">
         <div class="top-player-div">
             <img class="player-head" :src="this.$store.getters.userInfoGet.userhead"/>
-            <span class="player-name">{{this.$store.getters.userInfoGet.name}}</span>
+            <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
             <span class="play-introduce">单身猫，还我狗子</span>
         </div>
         <div class="player-menu">
@@ -54,7 +54,6 @@ export default {
         }
     },
     beforeCreate(){
-        console.log(this)
     },
     created(){
         this.playerMenu.findIndex(key => {

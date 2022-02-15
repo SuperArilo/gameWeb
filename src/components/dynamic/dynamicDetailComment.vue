@@ -4,7 +4,7 @@
             <div class="user-head">
                 <img :src="this.$store.getters.userInfoGet.userhead"/>
             </div>
-            <span class="user-name">{{this.$store.getters.userInfoGet.username}}</span>
+            <span class="user-name">{{this.$store.getters.userInfoGet.nickname}}</span>
             <span class="user-class" :style="{backgroundColor: this.$store.getters.userInfoGet.classColor}">{{this.$store.getters.userInfoGet.className}}</span>
         </div>
         <div class="dynamic-detail-comment-box" :style="!this.$store.getters.isPhoneGet ? 'margin-left: 0.5rem;':''">
@@ -87,7 +87,7 @@ export default {
             uploadImage(data).then(resq => {
                 if(resq.flag){
                     resq.data.forEach(item => {
-                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" onclick="showImageEnlarge(this)"/>')
+                        editor.cmd.do( 'insertHTML', `<img src="${item.mediaHttpUrl}" width="100"/>`)
                     })
                     ElMessage({type: 'success', message: resq.message})
                 } else {
@@ -107,7 +107,8 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key => {
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100" onclick="showImageEnlarge(this)"/>')
+                console.log(key.url)
+                this.editor.cmd.do( 'insertHTML', `<img src="${key.url}" width="100" style="null"/>`)
             })
         },
         openFile(){

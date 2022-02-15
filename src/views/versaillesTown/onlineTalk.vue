@@ -60,7 +60,9 @@ export default {
         }
     },
     created(){
-        this.initWebSocket()
+        if(this.$store.getters.userInfoGet !== null){
+            this.initWebSocket()
+        }
     },
     onMounted(){
         this.scrollToBottom()
@@ -119,7 +121,9 @@ export default {
         }
     },
     unmounted() {
-        this.websock.close()
+        if(this.$store.getters.userInfoGet !== null){
+            this.websock.close()
+        }
     },
 }
 </script>

@@ -12,7 +12,7 @@
                 <div class="user-head">
                     <img :src="dynamicMainContent.userHead"/>
                 </div>
-                <span class="user-name">{{dynamicMainContent.username}}</span>
+                <span class="user-name">{{dynamicMainContent.nickname}}</span>
                 <span class="user-class" :style="[{backgroundColor: dynamicMainContent.classColor}]">{{dynamicMainContent.className}}</span>
                 <div class="user-have-props">
                     <div class="sub-item"></div>
@@ -54,7 +54,7 @@
                         <div class="user-head">
                             <img :src="dynamicMainContent.userHead"/>
                         </div>
-                        <span class="user-name">{{dynamicMainContent.username}}</span>
+                        <span class="user-name">{{dynamicMainContent.nickname}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="far fa-calendar-alt"/>
@@ -73,7 +73,7 @@
                         <span>{{dynamicMainContent.dynamicPageView}} 浏览</span>
                     </div>
                 </div>
-                <div class="dy-edit-reshow-content render-by-edit" v-html="dynamicMainContent.dynamicContent">
+                <div class="dy-edit-reshow-content render-by-edit" v-html="dynamicMainContent.dynamicContent" @click="previewImg($event)">
             </div>
         </div>
         </div>
@@ -82,7 +82,7 @@
                 <i class="far fa-comment-alt"/>
                 <span>说点什么</span>
             </div>
-            <dynamic-detail-comment v-model="this.$route.query.thread" @commentStatus="commentStatus"/>
+            <dynamic-detail-comment key="111111" v-model="this.$route.query.thread" @commentStatus="commentStatus"/>
         </div>
         <div class="dy-comment-content">
             <span class="title-span">
@@ -99,7 +99,7 @@
                                         <div class="user-head">
                                             <img :src="item.userHead"/>
                                         </div>
-                                        <span class="user-name">{{item.username}}</span>
+                                        <span class="user-name">{{item.nickname}}</span>
                                         <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
                                         <div class="user-have-props">
                                             <div class="sub-item"></div>
@@ -123,11 +123,11 @@
                                                 <div class="user-head">
                                                     <img :src="item.userHead"/>
                                                 </div>
-                                                <span class="user-name">{{item.username}}</span>
+                                                <span class="user-name">{{item.nickname}}</span>
                                                 <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
                                             </div>
                                         </div>
-                                        <div class="comment-show render-by-edit" v-html="item.commentContent"/>
+                                        <div class="comment-show render-by-edit" v-html="item.commentContent" @click="previewImg($event)"/>
                                         <div class="function-show">
                                             <div class="sub-item">
                                                 <i class="far fa-clock"/>
@@ -153,7 +153,7 @@
                                             <div class="user-head">
                                                 <img :src="itemSub.userHead"/>
                                             </div>
-                                            <span class="user-name">{{itemSub.username}}</span>
+                                            <span class="user-name">{{itemSub.nickname}}</span>
                                             <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
                                             <div class="user-have-props">
                                                 <div class="sub-item"></div>
@@ -177,11 +177,11 @@
                                                     <div class="user-head">
                                                         <img :src="itemSub.userHead"/>
                                                     </div>
-                                                    <span class="user-name">{{itemSub.username}}</span>
+                                                    <span class="user-name">{{itemSub.nickname}}</span>
                                                     <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
                                                 </div>
                                             </div>
-                                            <div class="comment-show render-by-edit" v-html="itemSub.commentContent"/>
+                                            <div class="comment-show render-by-edit" v-html="itemSub.commentContent" @click="previewImg($event)"/>
                                             <div class="function-show">
                                                 <div class="sub-item">
                                                     <i class="far fa-clock"/>
@@ -217,10 +217,13 @@ import footerBottom from '@/components/footerBottom.vue'
 import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
 import { dynamicDetailGet , dynamicCommentGet } from '@/util/api.js'
 import { ElMessage } from 'element-plus'
+import ImgViewr, { showImages } from 'vue-img-viewr'
+import 'vue-img-viewr/styles/index.css'
 export default {
     components:{
         dynamicDetailComment,
         footerBottom,
+        ImgViewr
     },
     data(){
         return{
@@ -229,8 +232,8 @@ export default {
             OpenBackCommentShow: false,
             //动态评论
             commentContent: [],
-            //预览的图片
-            commentIntoImage: [],
+            //动态图片
+            commentImage: [],
         }
     },
     async created(){
@@ -246,14 +249,21 @@ export default {
         })
     },
     mounted(){
-        window.showImageEnlarge = (e) => {
-            let grandpa = $(e).parent().parent()
-            if(!grandpa.hasClass('w-e-text')){
-                grandpa.find('img').each((index,item) => {
-                    this.commentIntoImage.unshift($(item).attr('src'))
-                })
-            }
-        }
+        // window.showImageEnlarge = (e) => {
+        //     let grandpa = $(e).parent().parent()
+        //     if(!grandpa.hasClass('w-e-text')){
+        //         let imageIndex
+        //         grandpa.find('img').each((index,item) => {
+        //             if($(e).attr('src') === $(item).attr('src')){
+        //                 imageIndex = index
+        //             }
+        //             this.commentImage.push($(item).attr('src'))
+        //         })
+        //         showImages({urls: this.commentImage,initialIndex: imageIndex , onClose: () => {
+        //             this.commentImage = []
+        //         }})
+        //     }
+        // }
     },
     methods:{
         OpenBackComment(id){
@@ -280,6 +290,30 @@ export default {
                 this.OpenBackCommentShow = false
             }
         },
+        closeHandle(){
+            console.log('关闭')
+        },
+        changeHandle(){
+            console.log('切换')
+        },
+        showHandle(){
+            console.log('打开')
+        },
+        previewImg(e){
+            let grandpa = $(e.target).parent().parent()
+            if(!grandpa.hasClass('w-e-text') && $(e.target).attr('src') !== undefined){
+                let imageIndex
+                grandpa.find('img').each((index,item) => {
+                    if($(item).attr('src') === $(e.target).attr('src')){
+                        imageIndex = index
+                    }
+                    this.commentImage.push($(item).attr('src'))
+                })
+                showImages({urls: this.commentImage,index: imageIndex, onClose: () => {
+                    this.commentImage = []
+                }})
+            }
+        }
     }
 }
 </script>
