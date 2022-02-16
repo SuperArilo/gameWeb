@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="sub-user-name-set-div" v-if="this.$store.getters.userInfoGet !== null">
-                    <input-box class="input-sub-item" v-model="personalizedSignature" title="签名" :length="16" inputType="text"/>
+                    <input-box class="input-sub-item" v-model="personalizedSignature" title="签名" :length="32" inputType="text"/>
                     <div class="describe">
                         <span>输入你的个性签名~</span>
                         <i class="fas fa-info"/>
@@ -96,7 +96,7 @@ export default {
                     if(resq.flag){
                         ElMessage.success(resq.message)
                         this.$store.getters.userInfoGet.nickname = this.nickName
-                        this.$store.getters.userInfoGet.nickNpersonalizedSignatureame = this.nickNpersonalizedSignatureame
+                        this.$store.getters.userInfoGet.personalizedSignature = this.personalizedSignature
                     } else {
                         ElMessage.error('请求过程中发生错误！' + resq.message)
                     }
