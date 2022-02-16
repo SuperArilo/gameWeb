@@ -5,7 +5,7 @@
                 <span>基本信息</span>
                 <i class="fas fa-child"/>
             </div>
-            <div class="base-info">
+            <div class="base-info" v-loading="this.$store.getters.userInfoGet === null">
                 <div class="sub-item">
                     <span>用户组</span>
                     <span>UID</span>
@@ -14,11 +14,11 @@
                     <span>注册时间</span>
                 </div>
                 <div class="sub-item">
-                    <span>{{this.$store.getters.userInfoGet.className}}</span>
-                    <span>{{this.$store.getters.userInfoGet.uid}}</span>
+                    <span>{{this.$store.getters.userInfoGet === null ? '':this.$store.getters.userInfoGet.className}}</span>
+                    <span>{{this.$store.getters.userInfoGet === null ? '':this.$store.getters.userInfoGet.uid}}</span>
                     <span>Arilo007</span>
                     <span>114514</span>
-                    <span>{{this.$store.getters.userInfoGet.registertime}}</span>
+                    <span>{{this.$store.getters.userInfoGet === null ? '':this.$store.getters.userInfoGet.registertime}}</span>
                 </div>
             </div>
             <span class="line"></span>

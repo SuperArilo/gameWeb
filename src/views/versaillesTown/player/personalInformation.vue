@@ -5,20 +5,26 @@
                 <span>个性设置</span>
                 <i class="fas fa-feather-alt"/>
             </div>
-            <div class="setting-content">
-                <div class="sub-user-name-set-div">
-                    <input-box class="input-sub-item" v-model="this.$store.getters.userInfoGet.nickname" title="昵称" :length="16" inputType="text"/>
+            <div class="setting-content" v-loading="this.$store.getters.userInfoGet === null">
+                <div class="sub-user-name-set-div" v-if="this.$store.getters.userInfoGet !== null">
+                    <input-box class="input-sub-item" v-model="nickName" title="昵称" :length="16" inputType="text" @blur="sendToServer"/>
                     <div class="describe">
                         <span>输入你的个性名称~</span>
                         <i class="fas fa-highlighter"/>
                     </div>
                 </div>
-                <div class="sub-user-name-set-div">
-                    <input-box class="input-sub-item" v-model="this.$store.getters.userInfoGet.nickname" title="签名" :length="16" inputType="text"/>
+                <div class="sub-user-name-set-div" v-if="this.$store.getters.userInfoGet !== null">
+                    <input-box class="input-sub-item" v-model="personalizedSignature" title="签名" :length="16" inputType="text"/>
                     <div class="describe">
                         <span>输入你的个性签名~</span>
                         <i class="fas fa-info"/>
                     </div>
+                </div>
+            </div>
+            <div class="buttom-box">
+                <div class="comfirm-buttom" @click="sendToServer">
+                    <i v-if="isSendToServerWorkNow" class="fas fa-circle-notch fa-spin"/>
+                    <span v-else>提交</span>
                 </div>
             </div>
             <span class="line"></span>
@@ -26,19 +32,19 @@
                 <span>头像设置</span>
                 <i class="fas fa-laugh-wink"/>
             </div>
-            <div class="setting-content">
-                <div class="user-head-cropper">
+            <div class="setting-content" v-loading="this.$store.getters.userInfoGet === null">
+                <div class="user-head-cropper" v-if="this.$store.getters.userInfoGet !== null">
                     <div class="user-head-show">
-                        <img :src="this.$store.getters.userhead"/>
+                        <img :src="this.$store.getters.userInfoGet.userhead"/>
                         <span>x128</span>
                     </div>
                     <div class="user-head-show">
-                        <img :src="this.$store.getters.userhead"/>
+                        <img :src="this.$store.getters.userInfoGet.userhead"/>
                         <span>x64</span>
                     </div>
                     <span class="upload-buttom" @click="showUploadWindow =! showUploadWindow">上传图片</span>
                 </div>
-                <my-upload v-model="showUploadWindow" field="img" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" :width="300" :height="300" url="/upload" :params="params" :headers="headers" img-format="png"/>
+                <my-upload v-model="showUploadWindow" field="headerFile" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" url="https://www.itrong.love:1234/api/user/header/upload" :headers="headers" img-format="png"/>
             </div>
             <span class="line"></span>
         </div>
@@ -48,58 +54,58 @@
 <script>
 import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
-import myUpload from 'vue-image-crop-upload';
+import myUpload from 'vue-image-crop-upload'
+import { ElMessage } from 'element-plus'
+import { userModifyInfo } from '@/util/api.js'
 export default {
     components: {
 		myUpload,footerBottom , inputBox
 	},
     data(){
         return{
-            userShowName: '这次换你听歌',
-            userAutograph: '单身狗，还我狗子！',
-            spanStyleAdd: '',
             showUploadWindow: false,
-			params: {
-				token: '123456798',
-				name: 'avatar'
-			},
 			headers: {
-				smail: '*_~'
+				token: ''
 			},
-			imgDataUrl: '' // the datebase64 url of created image
+            isSendToServerWorkNow: false,
+            nickName: this.$store.getters.userInfoGet === null ? '' : this.$store.getters.userInfoGet.nickname,
+            personalizedSignature: this.$store.getters.userInfoGet === null ? '' : this.$store.getters.userInfoGet.personalizedSignature
         }
     },
     created(){
-
     },
     mounted(){
     },
     methods:{
         cropSuccess(imgDataUrl, field){
-            console.log('-------- crop success --------');
-            this.imgDataUrl = imgDataUrl;
+            this.headers.token = sessionStorage.getItem('token') === null ? (localStorage.getItem('token') !== null ? localStorage.getItem('token') : null) : sessionStorage.getItem('token')
         },
-        /**
-         * upload success
-         *
-         * [param] jsonData   服务器返回数据，已进行json转码
-         * [param] field
-         */
         cropUploadSuccess(jsonData, field){
-            console.log('-------- upload success --------');
-            console.log(jsonData);
-            console.log('field: ' + field);
+            if(jsonData.flag){
+                this.$store.getters.userInfoGet.userhead = jsonData.data.absolutePath
+            } else {
+                ElMessage.error('上传过程中发生错误！ ' + jsonData.messsage)
+            }
         },
-        /**
-         * upload fail
-         *
-         * [param] status    server api return error status, like 500
-         * [param] field
-         */
         cropUploadFail(status, field){
-            console.log('-------- upload fail --------');
-            console.log(status);
-            console.log('field: ' + field);
+            ElMessage.error('上传过程中发生错误！ ' + field)
+        },
+        sendToServer(){
+            if(this.nickName !== '' && this.personalizedSignature !== ''){
+                userModifyInfo({'nickname': this.nickName,'personalizedSignature': this.personalizedSignature}, this.$store.getters.userInfoGet.uid).then(resq => {
+                    if(resq.flag){
+                        ElMessage.success(resq.message)
+                        this.$store.getters.userInfoGet.nickname = this.nickName
+                        this.$store.getters.userInfoGet.nickNpersonalizedSignatureame = this.nickNpersonalizedSignatureame
+                    } else {
+                        ElMessage.error('请求过程中发生错误！' + resq.message)
+                    }
+                }).catch(err => {
+                    ElMessage.error('请求过程中发生错误！' + err)
+                })
+            } else {
+                ElMessage.warning('输入的内容有空白！')
+            }
         }
     }
 }
@@ -150,11 +156,56 @@ export default {
             background-color: rgba(68, 68, 68, 0.473);
             margin: 0.3rem 0;
         }
+        .buttom-box
+        {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin: 0.5rem 0;
+            .comfirm-buttom
+            {
+                width: 4rem;
+                height: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                background-color: #b3d8ff;
+                border: solid 0.05rem #409eff;
+                border-radius: 0.2rem;
+                transition: all 0.2s;
+                span , i
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    transition: all 0.2s;
+                }
+                span
+                {
+                    font-size: 0.6rem;
+                    color: #3399ff;
+                }
+                i
+                {
+                    font-size: 0.8rem;
+                }
+            }
+            .comfirm-buttom:hover
+            {
+                span , i
+                {
+                    color: white;
+                }
+                background-color: #409eff;
+            }
+        }
         .setting-content
         {
             width: 100%;
             display: flex;
             flex-direction: column;
+            min-height: 2rem;
             .sub-user-name-set-div
             {
                 width: 100%;

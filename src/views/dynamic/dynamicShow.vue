@@ -86,7 +86,7 @@
                 </div>
             </transition-group>
         </div>
-        <div class="dy-change-page">
+        <div class="dy-change-page" v-if="this.dyContent.length !== 0">
             <el-pagination background layout="prev, pager, next" :total="dyTotal" :page-size="10" v-model:currentPage="currentPage" @current-change="pageChange" :small="this.$store.getters.isPhoneGet"/>
         </div>
         <footer-bottom/>
@@ -428,6 +428,7 @@ export default {
     .dy-content
     {
         width: 100%;
+        min-height: 12rem;
         padding: 0 1rem;
         display: flex;
         align-content: flex-start;

@@ -3,7 +3,6 @@ const service = axios.create({
     baseURL: 'https://www.itrong.love:1234/api',
     timeout: 20000,
     headers: {
-        "Content-Type": "application/json",
         'Access-Control-Allow-Origin': 'http://localhost:8080',
         'Access-Control-Allow-Headers': 'POST,GET',
     }

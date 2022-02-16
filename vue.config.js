@@ -34,7 +34,7 @@ const cdn = {
         'https://unpkg.com/vue-router@4',
         'https://cdn.jsdelivr.net/npm/axios@0.24.0/dist/axios.min.js',
         'https://cdn.jsdelivr.net/npm/qs@6.10.3/dist/qs.js',
-        'https://cdn.jsdelivr.net/npm/wangeditor@4.7.11/dist/wangEditor.min.js'
+        'https://unpkg.com/wangeditor'
     ]
 }
  

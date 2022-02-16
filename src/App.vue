@@ -313,7 +313,7 @@ a
                         height: 80%;
                         display: flex;
                         align-items: center;
-                        border: solid 0.05rem #99a2aa;
+                        border: solid 0.04rem #99a2aa;
                         border-radius: 50%;
                         box-shadow: 0 0 0.2rem black;
                         overflow: hidden;
@@ -331,6 +331,7 @@ a
                         font-size: 0.56rem;
                         margin: 0 0.5rem;
                         min-width: 3rem;
+                        color: #ffffff;
                     }
                     .logout
                     {

@@ -1,9 +1,13 @@
 <template>
     <div class="index-box">
-        <div class="top-player-div">
+        <div class="top-player-div" v-if="this.$store.getters.userInfoGet !== null">
             <img class="player-head" :src="this.$store.getters.userInfoGet.userhead"/>
             <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
-            <span class="play-introduce">单身猫，还我狗子</span>
+            <span class="play-introduce">{{this.$store.getters.userInfoGet.personalizedSignature}}</span>
+        </div>
+        <div class="loading-box" v-else>
+            <span>加载中...</span>
+            <i class="fas fa-circle-notch fa-spin"/>
         </div>
         <div class="player-menu">
             <div class="sub-menu-item" v-for="(item,index) in playerMenu" :key="index" :class="playerMenuIndex === item.id ? 'sub-menu-item-active':''" @click="menuFunc(item.id,item.path)">
@@ -78,7 +82,7 @@ export default {
     align-content: flex-start;
     justify-content: center;
     flex-wrap: wrap;
-    .top-player-div
+    .top-player-div , .loading-box
     {
         width: 100%;
         height: 10rem;
@@ -86,11 +90,13 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        position: relative;
         background-image: url('../icon/index/versaillestown/player/playerBg.jpg');
         background-repeat: no-repeat;
-        background-position: top;
+        background-position: center;
         background-size: cover;
+    }
+    .top-player-div
+    {
         .player-head
         {
             width: 3.5rem;
@@ -113,6 +119,25 @@ export default {
             max-width: 60%;
             text-align: center;
             font-size: 0.6rem;
+        }
+    }
+    .loading-box
+    {
+        background-color: rgab(255,255,255,0.5);
+        span , i
+        {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            color: #4b4b4b;
+        }
+        span
+        {
+            font-size: 0.6rem;
+        }
+        i
+        {
+            font-size: 0.8rem;
         }
     }
     .player-menu

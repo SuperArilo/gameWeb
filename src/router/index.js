@@ -76,6 +76,7 @@ const routes = [
             if(localStorage.getItem('token') !== null || sessionStorage.getItem('token') !== null){
                 next()
             } else {
+                next('/login')
                 ElNotification({title: '提示',message: '你尚未登录！' ,type: 'info'})
             }
         },

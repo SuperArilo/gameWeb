@@ -131,3 +131,19 @@ export const userLogOut = () => {
         method: 'get',
     })
 }
+//用户修改信息接口
+export const userModifyInfo = (query , uid) => {
+    return request({
+        url: '/user/' + uid,
+        method: 'post',
+        data: query
+    })
+}
+//用户上传头像接口
+export const userUploadUserHead = (query) => {
+    return request({
+        url: '/user/header/upload',
+        method: 'post',
+        data: query
+    })
+}
