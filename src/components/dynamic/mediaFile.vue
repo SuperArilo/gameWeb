@@ -150,6 +150,7 @@ export default {
                         if(resq.flag){
                             ElMessage({  type: 'success', message: resq.message})
                             this.imageIsHaveIdList.findIndex(key => {
+                                this.intoEditList.splice(this.intoEditList.findIndex(item => item.id === key), 1)
                                 this.imageList.splice(this.imageList.findIndex(item => item.id === key), 1)
                             })
                             this.imageIsHaveIdList = []
