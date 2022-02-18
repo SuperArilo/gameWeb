@@ -91,20 +91,26 @@ export default {
             ElMessage.error('上传过程中发生错误！ ' + field)
         },
         sendToServer(){
-            if(this.nickName !== '' && this.personalizedSignature !== ''){
-                userModifyInfo({'nickname': this.nickName,'personalizedSignature': this.personalizedSignature}, this.$store.getters.userInfoGet.uid).then(resq => {
-                    if(resq.flag){
-                        ElMessage.success(resq.message)
-                        this.$store.getters.userInfoGet.nickname = this.nickName
-                        this.$store.getters.userInfoGet.personalizedSignature = this.personalizedSignature
-                    } else {
-                        ElMessage.error('请求过程中发生错误！' + resq.message)
-                    }
-                }).catch(err => {
-                    ElMessage.error('请求过程中发生错误！' + err)
-                })
-            } else {
-                ElMessage.warning('输入的内容有空白！')
+            if(!this.isSendToServerWorkNow){
+                this.isSendToServerWorkNow = true
+                if(this.nickName !== '' && this.personalizedSignature !== ''){
+                    userModifyInfo({'nickname': this.nickName,'personalizedSignature': this.personalizedSignature}, this.$store.getters.userInfoGet.uid).then(resq => {
+                        if(resq.flag){
+                            ElMessage.success(resq.message)
+                            this.$store.getters.userInfoGet.nickname = this.nickName
+                            this.$store.getters.userInfoGet.personalizedSignature = this.personalizedSignature
+                        } else {
+                            ElMessage.error('请求过程中发生错误！' + resq.message)
+                        }
+                        this.isSendToServerWorkNow = false
+                    }).catch(err => {
+                        ElMessage.error('请求过程中发生错误！' + err)
+                        this.isSendToServerWorkNow = false
+                    })
+                } else {
+                    ElMessage.warning('输入的内容有空白！')
+                    this.isSendToServerWorkNow = false
+                }
             }
         }
     }

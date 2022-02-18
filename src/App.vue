@@ -17,6 +17,23 @@
                             <img :src="this.$store.getters.userInfoGet.userhead"/>
                         </div>
                         <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
+                        <div class="player-notice-sum-box">
+                            <i class="fas fa-bullhorn" @click="openNoticeWindow = true"/>
+                            <span class="span-notice-sum">99+</span>
+                            <transition name="el-zoom-in-top">
+                                <div class="notice-drop-menu" v-if="openNoticeWindow" @mouseleave="openNoticeWindow = false">
+                                    <div class="drop-menu-title">
+                                        <span class="left-title-span">通知</span>
+                                        <div class="right-box">
+                                            <span class="sub-box">标记已读</span>
+                                        </div>
+                                    </div>
+                                    <div class="drop-notice-content">
+                                        
+                                    </div>
+                                </div>
+                            </transition>
+                        </div>
                         <div class="logout" @click="playerLogout">
                             <span>注销</span>
                             <i class="fas fa-sign-out-alt"/>
@@ -102,7 +119,8 @@ export default {
                     icon: require('@/views/icon/index/rule.png'),
                     path: 'applicationwhitelist'
                 }
-            ]
+            ],
+            openNoticeWindow: false,
         }
     },
     async beforeCreate(){
@@ -141,10 +159,6 @@ export default {
         this.windowWidth()
     },
     mounted(){
-        $('.comment-image').click(function() {
-            console.log(1111)
-            console.log(this)
-        })
         window.addEventListener('scroll', this.scrollValue,true)
     },
     methods:{
@@ -265,7 +279,6 @@ a
                 height: 100%;
                 display: flex;
                 align-items: center;
-                position: relative;
                 .login
                 {
                     width: 4rem;
@@ -333,6 +346,107 @@ a
                         min-width: 3rem;
                         color: #ffffff;
                     }
+                    .player-notice-sum-box
+                    {
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 3rem;
+                        position: relative;
+                        i
+                        {
+                            font-size: 0.8rem;
+                            cursor: pointer;
+                        }
+                        .span-notice-sum , i
+                        {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            transition: all 0.3s;
+                            color: #ffffff;
+                        }
+                        .span-notice-sum
+                        {
+                            height: auto;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            min-width: 0.8rem;
+                            min-height: 0.8rem;
+                            border-radius: 50%;
+                            background-color: red;
+                            font-size: 0.5rem;
+                            padding: 0.1rem;
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            margin: 0.1rem 0.5rem;
+                        }
+                        .notice-drop-menu
+                        {
+                            width: 10rem;
+                            display: flex;
+                            overflow: hidden;
+                            align-content: flex-start;
+                            flex-wrap: wrap;
+                            position: absolute;
+                            top: 2.2rem;
+                            box-shadow: 0 0.05rem 0.3rem rgba(0, 0, 0, 0.5);
+                            border-radius: 0.15rem;
+                            .drop-menu-title
+                            {
+                                width: 100%;
+                                height: 1.5rem;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 0 0.5rem;
+                                background-color: #ffffff;
+                                border-bottom: solid 0.05rem darkgray;
+                                .right-box , .left-title-span
+                                {
+                                    height: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                }
+                                .left-title-span
+                                {
+                                    font-size: 0.6rem;
+                                }
+                                .right-box
+                                {
+                                    .sub-box
+                                    {
+                                        height: 1rem;
+                                        display: flex;
+                                        align-items: center;
+                                        padding: 0 0.5rem;
+                                        border-radius: 0.15rem;
+                                        border: solid 0.05rem darkgray;
+                                        font-size: 0.55rem;
+                                        background-color: rgb(240,240,240);
+                                        cursor: pointer;
+                                        transition: all 0.3s;
+                                    }
+                                    .sub-box:hover
+                                    {
+                                        color: red;
+                                    }
+                                }
+                            }
+                            .drop-notice-content
+                            {
+                                width: 100%;
+                                height: 14rem;
+                                display: flex;
+                                align-content: flex-start;
+                                flex-wrap: wrap;
+                                background-color: rgba(240,240,240,1);
+                            }
+                        }
+                    }
                     .logout
                     {
                         width: 4rem;
@@ -343,14 +457,6 @@ a
                         background-color: #409eff;
                         cursor: pointer;
                         transition: all 0.3s;
-                        span , i
-                        {
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            transition: all 0.3s;
-                            color: #ffffff;
-                        }
                         span
                         {
                             font-size: 0.56rem;

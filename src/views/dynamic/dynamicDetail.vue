@@ -90,7 +90,7 @@
                 评论区
             </span>
             <transition name="list">
-                <div class="content">
+                <div class="content" v-loading="isChangeParentCommentWorkNow">
                     <transition-group name="list">
                         <div class="sub-comment-item" v-for="item in commentContent" :key="item.id"> 
                             <div class="top-comment">
@@ -147,7 +147,7 @@
                                 </el-collapse-transition>
                             </div>
                             <transition-group name="list">
-                                <div class="bottom-comment" v-for="itemSub in item.children" :key="itemSub.id">
+                                <div class="bottom-comment" v-for="itemSub in item.children.list" :key="itemSub.id">
                                     <div class="top">
                                         <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
                                             <div class="user-head">
@@ -207,7 +207,7 @@
                     <i class="fas fa-inbox"/>
                 </div>
             </transition>
-            <!-- <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/> -->
+            <el-pagination background layout="prev, pager, next" :total="commentTotal" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
         </div>
         <footer-bottom/>
     </div>
@@ -234,6 +234,9 @@ export default {
             commentContent: [],
             //动态图片
             commentImage: [],
+            commentTotal: null,
+            currentPage: 1,
+            isChangeParentCommentWorkNow: false
         }
     },
     async created(){
@@ -257,14 +260,17 @@ export default {
             this.$router.push('/dynamic')
         },
         commentGet(){
-            dynamicCommentGet({dynamicId: this.$route.query.thread}).then(resq => {
+            dynamicCommentGet({dynamicId: this.$route.query.thread,pageNumber: this.currentPage}).then(resq => {
                 if(resq.flag){
-                    this.commentContent = resq.data
+                    this.commentContent = resq.data.list
+                    this.commentTotal = resq.data.total
                 } else {
                     ElMessage.error('获取评论发生错误！ ' + resq.message)
                 }
+                this.isChangeParentCommentWorkNow = false
             }).catch(err => {
                 ElMessage.error('获取评论发生错误！ ' + err)
+                this.isChangeParentCommentWorkNow = false
             })
         },
         commentStatus(value){
@@ -272,15 +278,6 @@ export default {
                 this.commentGet()
                 this.OpenBackCommentShow = false
             }
-        },
-        closeHandle(){
-            console.log('关闭')
-        },
-        changeHandle(){
-            console.log('切换')
-        },
-        showHandle(){
-            console.log('打开')
         },
         previewImg(e){
             let grandpa = $(e.target).parent().parent()
@@ -296,7 +293,14 @@ export default {
                     this.commentImage = []
                 }})
             }
-        }
+        },
+        pageChange(e){
+            if(!this.isChangeParentCommentWorkNow){
+                this.isChangeParentCommentWorkNow = true
+                this.currentPage = e
+                this.commentGet()
+            }
+        },
     }
 }
 </script>
@@ -608,6 +612,7 @@ export default {
                 {
                     width: 100%;
                     display: flex;
+                    justify-content: center;
                     align-content: flex-start;
                     flex-wrap: wrap;
                     transition: all 0.5s;
