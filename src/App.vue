@@ -457,6 +457,13 @@ a
                         background-color: #409eff;
                         cursor: pointer;
                         transition: all 0.3s;
+                        span , i
+                        {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            color: #ffffff;
+                        }
                         span
                         {
                             font-size: 0.56rem;

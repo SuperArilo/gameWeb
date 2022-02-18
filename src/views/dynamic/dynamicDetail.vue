@@ -84,7 +84,7 @@
             </div>
             <dynamic-detail-comment key="111111" v-model="this.$route.query.thread" @commentStatus="commentStatus"/>
         </div>
-        <div class="dy-comment-content">
+        <div class="dy-comment-content" ref="commentContent">
             <span class="title-span">
                 <i class="far fa-comments"/>
                 评论区
@@ -94,109 +94,63 @@
                     <transition-group name="list">
                         <div class="sub-comment-item" v-for="item in commentContent" :key="item.id"> 
                             <div class="top-comment">
-                                <div class="top">
-                                    <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
-                                        <div class="user-head">
-                                            <img :src="item.userHead"/>
-                                        </div>
-                                        <span class="user-name">{{item.nickname}}</span>
-                                        <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
-                                        <div class="user-have-props">
-                                            <div class="sub-item"></div>
-                                            <div class="sub-item"></div>
-                                            <div class="sub-item"></div>
-                                        </div>
-                                        <div class="user-base-info">
-                                            <div class="sub-item">
-                                                <span>积分</span>
-                                                <span>114514</span>
-                                            </div>
-                                            <div class="sub-item">
-                                                <span>小黑屋</span>
-                                                <span>0</span>
-                                            </div>
-                                        </div>
+                                <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
+                                    <div class="user-head">
+                                        <img :src="item.replyUser.replyHeader"/>
                                     </div>
-                                    <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${item.classColor}`,borderRight: `solid 0.2rem ${item.classColor}`}]">
-                                        <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
-                                            <div class="user-head-and-name">
-                                                <div class="user-head">
-                                                    <img :src="item.userHead"/>
-                                                </div>
-                                                <span class="user-name">{{item.nickname}}</span>
-                                                <span class="user-class" :style="{backgroundColor: item.classColor}">{{item.className}}</span>
-                                            </div>
+                                    <span class="user-name">{{item.replyUser.replyNickname}}</span>
+                                    <span class="user-class" :style="{backgroundColor: item.replyUser.replyClassColor}">{{item.replyUser.replyClassName}}</span>
+                                    <div class="user-have-props">
+                                        <div class="sub-item"></div>
+                                        <div class="sub-item"></div>
+                                        <div class="sub-item"></div>
+                                    </div>
+                                    <div class="user-base-info">
+                                        <div class="sub-item">
+                                            <span>积分</span>
+                                            <span>114514</span>
                                         </div>
-                                        <div class="comment-show render-by-edit" v-html="item.commentContent" @click="previewImg($event)"/>
-                                        <div class="function-show">
-                                            <div class="sub-item">
-                                                <i class="far fa-clock"/>
-                                                <span>发表于：{{item.createTime}}</span>
-                                            </div>
-                                            <div class="sub-item" @click="OpenBackComment(item.id)" v-if="this.$store.getters.userInfoGet !== null">
-                                                <i class="fas fa-location-arrow"/>
-                                                <span>回复</span>
-                                            </div>
+                                        <div class="sub-item">
+                                            <span>小黑屋</span>
+                                            <span>0</span>
                                         </div>
                                     </div>
                                 </div>
-                                <el-collapse-transition>
-                                    <div class="fix-edit-to-transition" v-if="OpenBackCommentId === item.id && OpenBackCommentShow === true">
-                                        <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.id" @commentStatus="commentStatus"/>
-                                    </div>
-                                </el-collapse-transition>
-                            </div>
-                            <transition-group name="list">
-                                <div class="bottom-comment" v-for="itemSub in item.children.list" :key="itemSub.id">
-                                    <div class="top">
-                                        <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
+                                <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${item.replyUser.replyClassColor}`,borderRight: `solid 0.2rem ${item.replyUser.replyClassColor}`}]">
+                                    <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
+                                        <div class="user-head-and-name">
                                             <div class="user-head">
-                                                <img :src="itemSub.userHead"/>
+                                                <img :src="item.replyUser.replyHeader"/>
                                             </div>
-                                            <span class="user-name">{{itemSub.nickname}}</span>
-                                            <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
-                                            <div class="user-have-props">
-                                                <div class="sub-item"></div>
-                                                <div class="sub-item"></div>
-                                                <div class="sub-item"></div>
-                                            </div>
-                                            <div class="user-base-info">
-                                                <div class="sub-item">
-                                                    <span>积分</span>
-                                                    <span>114514</span>
-                                                </div>
-                                                <div class="sub-item">
-                                                    <span>小黑屋</span>
-                                                    <span>0</span>
-                                                </div>
-                                            </div>
+                                            <span class="user-name">{{item.replyUser.replyNickname}}</span>
+                                            <span class="user-class" :style="{backgroundColor: item.replyUser.replyClassColor}">{{item.replyUser.replyClassName}}</span>
                                         </div>
-                                        <div class="right" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 0.5rem;', {borderLeft: `solid 0.2rem ${itemSub.classColor}`,borderRight: `solid 0.2rem ${itemSub.classColor}`}]">
-                                            <div class="mobile-show-user" v-if="this.$store.getters.isPhoneGet">
-                                                <div class="user-head-and-name">
-                                                    <div class="user-head">
-                                                        <img :src="itemSub.userHead"/>
-                                                    </div>
-                                                    <span class="user-name">{{itemSub.nickname}}</span>
-                                                    <span class="user-class" :style="{backgroundColor: itemSub.classColor}">{{itemSub.className}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="comment-show render-by-edit" v-html="itemSub.commentContent" @click="previewImg($event)"/>
-                                            <div class="function-show">
-                                                <div class="sub-item">
-                                                    <i class="far fa-clock"/>
-                                                    <span>发表于：{{itemSub.createTime}}</span>
-                                                </div>
-                                            </div>
+                                        <div class="right-back-who" v-if="item.byReplyUser !== null && this.$store.getters.isPhoneGet === true">
+                                            <span>回复：{{item.byReplyUser.byReplyNickname}}</span>
                                         </div>
                                     </div>
-                                    <el-collapse-transition>
-                                        <div class="fix-edit-to-transition" v-if="OpenBackCommentId === itemSub.id && OpenBackCommentShow === true">
-                                            <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.id" @commentStatus="commentStatus"/>
+                                    <div class="is-back-to-who" v-if="item.byReplyUser !== null && this.$store.getters.isPhoneGet === false">
+                                        <span>回复：{{item.byReplyUser.byReplyNickname}}</span>
+                                        <span class="user-class" v-if="item.byReplyUser !== null" :style="{backgroundColor: item.byReplyUser.byReplyClassColor}">{{item.byReplyUser.byReplyClassName}}</span>
+                                    </div>
+                                    <div class="comment-show render-by-edit" v-html="item.replyContent" @click="previewImg($event)"/>
+                                    <div class="function-show">
+                                        <div class="sub-item">
+                                            <i class="far fa-clock"/>
+                                            <span>发表于：{{item.replyTime}}</span>
                                         </div>
-                                    </el-collapse-transition>
+                                        <div class="sub-item" @click="OpenBackComment(item.id)" v-if="this.$store.getters.userInfoGet !== null">
+                                            <i class="fas fa-location-arrow"/>
+                                            <span>回复</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </transition-group>
+                            </div>
+                            <el-collapse-transition>
+                                <div class="fix-edit-to-transition" v-if="OpenBackCommentId === item.id && OpenBackCommentShow === true">
+                                    <dynamic-detail-comment v-model="this.$route.query.thread" :father-id="item.replyId" @commentStatus="commentStatus"/>
+                                </div>
+                            </el-collapse-transition>
                         </div>
                     </transition-group>
                 </div>
@@ -207,7 +161,7 @@
                     <i class="fas fa-inbox"/>
                 </div>
             </transition>
-            <el-pagination background layout="prev, pager, next" :total="commentTotal" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
+            <el-pagination background layout="prev, pager, next" :page-size="8" :total="commentTotal" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
         </div>
         <footer-bottom/>
     </div>
@@ -251,6 +205,9 @@ export default {
             ElMessage.error('获取详情发生错误！ ' + err)
         })
     },
+    mounted(){
+        console.log($(this.$refs.commentContent)[0].offsetTop)
+    },
     methods:{
         OpenBackComment(id){
             this.OpenBackCommentShow =! this.OpenBackCommentShow
@@ -264,6 +221,7 @@ export default {
                 if(resq.flag){
                     this.commentContent = resq.data.list
                     this.commentTotal = resq.data.total
+                    console.log(this.commentTotal)
                 } else {
                     ElMessage.error('获取评论发生错误！ ' + resq.message)
                 }
@@ -277,6 +235,7 @@ export default {
             if(value){
                 this.commentGet()
                 this.OpenBackCommentShow = false
+                $('html,body').stop().animate({'scrollTop': $(this.$refs.commentContent)[0].offsetTop},1000)
             }
         },
         previewImg(e){
@@ -299,6 +258,7 @@ export default {
                 this.isChangeParentCommentWorkNow = true
                 this.currentPage = e
                 this.commentGet()
+                $('html,body').stop().animate({'scrollTop': $(this.$refs.commentContent)[0].offsetTop},1000)
             }
         },
     }
@@ -586,210 +546,212 @@ export default {
             flex-wrap: wrap;
             align-content: flex-start;
             justify-content: center;
-            position: relative;
             transition: all 0.3s;
             .sub-comment-item
             {
                 width: 100%;
                 display: flex;
+                justify-content: center;
                 align-content: flex-start;
                 flex-wrap: wrap;
                 transition: all 0.5s;
-                .top-comment .right
-                {
-                    background-color: rgb(255, 255, 255);
-                    margin: 0.5rem 0;
-                }
-                .bottom-comment 
-                {
-                    margin: 0.5rem 0;
-                    .right
-                    {
-                        background-color: rgb(240, 240, 240 , 0.6);
-                    }
-                }
-                .top-comment , .bottom-comment
+                .top-comment
                 {
                     width: 100%;
                     display: flex;
                     justify-content: center;
                     align-content: flex-start;
-                    flex-wrap: wrap;
                     transition: all 0.5s;
-                    .top
+                    margin: 0.5rem 0;
+                    .user-class
                     {
-                        width: 100%;
-                        min-height: 10rem;
+                        padding: 0.15rem 0.4rem;
                         display: flex;
                         justify-content: center;
-                        .user-data-show
+                        align-items: center;
+                        font-size: 0.52rem;
+                        border-radius: 0.2rem;
+                        color: #ffffff;
+                    }
+                    .user-data-show
+                    {
+                        display: flex;
+                        justify-content: center;
+                        align-content: flex-start;
+                        flex-wrap: wrap;
+                        .user-head
                         {
+                            height: 3.5rem;
                             display: flex;
                             justify-content: center;
-                            align-content: flex-start;
-                            flex-wrap: wrap;
-                            padding: 0.5rem 0;
-                            .user-head
+                            align-items: center;
+                            border-radius: 50%;
+                            overflow: hidden;
+                            box-shadow: 0 0 0.1rem black;
+                            img
                             {
-                                height: 3.5rem;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                border-radius: 50%;
-                                overflow: hidden;
-                                box-shadow: 0 0 0.1rem black;
-                                img
-                                {
-                                    height: 100%;
-                                    max-height: 100%;
-                                }
-                            }
-                            .user-class
-                            {
-                                padding: 0.15rem 0.4rem;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                font-size: 0.52rem;
-                                border-radius: 0.2rem;
-                                color: #ffffff;
-                            }
-                            .user-name
-                            {
-                                width: 100%;
-                                text-align: center;
-                                word-break: break-all;
-                                font-size: 0.6rem;
-                                color: rgb(44, 44, 44);
-                                margin: 0.3rem 0;
-                            }
-                            .user-have-props
-                            {
-                                width: 100%;
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                flex-wrap: wrap;
-                                background-color: rgba(136, 136, 136, 0.5);
-                                border-radius: 0.1rem;
-                                margin: 0.3rem 0;
-                                .sub-item
-                                {
-                                    width: calc(100% / 3);
-                                    height: 1.5rem;
-                                }
-                            }
-                            .user-base-info
-                            {
-                                width: 100%;
-                                display: flex;
-                                align-content: flex-start;
-                                flex-wrap: wrap;
-                                .sub-item
-                                {
-                                    width: 100%;
-                                    display: flex;
-                                    justify-content: flex-start;
-                                    span
-                                    {
-                                        height: 1rem;
-                                        font-size: 0.5rem;
-                                        width: 50%;
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: flex-start;
-                                    }
-                                }
+                                height: 100%;
+                                max-height: 100%;
                             }
                         }
-                        .right
+                        .user-name
+                        {
+                            width: 100%;
+                            text-align: center;
+                            word-break: break-all;
+                            font-size: 0.6rem;
+                            color: rgb(44, 44, 44);
+                            margin: 0.3rem 0;
+                        }
+                        .user-have-props
                         {
                             width: 100%;
                             display: flex;
-                            align-content: space-between;
+                            justify-content: space-between;
+                            align-items: center;
                             flex-wrap: wrap;
-                            padding: 0 0.5rem;
-                            border-radius: 0.3rem;
-                            .mobile-show-user
+                            background-color: rgba(136, 136, 136, 0.5);
+                            border-radius: 0.1rem;
+                            margin: 0.3rem 0;
+                            .sub-item
+                            {
+                                width: calc(100% / 3);
+                                height: 1.5rem;
+                            }
+                        }
+                        .user-base-info
+                        {
+                            width: 100%;
+                            display: flex;
+                            align-content: flex-start;
+                            flex-wrap: wrap;
+                            .sub-item
                             {
                                 width: 100%;
                                 display: flex;
                                 justify-content: flex-start;
-                                align-items: center;
-                                flex-wrap: wrap;
-                                border-bottom: solid 0.05rem rgb(172, 172, 172);
-                                .user-head-and-name
+                                span
                                 {
-                                    width: 100%;
-                                    height: 2rem;
+                                    height: 1rem;
+                                    font-size: 0.5rem;
+                                    width: 50%;
                                     display: flex;
-                                    justify-content: flex-start;
                                     align-items: center;
-                                    margin: 0.3rem 0;
-                                    .user-head
-                                    {
-                                        height: 100%;
-                                        border-radius: 50%;
-                                        overflow: hidden;
-                                        box-shadow: 0 0 0.1rem black;
-                                        img
-                                        {
-                                            max-height: 100%;
-                                        }
-                                    }
-                                    .user-name
-                                    {
-                                        height: 100%;
-                                        display: flex;
-                                        align-items: center;
-                                        font-size: 0.58rem;
-                                        text-align: center;
-                                        margin: 0 0.5rem;
-                                    }
-                                    .user-class
-                                    {
-                                        padding: 0.15rem 0.4rem;
-                                        display: flex;
-                                        justify-content: center;
-                                        align-items: center;
-                                        font-size: 0.52rem;
-                                        border-radius: 0.2rem;
-                                        color: #ffffff;
-                                    }
+                                    justify-content: flex-start;
                                 }
                             }
-                            .comment-show
+                        }
+                    }
+                    .right
+                    {
+                        width: 100%;
+                        display: flex;
+                        align-content: space-between;
+                        flex-wrap: wrap;
+                        padding: 0 0.5rem;
+                        border-radius: 0.3rem;
+                        background-color: rgb(255, 255, 255);
+                        .mobile-show-user
+                        {
+                            width: 100%;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            flex-wrap: wrap;
+                            border-bottom: solid 0.05rem rgb(172, 172, 172);
+                            .user-head-and-name
                             {
-                                width: 100%;
-                            }
-                            .function-show
-                            {
-                                width: 100%;
-                                height: 1.5rem;
+                                height: 2rem;
                                 display: flex;
-                                justify-content: space-between;
+                                justify-content: flex-start;
                                 align-items: center;
-                                .sub-item
+                                margin: 0.3rem 0;
+                                .user-head
+                                {
+                                    height: 100%;
+                                    border-radius: 50%;
+                                    overflow: hidden;
+                                    box-shadow: 0 0 0.1rem black;
+                                    img
+                                    {
+                                        max-height: 100%;
+                                    }
+                                }
+                                .user-name
                                 {
                                     height: 100%;
                                     display: flex;
                                     align-items: center;
-                                    span , i
-                                    {
-                                        height: 100%;
-                                        display: flex;
-                                        align-items: center;
-                                        font-size: 0.6rem;
-                                    }
-                                    span
-                                    {
-                                        margin-left: 0.3rem;
-                                    }
+                                    font-size: 0.58rem;
+                                    text-align: center;
+                                    margin: 0 0.5rem;
                                 }
-                                .sub-item:nth-child(2)
+                                .user-class
                                 {
-                                    cursor: pointer;
+                                    padding: 0.15rem 0.4rem;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    font-size: 0.52rem;
+                                    border-radius: 0.2rem;
+                                    color: #ffffff;
                                 }
+                            }
+                            .right-back-who
+                            {
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                font-size: 0.6rem;
+                            }
+                        }
+                        .is-back-to-who
+                        {
+                            width: 100%;
+                            height: 2rem;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            font-size: 0.65rem;
+                            padding: 0.5rem 0;
+                            border-bottom: solid 0.05rem rgb(172, 172, 172);
+                            .user-class
+                            {
+                                margin-left: 0.5rem;
+                            }
+                        }
+                        .comment-show
+                        {
+                            width: 100%;
+                            height: 6.5rem;
+                        }
+                        .function-show
+                        {
+                            width: 100%;
+                            height: 1.5rem;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            .sub-item
+                            {
+                                height: 100%;
+                                display: flex;
+                                align-items: center;
+                                span , i
+                                {
+                                    height: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    font-size: 0.6rem;
+                                }
+                                span
+                                {
+                                    margin-left: 0.3rem;
+                                }
+                            }
+                            .sub-item:nth-child(2)
+                            {
+                                cursor: pointer;
                             }
                         }
                     }
@@ -797,7 +759,6 @@ export default {
                 .fix-edit-to-transition
                 {
                     width: 100%;
-                    margin-top: 0.5rem;
                 }
             }
         }

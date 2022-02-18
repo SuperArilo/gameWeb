@@ -108,7 +108,6 @@ export default {
         imageIntoEdit(value){
             this.dialogVisible = false
             value.forEach(key => {
-                console.log(key.url)
                 this.editor.cmd.do( 'insertHTML', `<img src="${key.url}" width="100" style="null"/>`)
             })
         },
@@ -118,12 +117,12 @@ export default {
         sentToServer(){
             if(!this.isSendToServerWorkNow){
                 this.isSendToServerWorkNow = true
-                    dynamicCommentSet({commentContent: this.dyContent ,commentParentId: this.fatherId},this.modelValue).then(resq => {
+                    dynamicCommentSet({replyContent: this.dyContent ,byReplyId: this.fatherId},this.modelValue).then(resq => {
                     if(resq.flag){
                         this.$emit('commentStatus', true)
                         this.editor.txt.clear()
                         this.isSendToServerWorkNow = false
-                        ElMessage({message: resq.message,type: 'success'})
+                        ElMessage({message: resq.message, type: 'success'})
                     } else {
                         ElMessage.error('提交评论发生错误！' + resq.message)
                         this.isSendToServerWorkNow = false
@@ -149,6 +148,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     .user-data-show
     {
         display: flex;
@@ -168,7 +168,6 @@ export default {
             img
             {
                 height: 100%;
-                max-height: 100%;
             }
         }
         .user-name
