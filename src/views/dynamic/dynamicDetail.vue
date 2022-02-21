@@ -205,9 +205,6 @@ export default {
             ElMessage.error('获取详情发生错误！ ' + err)
         })
     },
-    mounted(){
-        console.log($(this.$refs.commentContent)[0].offsetTop)
-    },
     methods:{
         OpenBackComment(id){
             this.OpenBackCommentShow =! this.OpenBackCommentShow
@@ -221,7 +218,6 @@ export default {
                 if(resq.flag){
                     this.commentContent = resq.data.list
                     this.commentTotal = resq.data.total
-                    console.log(this.commentTotal)
                 } else {
                     ElMessage.error('获取评论发生错误！ ' + resq.message)
                 }

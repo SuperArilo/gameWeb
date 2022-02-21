@@ -10,45 +10,53 @@
                 </div>
             </div>
             <div class="lingan-div">
-                <div class="sub-item render-by-edit" v-html="text">   
+                <div class="sub-item render-by-edit">   
                 </div>
             </div>
-            <div class="edit-div" v-if="this.$store.getters.userInfoGet !== null">
+            <div class="edit-div">
                 <span class="title-span">说点什么</span>
                 <div class="render-edit" ref="dyEditTool"></div>
                 <div class="buttom">
                     <div class="buttom-file" @click="dialogVisible = true">
                         <span>媒体文件管理</span>
                     </div>
-                    <div class="button-confirm">
-                        <span>发布</span>
+                    <div class="button-confirm" @click="sendToServer">
+                        <span v-if="!isSendToServerWorkNow">发布</span>
+                        <i v-else class="fas fa-circle-notch fa-spin"/>
                     </div>
                 </div>
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
                 <div class="message-content">
-                    <!-- <div class="sub-message-item">
-                        <div class="left-head">
-                            <img src="../views/icon/head/stranger8.jpg"/>
-                        </div>
-                        <div class="right-content">
-                            <div class="show-content render-by-edit" v-html="text"></div>
-                            <div class="show-who">
-                                <div>
-                                    <i class="fas fa-paper-plane"></i>
-                                    <span>腐竹 留言</span>
+                    <transition-group name="list">
+                        <div class="sub-message-item" v-for="item in messageContent" :key="item.id">
+                            <div class="left-head" v-if="!this.$store.getters.isPhoneGet">
+                                <img :src="item.user.userhead"/>
+                            </div>
+                            <div class="right-content" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 1rem;', {borderLeft: `solid 0.2rem ${item.user.classColor}`,borderRight: `solid 0.2rem ${item.user.classColor}`}]">
+                                <div v-if="this.$store.getters.isPhoneGet" class="mobile-box">
+                                    <div class="user-head">
+                                        <img :src="item.user.userhead"/>
+                                    </div>
+                                    <span class="user-name">{{item.user.nickname}}</span>
                                 </div>
-                                <div>
-                                    <i class="far fa-calendar-alt"></i>
-                                    <span>2021-12-21</span>
+                                <div class="show-content render-by-edit" v-html="item.content"></div>
+                                <div class="show-who">
+                                    <div v-if="!this.$store.getters.isPhoneGet">
+                                        <span>{{item.user.nickname}} 留言</span>
+                                    </div>
+                                    <div>
+                                        <i class="far fa-calendar-alt"></i>
+                                        <span style="margin-left: 0.3rem;">{{item.createTime}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </transition-group>
                 </div>
             </div>
-            <el-pagination background layout="prev, pager, next" :total="20" :page-size="8"></el-pagination>
+            <el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalCount" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
         </div>
         <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
             <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
@@ -57,7 +65,7 @@
     </div>
 </template>
 <script>
-import { uploadImage } from '@/util/api.js'
+import { uploadImage , userMessageGet , userSendMessage } from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 import { ElMessage } from 'element-plus'
@@ -65,15 +73,70 @@ export default {
   components: { footerBottom , mediaFile },
     data(){
         return{
-            text: '',
+            userContent: '',
             editor: null,
             dialogVisible: false,
+            pageSize: 8,
+            currentPage: 1,
+            totalCount: null,
+            isSendToServerWorkNow: false,
+            messageContent: [],
+            
         }
     },
+    created(){
+        this.getUserMessage()
+    },
     mounted(){
-        if(this.$store.getters.userInfoGet !== null){
-            this.createEditor()
+        const editor = new wangEditor(this.$refs.dyEditTool)
+        editor.config.showLinkImg = false
+        editor.config.focus = false
+        editor.config.uploadImgMaxLength = 4
+        editor.config.menus = [
+            'head',
+            'bold',
+            'fontSize',
+            'italic',
+            'underline',
+            'strikeThrough',
+            'indent',
+            'lineHeight',
+            'foreColor',
+            'backColor',
+            'link',
+            'list',
+            'justify',
+            'quote',
+            'emoticon',
+            'table',
+            'splitLine',
+            'image',
+            'video',
+        ]
+        editor.config.onchange = (newHtml) => {
+            this.userContent = newHtml
         }
+        editor.config.customUploadImg = (resultFiles) => {
+            let data = new FormData()
+            resultFiles.forEach(item => {
+                data.append('imageFiles',item)
+            })
+            data.append('uid', this.$store.getters.userInfoGet.uid)
+            uploadImage(data).then(resq => {
+                if(resq.flag){
+                    resq.data.forEach(item => {
+                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
+                    })
+                    ElMessage({type: 'success', message: resq.message})
+                } else {
+                    ElMessage.error(resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('上传图片过程中发生错误！ ' + err)
+            })
+        }
+        editor.create()
+        this.editor = editor
     },
     methods:{
         closeWindow(value){
@@ -85,80 +148,43 @@ export default {
                 this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100"/>')
             })
         },
-        createEditor(){
-            const editor = new wangEditor(this.$refs.dyEditTool)
-            editor.config.showLinkImg = false
-            editor.config.focus = false
-            editor.config.uploadImgMaxLength = 4
-            editor.config.menus = [
-                'head',
-                'bold',
-                'fontSize',
-                'italic',
-                'underline',
-                'strikeThrough',
-                'indent',
-                'lineHeight',
-                'foreColor',
-                'backColor',
-                'link',
-                'list',
-                'justify',
-                'quote',
-                'emoticon',
-                'table',
-                'splitLine',
-                'image',
-                'video',
-            ]
-            editor.config.onchange = (newHtml) => {
-                this.text = newHtml
-            }
-            editor.config.customUploadImg = (resultFiles) => {
-                let data = new FormData()
-                resultFiles.forEach(item => {
-                    data.append('imageFiles',item)
-                })
-                data.append('uid', this.$store.getters.userInfoGet.uid)
-                uploadImage(data).then(resq => {
-                    if(resq.flag){
-                        resq.data.forEach(item => {
-                            editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
-                        })
-                        ElMessage({type: 'success', message: resq.message})
-                    } else {
-                        ElMessage.error(resq.message)
-                    }
-                }).catch(err => {
-                    ElMessage.error('上传图片过程中发生错误！ ' + err)
-                })
-            }
-            editor.create()
-            this.editor = editor
-        }
-    },
-    computed:{
-        isHaveUserInfo(){
-            return this.$store.getters.userInfoGet
-        }
-    },
-    watch:{
-        isHaveUserInfo(n , o){
-            if(n !== null){
-                this.$nextTick(() => {
-                    this.createEditor()
-                })
-            } else {
-                this.editor.destroy()
-                this.editor = null
+        pageChange(e){
+            this.currentPage = e
+        },
+        getUserMessage(){
+            userMessageGet({pageNumber: this.currentPage,pageSize: this.pageSize}).then(resq => {
+                if(resq.code === 200){
+                    this.totalCount = resq.data.totalCount
+                    this.messageContent = resq.data.list
+                } else {
+                    ElMessage.error('获取评论发生错误！ ' + resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('获取评论发生错误！ ' + err)
+            })
+        },
+        sendToServer(){
+            if(!this.isSendToServerWorkNow){
+                this.isSendToServerWorkNow = true
+                if(this.userContent !== ''){
+                    userSendMessage({content: this.userContent}).then(resq => {
+                        if(resq.code === 200){
+                            ElMessage.success(resq.message)
+                            this.userContent = ''
+                            this.getUserMessage()
+                        }
+                        this.isSendToServerWorkNow = false
+                    })
+                } else {
+                    ElMessage.info('留言信息为空白哦！')
+                    this.isSendToServerWorkNow = false
+                }
             }
         }
     },
     unmounted() {
-        if(this.$store.getters.userInfoGet !== null){
-            this.editor.destroy()
-            this.editor = null
-        }
+        this.editor.destroy()
+        this.editor = null
     }
 }
 </script>
@@ -171,6 +197,7 @@ export default {
     align-items: flex-start;
     flex-wrap: wrap;
     background-repeat: no-repeat;
+    background-attachment: fixed;
     background-position: top;
     background-size: cover;
     .center-top-inf
@@ -349,15 +376,23 @@ export default {
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
-                padding: 1rem 0 1rem 0;
+                .list-enter-from , .list-leave-to
+                {
+                    opacity: 0;
+                    transform: translateY(1rem);
+                }
+                .list-leave-active
+                {
+                    position: absolute;
+                }
                 .sub-message-item
                 {
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
                     align-items: flex-start;
-                    padding: 0 0.5rem 0 0.5rem;
-                    margin-bottom: 1rem;
+                    margin: 0.5rem 0;
+                    transition: all 0.3s;
                     .left-head
                     {
                         width: 2.5rem;
@@ -376,13 +411,35 @@ export default {
                     {
                         width: 100%;
                         height: 100%;
-                        margin-left: 1rem;
                         border-left: solid 0.2rem #807fe2;
                         border-right: solid 0.2rem #807fe2;
                         background-color: rgba(255,255,255,0.7);
                         box-shadow: 0 0.1rem 0.8rem -0.6rem black;
-                        padding: 0 0.5rem 0 0.5rem;
-                        position: relative;
+                        padding: 0 0.3rem;
+                        .mobile-box
+                        {
+                            width: 100%;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            margin: 0.3rem 0;
+                            .user-head
+                            {
+                                height: 2rem;
+                                width: 2rem;
+                                border-radius: 50%;
+                                overflow: hidden;
+                                img
+                                {
+                                    max-height: 100%;
+                                }
+                            }
+                            .user-name
+                            {
+                                font-size: 0.6rem;
+                                margin-left: 0.5rem;
+                            }
+                        }
                         .show-content
                         {
                             width: 100%;
@@ -399,49 +456,26 @@ export default {
                             align-items: center;
                             div
                             {
-                                width: 50%;
                                 height: 100%;
                                 display: flex;
-                                justify-content: center;
                                 align-items: center;
-                                i
+                                span , i
                                 {
                                     display: flex;
-                                    justify-content: center;
                                     align-items: center;
                                     height: 100%;
+                                }
+                                i
+                                {
                                     font-size: 0.7rem;
-                                    margin: 0 0.3rem 0 0.3rem;
                                 }
                                 span
                                 {
-                                    height: 100%;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
                                     font-size: 0.55rem;
                                     color: #757575;
                                 }
                             }
                         }
-                        .show-who div:nth-child(1)
-                        {
-                            justify-content: flex-start;
-                        }
-                        .show-who div:nth-child(2)
-                        {
-                            justify-content: flex-end;
-                        }
-                    }
-                    .right-content::after
-                    {
-                        content: "";
-                        position: absolute;
-                        border-top: solid 0.3rem transparent;
-                        border-right: solid 0.4rem #807fe2;
-                        border-bottom: solid 0.3rem transparent;
-                        left: -0.6rem;
-                        top: 1rem;
                     }
                 }
             }

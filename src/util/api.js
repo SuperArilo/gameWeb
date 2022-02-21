@@ -147,3 +147,22 @@ export const userUploadUserHead = (query) => {
         data: query
     })
 }
+//查询留言内容
+export const userMessageGet = (params) => {
+    return request({
+        url: '/leave-words/list',
+        method: 'get',
+        params: params,
+        paramsSerializer: params => {
+            return Qs.stringify(params, {arrayFormat: 'repeat'})
+        }
+    })
+}
+//用户留言
+export const userSendMessage = (query) => {
+    return request({
+        url: '/leave-words/',
+        method: 'post',
+        data: query
+    })
+}
