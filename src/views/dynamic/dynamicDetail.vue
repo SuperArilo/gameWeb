@@ -719,7 +719,6 @@ export default {
                         .comment-show
                         {
                             width: 100%;
-                            height: 6.5rem;
                         }
                         .function-show
                         {

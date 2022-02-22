@@ -3,17 +3,12 @@
         <div class="center-top-inf">
             <div class="top-tips">
                 <span class="title">闲言碎语</span>
-                <div class="other-inf">
-                    <span>2021-12-21</span>
-                    <span>这次换你听歌</span>
-                    <span>2篇灵感</span>
-                </div>
             </div>
             <div class="lingan-div">
                 <div class="sub-item render-by-edit">   
                 </div>
             </div>
-            <div class="edit-div">
+            <div class="edit-div" v-if="this.$store.getters.userInfoGet !== null">
                 <span class="title-span">说点什么</span>
                 <div class="render-edit" ref="dyEditTool"></div>
                 <div class="buttom">
@@ -28,7 +23,7 @@
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
-                <div class="message-content">
+                <div class="message-content" v-loading="this.messageContent.length === 0">
                     <transition-group name="list">
                         <div class="sub-message-item" v-for="item in messageContent" :key="item.id">
                             <div class="left-head" v-if="!this.$store.getters.isPhoneGet">
@@ -41,7 +36,7 @@
                                     </div>
                                     <span class="user-name">{{item.user.nickname}}</span>
                                 </div>
-                                <div class="show-content render-by-edit" v-html="item.content"></div>
+                                <div class="show-content render-by-edit" v-html="item.content" @click="previewImg($event)"></div>
                                 <div class="show-who">
                                     <div v-if="!this.$store.getters.isPhoneGet">
                                         <span>{{item.user.nickname}} 留言</span>
@@ -69,8 +64,10 @@ import { uploadImage , userMessageGet , userSendMessage } from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 import { ElMessage } from 'element-plus'
+import ImgViewr, { showImages } from 'vue-img-viewr'
+import 'vue-img-viewr/styles/index.css'
 export default {
-  components: { footerBottom , mediaFile },
+  components: { footerBottom , mediaFile , ImgViewr },
     data(){
         return{
             userContent: '',
@@ -81,6 +78,7 @@ export default {
             totalCount: null,
             isSendToServerWorkNow: false,
             messageContent: [],
+            messageImageList:[]
             
         }
     },
@@ -88,55 +86,57 @@ export default {
         this.getUserMessage()
     },
     mounted(){
-        const editor = new wangEditor(this.$refs.dyEditTool)
-        editor.config.showLinkImg = false
-        editor.config.focus = false
-        editor.config.uploadImgMaxLength = 4
-        editor.config.menus = [
-            'head',
-            'bold',
-            'fontSize',
-            'italic',
-            'underline',
-            'strikeThrough',
-            'indent',
-            'lineHeight',
-            'foreColor',
-            'backColor',
-            'link',
-            'list',
-            'justify',
-            'quote',
-            'emoticon',
-            'table',
-            'splitLine',
-            'image',
-            'video',
-        ]
-        editor.config.onchange = (newHtml) => {
-            this.userContent = newHtml
+        if(this.$store.getters.userInfoGet !== null){
+            const editor = new wangEditor(this.$refs.dyEditTool)
+            editor.config.showLinkImg = false
+            editor.config.focus = false
+            editor.config.uploadImgMaxLength = 4
+            editor.config.menus = [
+                'head',
+                'bold',
+                'fontSize',
+                'italic',
+                'underline',
+                'strikeThrough',
+                'indent',
+                'lineHeight',
+                'foreColor',
+                'backColor',
+                'link',
+                'list',
+                'justify',
+                'quote',
+                'emoticon',
+                'table',
+                'splitLine',
+                'image',
+                'video',
+            ]
+            editor.config.onchange = (newHtml) => {
+                this.userContent = newHtml
+            }
+            editor.config.customUploadImg = (resultFiles) => {
+                let data = new FormData()
+                resultFiles.forEach(item => {
+                    data.append('imageFiles',item)
+                })
+                data.append('uid', this.$store.getters.userInfoGet.uid)
+                uploadImage(data).then(resq => {
+                    if(resq.flag){
+                        resq.data.forEach(item => {
+                            editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
+                        })
+                        ElMessage({type: 'success', message: resq.message})
+                    } else {
+                        ElMessage.error(resq.message)
+                    }
+                }).catch(err => {
+                    ElMessage.error('上传图片过程中发生错误！ ' + err)
+                })
+            }
+            editor.create()
+            this.editor = editor
         }
-        editor.config.customUploadImg = (resultFiles) => {
-            let data = new FormData()
-            resultFiles.forEach(item => {
-                data.append('imageFiles',item)
-            })
-            data.append('uid', this.$store.getters.userInfoGet.uid)
-            uploadImage(data).then(resq => {
-                if(resq.flag){
-                    resq.data.forEach(item => {
-                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
-                    })
-                    ElMessage({type: 'success', message: resq.message})
-                } else {
-                    ElMessage.error(resq.message)
-                }
-            }).catch(err => {
-                ElMessage.error('上传图片过程中发生错误！ ' + err)
-            })
-        }
-        editor.create()
-        this.editor = editor
     },
     methods:{
         closeWindow(value){
@@ -150,6 +150,7 @@ export default {
         },
         pageChange(e){
             this.currentPage = e
+            this.getUserMessage()
         },
         getUserMessage(){
             userMessageGet({pageNumber: this.currentPage,pageSize: this.pageSize}).then(resq => {
@@ -170,7 +171,7 @@ export default {
                     userSendMessage({content: this.userContent}).then(resq => {
                         if(resq.code === 200){
                             ElMessage.success(resq.message)
-                            this.userContent = ''
+                            this.editor.txt.clear()
                             this.getUserMessage()
                         }
                         this.isSendToServerWorkNow = false
@@ -180,11 +181,33 @@ export default {
                     this.isSendToServerWorkNow = false
                 }
             }
+        },
+        previewImg(e){
+            let grandpa = $(e.target).parent().parent()
+            if(!grandpa.hasClass('w-e-text') && $(e.target).attr('src') !== undefined){
+                let imageIndex
+                grandpa.find('img').each((index,item) => {
+                    if($(item).attr('src') === $(e.target).attr('src')){
+                        imageIndex = index
+                    }
+                    this.messageImageList.push($(item).attr('src'))
+                })
+                showImages({urls: this.messageImageList,index: imageIndex, onClose: () => {
+                    this.messageImageList = []
+                }})
+            }
+        },
+    },
+    computed:{
+        checkUserInfo(){
+            return this.$stoer.getters.userInfoGet
         }
     },
     unmounted() {
-        this.editor.destroy()
-        this.editor = null
+        if(this.$store.getters.userInfoGet !== null){
+            this.editor.destroy()
+            this.editor = null
+        }   
     }
 }
 </script>
@@ -217,23 +240,6 @@ export default {
             {
                 font-size: 1rem;
                 text-align: center;
-            }
-            .other-inf
-            {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 0.5rem;
-                span
-                {
-                    font-size: 0.6rem;
-                    color: #7c8188;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    margin: 0 0.25rem;
-                }
             }
         }
         .lingan-div
@@ -373,9 +379,11 @@ export default {
             .message-content
             {
                 width: 100%;
+                min-height: 6rem;
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
+                position: relative;
                 .list-enter-from , .list-leave-to
                 {
                     opacity: 0;
