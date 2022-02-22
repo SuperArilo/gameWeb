@@ -23,7 +23,13 @@
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
-                <div class="message-content" v-loading="this.messageContent.length === 0">
+                <transition-group name="list">
+                    <div class="message-empty" v-if="this.messageContent.length === 0">
+                        <span>当前没有留言哦！</span>
+                        <i class="fas fa-inbox"/>
+                    </div>
+                </transition-group>
+                <div class="message-content" v-if="this.messageContent.length !== 0" v-loading="this.messageContent.length === 0">
                     <transition-group name="list">
                         <div class="sub-message-item" v-for="item in messageContent" :key="item.id">
                             <div class="left-head" v-if="!this.$store.getters.isPhoneGet">
@@ -51,7 +57,7 @@
                     </transition-group>
                 </div>
             </div>
-            <el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalCount" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
+            <el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalCount" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;" v-if="this.messageContent.length !== 0"/>
         </div>
         <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
             <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
@@ -158,10 +164,10 @@ export default {
                     this.totalCount = resq.data.totalCount
                     this.messageContent = resq.data.list
                 } else {
-                    ElMessage.error('获取评论发生错误！ ' + resq.message)
+                    ElMessage.error('获取留言发生错误！ ' + resq.message)
                 }
             }).catch(err => {
-                ElMessage.error('获取评论发生错误！ ' + err)
+                ElMessage.error('获取留言发生错误！ ' + err)
             })
         },
         sendToServer(){
@@ -379,7 +385,7 @@ export default {
             .message-content
             {
                 width: 100%;
-                min-height: 6rem;
+                min-height: 12rem;
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
@@ -485,6 +491,28 @@ export default {
                             }
                         }
                     }
+                }
+            }
+            .message-empty
+            {
+                width: 100%;
+                height: 12rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                span , i
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                }
+                span
+                {
+                    font-size: 0.7rem;
+                }
+                i
+                {
+                    font-size: 0.8rem;
                 }
             }
         }
