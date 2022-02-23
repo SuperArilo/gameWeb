@@ -264,6 +264,7 @@ export default {
     background-repeat: no-repeat;
     background-position: top;
     background-size: cover;
+    background-attachment: fixed;
     .top-menu
     {
         width: 100%;

@@ -4,22 +4,10 @@
             <div class="top-tips">
                 <span class="title">闲言碎语</span>
             </div>
-            <div class="lingan-div">
-                <div class="sub-item render-by-edit">   
-                </div>
-            </div>
+            <div class="lingan-div render-by-edit" v-html="linshi"/>
             <div class="edit-div" v-if="this.$store.getters.userInfoGet !== null">
                 <span class="title-span">说点什么</span>
-                <div class="render-edit" ref="dyEditTool"></div>
-                <div class="buttom">
-                    <div class="buttom-file" @click="dialogVisible = true">
-                        <span>媒体文件管理</span>
-                    </div>
-                    <div class="button-confirm" @click="sendToServer">
-                        <span v-if="!isSendToServerWorkNow">发布</span>
-                        <i v-else class="fas fa-circle-notch fa-spin"/>
-                    </div>
-                </div>
+                <editor @sendData="sendDataTo" :status="isSendToServerWorkNow" :isClearContent="isClearContent"/>
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
@@ -59,101 +47,36 @@
             </div>
             <el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalCount" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;" v-if="this.messageContent.length !== 0"/>
         </div>
-        <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
-            <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
-        </el-dialog>
-        <footer-bottom></footer-bottom>
+        <footer-bottom/>
     </div>
 </template>
 <script>
-import { uploadImage , userMessageGet , userSendMessage } from '@/util/api.js'
+import { userMessageGet , userSendMessage } from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
-import mediaFile from '@/components/dynamic/mediaFile.vue'
+import editor from '@/components/editor.vue'
 import { ElMessage } from 'element-plus'
 import ImgViewr, { showImages } from 'vue-img-viewr'
 import 'vue-img-viewr/styles/index.css'
 export default {
-  components: { footerBottom , mediaFile , ImgViewr },
+  components: { footerBottom , ImgViewr , editor },
     data(){
         return{
             userContent: '',
-            editor: null,
-            dialogVisible: false,
             pageSize: 8,
             currentPage: 1,
             totalCount: null,
             isSendToServerWorkNow: false,
+            isClearContent: false,
             messageContent: [],
-            messageImageList:[]
+            messageImageList:[],
+            linshi: '<blockquote><p><font size="2"><span id="o67hj" style=""></span><b><i>我们所度过的每个平凡的日常，也许就是连续发生的奇迹&nbsp; &nbsp; &nbsp;&nbsp;</i></b></font><img src="https://www.itrong.love:4433/images/2022/02/23/c08551ad11a149e5a6fc9dd4aa4394f3.jpg" width="100" style="font-size: 24px;"/></p><p><font color="#46acc8">欢迎大家在这留下你的脚印</font></p><p><font color="#8baa4a">也欢迎大家提出您的宝贵建议</font></p></blockquote>'
             
         }
     },
     created(){
         this.getUserMessage()
     },
-    mounted(){
-        if(this.$store.getters.userInfoGet !== null){
-            const editor = new wangEditor(this.$refs.dyEditTool)
-            editor.config.showLinkImg = false
-            editor.config.focus = false
-            editor.config.uploadImgMaxLength = 4
-            editor.config.menus = [
-                'head',
-                'bold',
-                'fontSize',
-                'italic',
-                'underline',
-                'strikeThrough',
-                'indent',
-                'lineHeight',
-                'foreColor',
-                'backColor',
-                'link',
-                'list',
-                'justify',
-                'quote',
-                'emoticon',
-                'table',
-                'splitLine',
-                'image',
-                'video',
-            ]
-            editor.config.onchange = (newHtml) => {
-                this.userContent = newHtml
-            }
-            editor.config.customUploadImg = (resultFiles) => {
-                let data = new FormData()
-                resultFiles.forEach(item => {
-                    data.append('imageFiles',item)
-                })
-                data.append('uid', this.$store.getters.userInfoGet.uid)
-                uploadImage(data).then(resq => {
-                    if(resq.flag){
-                        resq.data.forEach(item => {
-                            editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
-                        })
-                        ElMessage({type: 'success', message: resq.message})
-                    } else {
-                        ElMessage.error(resq.message)
-                    }
-                }).catch(err => {
-                    ElMessage.error('上传图片过程中发生错误！ ' + err)
-                })
-            }
-            editor.create()
-            this.editor = editor
-        }
-    },
     methods:{
-        closeWindow(value){
-            this.dialogVisible = value
-        },
-        imageIntoEdit(value){
-            this.dialogVisible = false
-            value.forEach(key =>{
-                this.editor.cmd.do('insertHTML', '<img src="' + key.url + '" width="100"/>')
-            })
-        },
         pageChange(e){
             this.currentPage = e
             this.getUserMessage()
@@ -176,8 +99,8 @@ export default {
                 if(this.userContent !== ''){
                     userSendMessage({content: this.userContent}).then(resq => {
                         if(resq.code === 200){
+                            this.isClearContent = true
                             ElMessage.success(resq.message)
-                            this.editor.txt.clear()
                             this.getUserMessage()
                         }
                         this.isSendToServerWorkNow = false
@@ -203,17 +126,11 @@ export default {
                 }})
             }
         },
-    },
-    computed:{
-        checkUserInfo(){
-            return this.$stoer.getters.userInfoGet
+        sendDataTo(value){
+            this.userContent = value
+            this.isClearContent = false
+            this.sendToServer()
         }
-    },
-    unmounted() {
-        if(this.$store.getters.userInfoGet !== null){
-            this.editor.destroy()
-            this.editor = null
-        }   
     }
 }
 </script>
@@ -251,17 +168,6 @@ export default {
         .lingan-div
         {
             width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            flex-wrap:wrap;
-            .sub-item
-            {
-                width: 100%;
-                border-left: solid 0.15rem #b1bbd4;
-                margin: 0.2rem 0 0.2rem 0;
-                padding: 0 0.5rem;
-            }
         }
         .edit-div , .show-message-div 
         {
@@ -294,86 +200,6 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            .render-edit
-            {
-                width: 100%;
-            }
-            ::v-deep(.w-e-toolbar)
-            {
-                z-index: 400 !important;
-            }
-            ::v-deep(.w-e-text-container)
-            {
-                z-index: 399 !important;
-            }
-            ::v-deep(i)
-            {
-                font-size: 0.6rem !important;
-            }
-            ::v-deep(.w-e-menu-tooltip)
-            {
-                font-size: 0.6rem;
-            }
-            ::v-deep(.w-e-up-btn)
-            {
-                width: 100%;
-            }
-            .buttom
-            {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                margin: 1rem 0;
-                span , i
-                {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all 0.3s;
-                }
-                span
-                {
-                    font-size: 0.6rem;
-                }
-                i
-                {
-                    font-size: 0.8rem;
-                }
-                .button-confirm
-                {
-                    background-color: #b3d8ff;
-                    border: solid 0.05rem #409eff;
-                    color: #3399ff;
-                }
-                .buttom-file
-                {
-                    background-color: #8db0b9;
-                    color: #ffffff;
-                    border: solid 0.05rem #6c888f;
-                }
-                .buttom-file:hover
-                {
-                    background-color: #407e8d;
-                }
-                .button-confirm , .buttom-file
-                {
-                    width: 4rem;
-                    height: 1.5rem;
-                    transition: all 0.3s;
-                    border-radius: 0.2rem;
-                    transition: all 0.3s;
-                    cursor: pointer;
-                }
-                .button-confirm:hover
-                {
-                    background-color: #409eff;
-                    span , i
-                    {
-                        color: white;
-                    }
-                }
-            }
         }
         .show-message-div
         {
@@ -517,14 +343,6 @@ export default {
             }
         }
     }
-    ::v-deep(.el-dialog__body)
-    {
-        padding: 0;
-    }
-    ::v-deep(.el-dialog__header)
-    {
-        display: none;
-    }
 }
 @media screen and (min-width:1400px)
 {
@@ -535,10 +353,6 @@ export default {
             width: 60%;
             padding: 1.5rem 1rem 1rem 1rem;
             margin: 2rem 0 2rem 0;
-        }
-        ::v-deep(.el-dialog)
-        {
-            width: 35rem;
         }
     }
 }
@@ -552,10 +366,6 @@ export default {
             padding: 1.5rem 1rem 1rem 1rem;
             margin: 2rem 0 2rem 0;
         }
-        ::v-deep(.el-dialog)
-        {
-            width: 35rem;
-        }
     }
 }
 @media screen and (max-width:1200px) and (min-width:936px)
@@ -568,10 +378,6 @@ export default {
             padding: 1.5rem 0.8rem 0.8rem 0.8rem;
             margin: 2rem 0 2rem 0;
         }
-        ::v-deep(.el-dialog)
-        {
-            width: 35rem;
-        }
     }
 }
 @media screen and (max-width:936px) and (min-width:767px)
@@ -582,10 +388,6 @@ export default {
         {
             width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
-        }
-        ::v-deep(.el-dialog)
-        {
-            width: 90%;
         }
     }
 }
@@ -598,10 +400,6 @@ export default {
             width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
         }
-        ::v-deep(.el-dialog)
-        {
-            width: 90%;
-        }
     }
 }
 @media screen and (max-width:676px)
@@ -612,10 +410,6 @@ export default {
         {
             width: 100%;
             padding: 1.5rem 0.5rem 1rem 0.5rem;
-        }
-        ::v-deep(.el-dialog)
-        {
-            width: 90%;
         }
     }
 }

@@ -90,7 +90,7 @@
                 评论区
             </span>
             <transition name="list">
-                <div class="content" v-loading="isChangeParentCommentWorkNow">
+                <div class="content">
                     <transition-group name="list">
                         <div class="sub-comment-item" v-for="item in commentContent" :key="item.id"> 
                             <div class="top-comment">
@@ -129,11 +129,13 @@
                                             <span>回复：{{item.byReplyUser.byReplyNickname}}</span>
                                         </div>
                                     </div>
-                                    <div class="is-back-to-who" v-if="item.byReplyUser !== null && this.$store.getters.isPhoneGet === false">
-                                        <span>回复：{{item.byReplyUser.byReplyNickname}}</span>
-                                        <span class="user-class" v-if="item.byReplyUser !== null" :style="{backgroundColor: item.byReplyUser.byReplyClassColor}">{{item.byReplyUser.byReplyClassName}}</span>
+                                    <div class="who-comment">
+                                        <div class="is-back-to-who" v-if="item.byReplyUser !== null && this.$store.getters.isPhoneGet === false">
+                                            <span>回复：{{item.byReplyUser.byReplyNickname}}</span>
+                                            <span class="user-class" v-if="item.byReplyUser !== null" :style="{backgroundColor: item.byReplyUser.byReplyClassColor}">{{item.byReplyUser.byReplyClassName}}</span>
+                                        </div>
+                                        <div class="comment-show render-by-edit" v-html="item.replyContent" @click="previewImg($event)"/>
                                     </div>
-                                    <div class="comment-show render-by-edit" v-html="item.replyContent" @click="previewImg($event)"/>
                                     <div class="function-show">
                                         <div class="sub-item">
                                             <i class="far fa-clock"/>
@@ -701,25 +703,33 @@ export default {
                                 font-size: 0.6rem;
                             }
                         }
-                        .is-back-to-who
+                        .who-comment
                         {
                             width: 100%;
-                            height: 2rem;
                             display: flex;
-                            justify-content: flex-start;
-                            align-items: center;
-                            font-size: 0.65rem;
-                            padding: 0.5rem 0;
-                            border-bottom: solid 0.05rem rgb(172, 172, 172);
-                            .user-class
+                            align-content: flex-start;
+                            flex-wrap: wrap;
+                            .is-back-to-who
                             {
-                                margin-left: 0.5rem;
+                                width: 100%;
+                                height: 2rem;
+                                display: flex;
+                                justify-content: flex-start;
+                                align-items: center;
+                                font-size: 0.65rem;
+                                padding: 0.5rem 0;
+                                border-bottom: solid 0.05rem rgb(172, 172, 172);
+                                .user-class
+                                {
+                                    margin-left: 0.5rem;
+                                }
+                            }
+                            .comment-show
+                            {
+                                width: 100%;
                             }
                         }
-                        .comment-show
-                        {
-                            width: 100%;
-                        }
+                        
                         .function-show
                         {
                             width: 100%;

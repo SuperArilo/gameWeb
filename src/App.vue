@@ -29,7 +29,10 @@
                                         </div>
                                     </div>
                                     <div class="drop-notice-content">
-                                        
+                                        <div class="drop-notice-sub-item" v-for="(item,index) in playerNoticeContent" :key="item.id">
+                                            <span class="left-text">{{index}}. {{item.content}}</span>
+                                            <i class="far fa-square"/>
+                                        </div>
                                     </div>
                                 </div>
                             </transition>
@@ -77,7 +80,7 @@
 </template>
 <script>
 import { ElNotification , ElMessageBox , ElMessage } from 'element-plus'
-import { userLognState , userLogOut } from '@/util/api.js'
+import { userLognState , userLogOut , userNoticeGet } from '@/util/api.js'
 export default {
     data(){
         return{
@@ -121,6 +124,7 @@ export default {
                 }
             ],
             openNoticeWindow: false,
+            playerNoticeContent: []
         }
     },
     async beforeCreate(){
@@ -128,6 +132,7 @@ export default {
             userLognState().then(resq => {
                 if(resq.flag){
                     this.$store.commit('userInfoSet', resq.data)
+                    this.playerNoticeGet()
                 } else {
                     ElNotification({title: '提示',message: resq.message ,type: 'warning'})
                     this.$store.commit('userInfoSet',null)
@@ -142,6 +147,7 @@ export default {
             userLognState().then(resq => {
                 if(resq.flag){
                     this.$store.commit('userInfoSet', resq.data)
+                    this.playerNoticeGet()
                 } else {
                     ElNotification({title: '提示',message: resq.message ,type: 'warning'})
                     this.$store.commit('userInfoSet',null)
@@ -193,6 +199,17 @@ export default {
                     ElMessage.error('注销登陆过程发生错误！ ' + err)
                 })
             }).catch(() => {
+            })
+        },
+        playerNoticeGet(){
+            userNoticeGet({receiver: this.$store.getters.userInfoGet.uid}).then(resq => {
+                if(resq.code === 200){
+                    this.playerNoticeContent = resq.data.list
+                } else {
+                    ElMessage.error('获取玩家通知消息发生错误！' + resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error('获取玩家通知消息发生错误！' + err)
             })
         }
     },
@@ -386,13 +403,14 @@ a
                         }
                         .notice-drop-menu
                         {
-                            width: 10rem;
+                            width: 12rem;
                             display: flex;
                             overflow: hidden;
                             align-content: flex-start;
                             flex-wrap: wrap;
                             position: absolute;
                             top: 2.2rem;
+                            left: -6rem;
                             box-shadow: 0 0.05rem 0.3rem rgba(0, 0, 0, 0.5);
                             border-radius: 0.15rem;
                             .drop-menu-title
@@ -439,11 +457,40 @@ a
                             .drop-notice-content
                             {
                                 width: 100%;
-                                height: 14rem;
+                                min-height: 8rem;
                                 display: flex;
                                 align-content: flex-start;
                                 flex-wrap: wrap;
                                 background-color: rgba(240,240,240,1);
+                                .drop-notice-sub-item
+                                {
+                                    width: 100%;
+                                    height: 1.2rem;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    margin: 0.2rem 0;
+                                    padding: 0 0.5rem;
+                                    cursor: pointer;
+                                    .left-text
+                                    {
+                                        width: 80%;
+                                        height: 100%;
+                                        text-align: left;
+                                        line-height: 1.2rem;
+                                        font-size: 0.55rem;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        white-space: nowrap;
+                                    }
+                                    i
+                                    {
+                                        height: 100%;
+                                        font-size: 0.7rem;
+                                        display: flex;
+                                        align-items: center;
+                                        color: rgb(112, 112, 112);
+                                    }
+                                }
                             }
                         }
                     }

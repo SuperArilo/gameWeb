@@ -166,3 +166,14 @@ export const userSendMessage = (query) => {
         data: query
     })
 }
+//用户获取通知
+export const userNoticeGet = (params) => {
+    return request({
+        url: '/inform/list',
+        method: 'get',
+        params: params,
+        paramsSerializer: params => {
+            return Qs.stringify(params, {arrayFormat: 'repeat'})
+        }
+    })
+}
