@@ -103,13 +103,13 @@ export default {
             dropdownMenu:[
                 {
                     id: 0,
-                    title: '最新',
-                    order: 'newest'
-                },
-                {
-                    id: 0,
                     title: '热门',
                     order: 'hottest'
+                },
+                {
+                    id: 1,
+                    title: '最新',
+                    order: 'newest'
                 },
                 {
                     id: 0,
@@ -124,14 +124,14 @@ export default {
             ],
             tagList:[],
             openChoiceTags: false,
-            dropdownMenuTitle: '最新',
+            dropdownMenuTitle: '热门',
             //显示的主要数据
             dyContent: [],
             currentPage: 1,
             // 发送到服务器的参数
             dYsendToServerParams:{
                 tagIds:[],
-                order: 'newest',
+                order: 'hottest',
                 pageNumber: 1,
                 pageSize: 10,
             },
@@ -150,6 +150,7 @@ export default {
                 this.firstRequestIsWorkNow = false
                 this.dyContent = resq.data.data
                 this.dyTotal = resq.data.total
+                this.getTags()
             } else {
                 this.firstRequestIsWorkNow = false
                 ElMessage({ showClose: true, message: resq.message, type: 'warning',})
@@ -157,15 +158,6 @@ export default {
         }).catch(err => {
             this.firstRequestIsWorkNow = false
             ElMessage({showClose: true, message: '请求动态发生错误，请稍后重试！' + err, type: 'error', center: false})
-        })
-        dynamicTagsGet().then(resq => {
-            if(resq.flag){
-                this.tagList = resq.data
-            } else {
-                ElMessage({ showClose: true, message: resq.message, type: 'warning',})
-            }
-        }).catch(err => {
-            ElMessage({showClose: true, message: '请求标签发生错误，请稍后重试！' + err, type: 'error', center: false})
         })
     },
     methods:{
@@ -181,6 +173,7 @@ export default {
             if(!this.dyAllLoading){
                 this.dyAllLoading = true
                 this.sendToServer()
+                this.getTags()
             }
         },
         editRouter(){
@@ -234,6 +227,17 @@ export default {
                 $('html,body').stop().animate({'scrollTop': 0})
                 this.sendToServer()
             }
+        },
+        getTags(){
+            dynamicTagsGet().then(resq => {
+                if(resq.flag){
+                    this.tagList = resq.data
+                } else {
+                    ElMessage({ showClose: true, message: resq.message, type: 'warning',})
+                }
+            }).catch(err => {
+                ElMessage({showClose: true, message: '请求标签发生错误，请稍后重试！' + err, type: 'error', center: false})
+            })
         },
         sendToServer(){
             dynamicGet(this.dYsendToServerParams).then(resq => {

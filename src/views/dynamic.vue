@@ -10,7 +10,7 @@
             </div>
             <div class="center-content-box">
                 <router-view v-slot="{ Component }" style="position: absolute;">
-                    <transition name="router_animate">
+                    <transition name="loading_animate">
                         <component :is="Component" />
                     </transition>
                 </router-view>
@@ -87,11 +87,11 @@
     }
     .loading_animate-enter-active
     {
-        animation: flipInX 0.3s;
+        animation: fadeInLeft 0.8s;
     }
     .loading_animate-leave-active
     {
-        animation: flipOutY 0.3s;
+        animation: fadeOutRight 0.8s;
     }
 }
 </style>

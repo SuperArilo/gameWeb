@@ -231,9 +231,10 @@ export default {
         },
         commentStatus(value){
             if(value){
+                this.currentPage = 1
                 this.commentGet()
                 this.OpenBackCommentShow = false
-                $('html,body').stop().animate({'scrollTop': $(this.$refs.commentContent)[0].offsetTop},1000)
+                $('html,body').stop().animate({'scrollTop': $(this.$refs.commentContent)[0].offsetTop},500)
             }
         },
         previewImg(e){
@@ -552,7 +553,7 @@ export default {
                 justify-content: center;
                 align-content: flex-start;
                 flex-wrap: wrap;
-                transition: all 0.5s;
+                transition: all 0.4s;
                 .top-comment
                 {
                     width: 100%;

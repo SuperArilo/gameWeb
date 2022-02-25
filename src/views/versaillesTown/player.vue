@@ -17,7 +17,7 @@
         </div>
         <div class="player-router">
             <router-view v-slot="{ Component }" style="position: absolute;">
-                <transition enter-active-class="animate__animated router_animate-enter-active" leave-active-class="animate__animated router_animate-leave-active">
+                <transition name="loading_animate">
                     <component :is="Component" />
                 </transition>
             </router-view>
@@ -199,32 +199,14 @@ export default {
     {
         width: 100%;
         position: relative;
-        .router_animate-enter-active
+        .loading_animate-enter-active
         {
-            animation: slideInLeft 0.6s;
+            animation: fadeInLeft 0.8s;
         }
-        .router_animate-leave-active
+        .loading_animate-leave-active
         {
-            animation: slideOutRight 0.6s;
+            animation: fadeOutRight 0.8s;
         }
     }
-}
-@media screen and (min-width:1400px)
-{
-}
-@media screen and (max-width:1400px) and (min-width:1200px)
-{
-}
-@media screen and (max-width:1200px) and (min-width:936px)
-{
-}
-@media screen and (max-width:936px) and (min-width:767px)
-{
-}
-@media screen and (max-width:767px) and (min-width:676px)
-{
-}
-@media screen and (max-width:676px)
-{
 }
 </style>

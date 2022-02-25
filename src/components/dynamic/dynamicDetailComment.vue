@@ -12,12 +12,16 @@
                 <div class="render-edit" ref="dyEditTool"></div>
             </div>
             <div class="dy-buttom">
-                <div class="buttom-file" @click="openFile">
-                    <span>媒体管理器</span>
+                <div class="left-and-right-div">
+                    <div class="buttom-file" @click="openFile">
+                        <span>媒体管理器</span>
+                    </div>
                 </div>
-                <div class="button-confirm" @click="sentToServer">
-                    <span v-if="!isSendToServerWorkNow">提交</span>
-                    <i v-else class="fas fa-circle-notch fa-spin"/>
+                <div class="left-and-right-div">
+                    <div class="button-confirm" @click="sentToServer">
+                        <span v-if="!isSendToServerWorkNow">提交</span>
+                        <i v-else class="fas fa-circle-notch fa-spin"/>
+                    </div>
                 </div>
             </div>
             <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
@@ -234,49 +238,55 @@ export default {
             margin-top: 0.5rem;
             display: flex;
             justify-content: space-between;
-            span
+            .left-and-right-div
             {
-                font-size: 0.6rem;
-            }
-            .buttom-file , .button-confirm
-            {
-                width: 4rem;
-                height: 1.5rem;
+                height: 100%;
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                transition: all 0.3s;
-                transition: all 0.3s;
-                border-radius: 0.2rem;
-                cursor: pointer;
-                i
+                span
                 {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    font-size: 0.8rem;
+                    font-size: 0.6rem;
                 }
-            }
-            .buttom-file
-            {
-                background-color: #8db0b9;
-                color: #ffffff;
-                border: solid 0.05rem #6c888f;
-            }
-            .buttom-file:hover
-            {
-                background-color: #407e8d;
-            }
-            .button-confirm
-            {
-                background-color: #b3d8ff;
-                color: #3399ff;
-                border: solid 0.05rem #409eff;
-            }
-            .button-confirm:hover
-            {
-                color: white;
-                background-color: #409eff;
+                .buttom-file , .button-confirm
+                {
+                    width: 4rem;
+                    height: 1.5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    transition: all 0.3s;
+                    transition: all 0.3s;
+                    border-radius: 0.2rem;
+                    cursor: pointer;
+                    i
+                    {
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.8rem;
+                    }
+                }
+                .buttom-file
+                {
+                    background-color: #8db0b9;
+                    color: #ffffff;
+                    border: solid 0.05rem #6c888f;
+                }
+                .buttom-file:hover
+                {
+                    background-color: #407e8d;
+                }
+                .button-confirm
+                {
+                    background-color: #b3d8ff;
+                    color: #3399ff;
+                    border: solid 0.05rem #409eff;
+                }
+                .button-confirm:hover
+                {
+                    color: white;
+                    background-color: #409eff;
+                }
             }
         }
         ::v-deep(.el-dialog__body)

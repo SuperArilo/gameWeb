@@ -72,7 +72,7 @@
                 <i class="fas fa-sign"/>
             </div>
             <div class="user-message">
-                <div class="render-edit" ref="dyEditTool"></div>
+                <editor v-if="this.$store.getters.userInfoGet !== null" />
             </div>
             <span class="line"></span>
             <div class="message-content">
@@ -105,9 +105,11 @@
 </template>
 <script>
 import footerBottom from '@/components/footerBottom.vue'
+import editor from '@/components/editor.vue'
 export default {
     components:{
-        footerBottom
+        footerBottom,
+        editor
     },
     data(){
         return{
@@ -134,42 +136,8 @@ export default {
                     order: 'DESC'
                 }
             ],
-            editor: null,
             dyAllLoading: false,
-            text: ''
         }
-    },
-    mounted(){
-        const editor = new wangEditor(this.$refs.dyEditTool)
-        editor.config.showLinkImg = false
-        editor.config.focus = false
-        editor.config.height = 200
-        editor.config.menus = [
-            'head',
-            'bold',
-            'fontSize',
-            'italic',
-            'underline',
-            'strikeThrough',
-            'indent',
-            'lineHeight',
-            'foreColor',
-            'backColor',
-            'link',
-            'list',
-            'justify',
-            'quote',
-            'emoticon',
-            'table',
-            'splitLine',
-            'image',
-            'video',
-        ]
-        editor.config.onchange = (newHtml) => {
-            this.text = newHtml
-        }
-        editor.create()
-        this.editor = editor
     },
     methods:{
         dropdownMenuFunc(command, number, object){
@@ -179,10 +147,6 @@ export default {
                 this.dyAllLoading = false
             }
         }
-    },
-    unmounted() {
-        this.editor.destroy()
-        this.editor = null
     }
 }
 </script>
@@ -395,30 +359,7 @@ export default {
         .user-message
         {
             width: 100%;
-            .render-edit
-            {
-                width: 100%;
-            }
-            ::v-deep(.w-e-toolbar)
-            {
-                z-index: 400 !important;
-            }
-            ::v-deep(.w-e-text-container)
-            {
-                z-index: 399 !important;
-            }
-            ::v-deep(i)
-            {
-                font-size: 0.6rem !important;
-            }
-            ::v-deep(.w-e-menu-tooltip)
-            {
-                font-size: 0.6rem;
-            }
-            ::v-deep(.w-e-up-btn)
-            {
-                width: 100%;
-            }
+            margin-top: 1rem;
         }
         .message-content
         {
