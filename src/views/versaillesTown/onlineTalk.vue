@@ -60,9 +60,9 @@ export default {
         }
     },
     created(){
-        if(this.$store.getters.userInfoGet !== null){
-            this.initWebSocket()
-        }
+        // if(this.$store.getters.userInfoGet !== null){
+        //     this.initWebSocket()
+        // }
     },
     onMounted(){
         this.scrollToBottom()
@@ -80,19 +80,19 @@ export default {
             this.userWriteContent = this.userWriteContent + '\n'
         },
         sentToServer(){
-            if(!this.sentToServerStatu){
-                this.sentToServerStatu = true
-                if(this.userWriteContent === ''){
-                    ElNotification({title: '提示',message: '发送的信息不能为空！',type: 'info'})
-                    this.sentToServerStatu = false
-                    return
-                }
-                let sendToServer = {uid: this.$store.getters.userInfoGet.uid,MCJAVAId: this.$store.getters.userInfoGet.javaMcId,userName: this.$store.getters.userInfoGet.userName,uuid: this.$store.getters.userInfoGet.mcUUID,content: this.userWriteContent,fromGame: false}
-                this.websock.send(JSON.stringify(sendToServer))
-                this.sentToServerStatu = false
-                this.scrollToBottom()
-                this.userWriteContent = ''
-            }
+            // if(!this.sentToServerStatu){
+            //     this.sentToServerStatu = true
+            //     if(this.userWriteContent === ''){
+            //         ElNotification({title: '提示',message: '发送的信息不能为空！',type: 'info'})
+            //         this.sentToServerStatu = false
+            //         return
+            //     }
+            //     let sendToServer = {uid: this.$store.getters.userInfoGet.uid,MCJAVAId: this.$store.getters.userInfoGet.javaMcId,userName: this.$store.getters.userInfoGet.userName,uuid: this.$store.getters.userInfoGet.mcUUID,content: this.userWriteContent,fromGame: false}
+            //     this.websock.send(JSON.stringify(sendToServer))
+            //     this.sentToServerStatu = false
+            //     this.scrollToBottom()
+            //     this.userWriteContent = ''
+            // }
         },
         scrollToBottom(){
             this.$nextTick(()=>{
@@ -121,9 +121,9 @@ export default {
         }
     },
     unmounted() {
-        if(this.$store.getters.userInfoGet !== null){
-            this.websock.close()
-        }
+        // if(this.$store.getters.userInfoGet !== null){
+        //     this.websock.close()
+        // }
     },
 }
 </script>

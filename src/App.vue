@@ -29,8 +29,10 @@
                                         </div>
                                     </div>
                                     <div class="drop-notice-content">
-                                        <div class="drop-notice-sub-item" v-for="(item,index) in playerNoticeContent" :key="item.id">
-                                            <span class="left-text">{{index}}. {{item.content}}</span>
+                                        <div class="drop-notice-sub-item" v-for="item in playerNoticeContent" :key="item.id">
+                                            <div class="left-text">
+                                                <span>{{item.content}}</span>
+                                            </div>
                                             <i class="far fa-square"/>
                                         </div>
                                     </div>
@@ -461,26 +463,28 @@ a
                                 display: flex;
                                 align-content: flex-start;
                                 flex-wrap: wrap;
-                                background-color: rgba(240,240,240,1);
+                                background-color: rgb(240,240,240);
                                 .drop-notice-sub-item
                                 {
                                     width: 100%;
                                     height: 1.2rem;
                                     display: flex;
                                     justify-content: space-between;
-                                    margin: 0.2rem 0;
                                     padding: 0 0.5rem;
                                     cursor: pointer;
                                     .left-text
                                     {
                                         width: 80%;
                                         height: 100%;
-                                        text-align: left;
-                                        line-height: 1.2rem;
-                                        font-size: 0.55rem;
-                                        text-overflow: ellipsis;
-                                        overflow: hidden;
-                                        white-space: nowrap;
+                                        display: flex;
+                                        align-items: center;
+                                        span
+                                        {
+                                            font-size: 0.6rem;
+                                            text-overflow: ellipsis;
+                                            overflow: hidden;
+                                            white-space: nowrap;
+                                        }
                                     }
                                     i
                                     {
@@ -645,11 +649,11 @@ a
                 justify-content: center;
                 .router_animate-enter-active
                 {
-                    animation: slideInLeft 0.6s;
+                    animation: fadeInLeft 0.8s;
                 }
                 .router_animate-leave-active
                 {
-                    animation: slideOutRight 0.6s;
+                    animation: fadeOutRight 0.8s;
                 }
             }
         }
@@ -745,10 +749,10 @@ a
     blockquote
     {
         display: block;
-        border-left: 8px solid #d0e5f2;
-        padding: 5px 10px;
-        margin: 10px 0;
-        line-height: 1.4;
+        border-left: 0.3rem solid #d0e5f2;
+        padding: 0.15rem 0.3rem;
+        margin: 0.3rem 0;
+        line-height: 2;
         font-size: 100%;
         background-color: #f1f1f1;
     }
@@ -756,10 +760,10 @@ a
     {
         cursor: pointer;
         display: block;
-        height: 0px;
+        height: 0;
         border: 0;
-        border-top: 3px solid #ccc;
-        margin: 20px 0;
+        border-top: 0.1rem solid #ccc;
+        margin: 0.6rem 0;
     }
     img
     {

@@ -34,7 +34,7 @@
                 <div class="title-dy-data" v-if="!this.$store.getters.isPhoneGet">
                     <div class="dy-sub-item">
                         <i class="far fa-calendar-alt"/>
-                        <span>{{dynamicMainContent.createTime}}</span>
+                        <span>发布时间：{{dynamicMainContent.createTime}}</span>
                     </div>
                     <div class="dy-sub-item">
                         <i class="far fa-comment-dots"/>
@@ -445,7 +445,7 @@ export default {
                         height: 100%;
                         display: flex;
                         align-items: center;
-                        font-size: 0.6rem;
+                        font-size: 0.55rem;
                     }
                     span
                     {

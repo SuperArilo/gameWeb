@@ -137,6 +137,47 @@ export default {
     ::v-deep(.w-e-text-container)
     {
         z-index: 399 !important;
+        h1 , h2 , h3 , h4 , h5 , p , table , pre
+        {
+            margin: 0.5rem 0;
+            line-height: 1.5;
+        }
+        ul , li , ol
+        {
+            font-size: 0.6rem;
+        }
+        blockquote
+        {
+            padding: 0.15rem 0.3rem;
+            margin: 0.3rem 0;
+            line-height: 2;
+        }
+        hr
+        {
+            height: 0;
+            border: 0;
+            border-top: 0.1rem solid #ccc;
+            margin: 0.6rem 0;
+        }
+        table
+        {
+            border-top: 0.08rem solid #ccc;
+            border-left: 0.08rem solid #ccc;
+            th , td
+            {
+                border-bottom: 0.08rem solid #ccc;
+                border-right: 0.08rem solid #ccc;
+                padding: 0.1rem 0.3rem;
+                min-height: 1.2rem;
+                height: 1.2rem;
+            }
+            th
+            {
+                border-bottom: 0.1rem solid #ccc;
+                text-align: center;
+                background-color: #f1f1f1;
+            }
+        }
     }
     ::v-deep(i)
     {

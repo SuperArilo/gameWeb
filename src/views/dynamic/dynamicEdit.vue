@@ -38,56 +38,26 @@
             </div>
             <span class="dy-edit-title" style="margin: 0.5rem 0">动态内容编辑</span>
             <div class="dy-edit-tool">
-                <div class="render-edit" ref="dyEditTool"></div>
-            </div>
-            <div class="md-editor-submit">
-                <div class="buttom-file" @click="dialogVisible = true">
-                    <span>媒体文件管理</span>
-                </div>
-                <div class="button-confirm" @click="dyPublish">
-                    <span v-if="!isDyPublishWorkNow">发布</span>
-                    <i v-if="isDyPublishWorkNow" class="fas fa-circle-notch fa-spin"/>
-                </div>
+                <editor @sendData="sendDataTo" :status="isDyPublishWorkNow" :isClearContent="isClearContent" />
             </div>
         </div>
-        <el-dialog v-model="dialogVisible" :lock-scroll="false" :close-on-click-modal="false" :close-on-press-escape="false">
-            <media-file v-if="dialogVisible" @closeWindow="closeWindow" @imageIntoEdit="imageIntoEdit"/>
-        </el-dialog>
         <footer-bottom/>
     </div>
 </template>
 <script>
 import { ElMessage , ElMessageBox } from 'element-plus'
-import {userPublishDynamic , dynamicTagsGet , uploadImage} from '@/util/api.js'
+import {userPublishDynamic , dynamicTagsGet} from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
+import editor from '@/components/editor.vue'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
 export default {
     components:{
-        mediaFile , footerBottom
+        mediaFile , footerBottom , editor
     },
     data(){
         return{
-            ruleListO:[
-                '1. 不得含有人身侮辱性质内容、宗教斗争色彩、政治色彩、精神污染内容',
-                '2. 不得含有性相关或强烈性暗示色彩',
-                '3. 不得含有未经许可的广告/商业盈利/服务器宣传内容、宣传或引导到其他与本站相同定位的社区',
-                '4. 不得使用超长头像（源图片高度大于200像素的头像）、超大头像（头像尺寸已经接触信息框边缘的头像）、任何可以扫描的图形编码头像或签名（扫描打开网页链接、付款捐赠链接等）',
-                '5. 不得使用超过3行的自定义头衔（超长头衔）',
-                '6. 不得恶意模仿论坛现有用户及站内外团体',
-                '7. 不得包含或暗示管制类精神药品或有类似功效的生物制品的内容。'
-            ],
-            ruleListT:[
-                '1. 请认真选择发表主题的版块和主题分类',
-                '2. 不得发布违规信息，政治内容，违反中华人民共和国《全国人大常委会关于维护互联网安全的决定》及其它相关法律法规，包括地方性及临时性法规。发现违反者将删除相关帖子并视情况严重与否进行其他惩罚',
-                '3. 不得含有未经许可的广告/商业盈利/服务器宣传内容、宣传或引导到其他与本站相同定位的社区',
-                '4. 不得使用超长头像（源图片高度大于200像素的头像）、超大头像（头像尺寸已经接触信息框边缘的头像）、任何可以扫描的图形编码头像或签名（扫描打开网页链接、付款捐赠链接等）',
-                '5. 不得使用超过3行的自定义头衔（超长头衔）',
-                '6. 不得恶意模仿论坛现有用户及站内外团体',
-                '7. 不得包含或暗示管制类精神药品或有类似功效的生物制品的内容。'
-            ],
             tagList:[],
             showMoreTags: false,
-            dialogVisible: false,
             noHaveTag:[],
             havedTag:[],
             tagTemp:[],
@@ -96,58 +66,9 @@ export default {
             dyContent: '',
             clearTagInput: '',
             editor: null,
-            isDyPublishWorkNow: false
+            isDyPublishWorkNow: false,
+            isClearContent: false
         }
-    },
-    mounted(){
-        const editor = new wangEditor(this.$refs.dyEditTool)
-        editor.config.showLinkImg = false
-        editor.config.focus = false
-        editor.config.menus = [
-            'head',
-            'bold',
-            'fontSize',
-            'italic',
-            'underline',
-            'strikeThrough',
-            'indent',
-            'lineHeight',
-            'foreColor',
-            'backColor',
-            'link',
-            'list',
-            'justify',
-            'quote',
-            'emoticon',
-            'table',
-            'splitLine',
-            'image',
-            'video',
-        ]
-        editor.config.onchange = (newHtml) => {
-            this.dyContent = newHtml
-        }
-        editor.config.customUploadImg = (resultFiles) => {
-            let data = new FormData()
-            resultFiles.forEach(item => {
-                data.append('imageFiles',item)
-            })
-            data.append('uid', this.$store.getters.userInfoGet.uid)
-            uploadImage(data).then(resq => {
-                if(resq.flag){
-                    resq.data.forEach(item => {
-                        editor.cmd.do('insertHTML', '<img src="' + item.mediaHttpUrl + '" width="100" "/>')
-                    })
-                    ElMessage({type: 'success', message: resq.message})
-                } else {
-                    ElMessage.error(resq.message)
-                }
-            }).catch(err => {
-                ElMessage.error('上传图片过程中发生错误！ ' + err)
-            })
-        }
-        editor.create()
-        this.editor = editor
     },
     methods:{
         routerBackFunc() {
@@ -196,7 +117,6 @@ export default {
             }
         },
         openTagsBox(){
-            
             if(this.tagList.length === 0){
                 dynamicTagsGet().then(resq => {
                     if(resq.flag){
@@ -249,6 +169,7 @@ export default {
                             if(resq.flag){
                                 ElMessageBox.alert(resq.message, '提示', {confirmButtonText: 'OK',callback: () => {
                                         this.$router.push('/dynamic')
+                                        this.isClearContent = true
                                     }
                                 })
                                 this.isDyPublishWorkNow = false
@@ -263,12 +184,13 @@ export default {
                     }
                 }
             }
+        },
+        sendDataTo(value){
+            this.dyContent = value
+            this.isClearContent = false
+            this.dyPublish()
         }
-    },
-    unmounted() {
-        this.editor.destroy()
-        this.editor = null
-    },
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -353,30 +275,6 @@ export default {
         .dy-edit-tool
         {
             width: 100%;
-            .render-edit
-            {
-                width: 100%;
-            }
-            ::v-deep(.w-e-toolbar)
-            {
-                z-index: 400 !important;
-            }
-            ::v-deep(.w-e-text-container)
-            {
-                z-index: 399 !important;
-            }
-            ::v-deep(i)
-            {
-                font-size: 0.6rem !important;
-            }
-            ::v-deep(.w-e-menu-tooltip)
-            {
-                font-size: 0.6rem;
-            }
-            ::v-deep(.w-e-up-btn)
-            {
-                width: 100%;
-            }
         }
         .choice-tags
         {
@@ -509,122 +407,6 @@ export default {
             margin: 0.5rem 0;
             resize: none;
             font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-        }
-        ::v-deep(.v-md-editor)
-        {
-            margin: 0.5rem 0;
-            border-radius: 0.2rem;
-            box-shadow: none;
-            height: 15rem;
-        }
-        .md-editor-submit
-        {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            height: 1.5rem;
-            margin-top: 0.5rem;
-            div
-            {
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 0.6rem;
-                min-width: 4rem;
-                transition: all 0.3s;
-                border-radius: 0.2rem;
-                cursor: pointer;
-            }
-            .buttom-file
-            {
-                background-color: #8db0b9;
-                color: #ffffff;
-                border: solid 0.05rem #6c888f;
-            }
-            .buttom-file:hover
-            {
-                background-color: #407e8d;
-            }
-            .button-confirm
-            {
-                background-color: #b3d8ff;
-                color: #3399ff;
-                border: solid 0.05rem #409eff;
-            }
-            .button-confirm:hover
-            {
-                color: white;
-                background-color: #409eff;
-            }
-        }
-    }
-    ::v-deep(.el-dialog__body)
-    {
-        padding: 0;
-    }
-    ::v-deep(.el-dialog__header)
-    {
-        display: none;
-    }
-}
-@media screen and (min-width:1400px)
-{
-    .edit-box
-    {
-        ::v-deep(.el-dialog)
-        {
-            width: 35rem;
-        }
-    }
-}
-@media screen and (max-width:1400px) and (min-width:1200px)
-{
-    .edit-box
-    {
-        ::v-deep(.el-dialog)
-        {
-            width: 35rem;
-        }
-    }
-}
-@media screen and (max-width:1200px) and (min-width:936px)
-{
-    .edit-box
-    {
-        ::v-deep(.el-dialog)
-        {
-            width: 30rem;
-        }
-    }
-}
-@media screen and (max-width:936px) and (min-width:767px)
-{
-    .edit-box
-    {
-        ::v-deep(.el-dialog)
-        {
-            width: 90%;
-        }
-    }
-}
-@media screen and (max-width:767px) and (min-width:676px)
-{
-    .edit-box
-    {
-        ::v-deep(.el-dialog)
-        {
-            width: 90%;
-        }
-    }
-}
-@media screen and (max-width:676px)
-{
-    .edit-box
-    {
-        ::v-deep(.el-dialog)
-        {
-            width: 90%;
         }
     }
 }
