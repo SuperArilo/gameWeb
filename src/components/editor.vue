@@ -199,6 +199,10 @@ export default {
     {
         display: none;
     }
+    ::v-deep(.el-dialog__footer)
+    {
+        display: none;
+    }
     .buttom
     {
         width: 100%;

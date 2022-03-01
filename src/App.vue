@@ -5,46 +5,42 @@
                 <i class="fas fa-bars" @click="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
             </div>
             <div class="right-func">
-                <transition name="content-effects">
-                    <div v-if="this.$store.getters.userInfoGet === null" class="login" @click="this.$router.push('/login')">
-                        <span>登录</span>
-                        <i class="fas fa-location-arrow"/>
+                <div v-if="this.$store.getters.userInfoGet === null" class="login" @click="this.$router.push('/login')">
+                    <span>登录</span>
+                    <i class="fas fa-location-arrow"/>
+                </div>
+                <div v-else class="nav-player-show-box">
+                    <div class="player-head" @click="this.$router.push('/player')">
+                        <img :src="this.$store.getters.userInfoGet.userhead"/>
                     </div>
-                </transition>
-                <transition name="content-effects">
-                    <div v-if="this.$store.getters.userInfoGet !== null" class="nav-player-show-box">
-                        <div class="player-head">
-                            <img :src="this.$store.getters.userInfoGet.userhead"/>
-                        </div>
-                        <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
-                        <div class="player-notice-sum-box">
-                            <i class="fas fa-bullhorn" @click="openNoticeWindow = true"/>
-                            <span class="span-notice-sum">99+</span>
-                            <transition name="el-zoom-in-top">
-                                <div class="notice-drop-menu" v-if="openNoticeWindow" @mouseleave="openNoticeWindow = false">
-                                    <div class="drop-menu-title">
-                                        <span class="left-title-span">通知</span>
-                                        <div class="right-box">
-                                            <span class="sub-box">标记已读</span>
-                                        </div>
-                                    </div>
-                                    <div class="drop-notice-content">
-                                        <div class="drop-notice-sub-item" v-for="item in playerNoticeContent" :key="item.id">
-                                            <div class="left-text">
-                                                <span>{{item.content}}</span>
-                                            </div>
-                                            <i class="far fa-square"/>
-                                        </div>
+                    <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
+                    <div class="player-notice-sum-box">
+                        <i class="fas fa-bullhorn" @click="openNoticeWindow = true"/>
+                        <span class="span-notice-sum">99+</span>
+                        <transition name="el-zoom-in-top">
+                            <div class="notice-drop-menu" v-if="openNoticeWindow" @mouseleave="openNoticeWindow = false">
+                                <div class="drop-menu-title">
+                                    <span class="left-title-span">通知</span>
+                                    <div class="right-box">
+                                        <span class="sub-box">标记已读</span>
                                     </div>
                                 </div>
-                            </transition>
-                        </div>
-                        <div class="logout" @click="playerLogout">
-                            <span>注销</span>
-                            <i class="fas fa-sign-out-alt"/>
-                        </div>
+                                <div class="drop-notice-content">
+                                    <div class="drop-notice-sub-item" v-for="item in playerNoticeContent" :key="item.id">
+                                        <div class="left-text">
+                                            <span>{{item.content}}</span>
+                                        </div>
+                                        <i class="far fa-square"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition>
                     </div>
-                </transition>
+                    <div class="logout" @click="playerLogout">
+                        <span>注销</span>
+                        <i class="fas fa-sign-out-alt"/>
+                    </div>
+                </div>
             </div>
         </nav>
         <div class="change-content">
@@ -96,7 +92,7 @@ export default {
                 },
                 {
                     id: 1,
-                    title: '动态',
+                    title: '社区',
                     icon: 'http://image.superarilo.icu/menu/dynamic.png',
                     path: 'dynamic'
                 },
@@ -307,7 +303,6 @@ a
                     align-items: center;
                     background-color: #409eff;
                     cursor: pointer;
-                    transition: all 0.4s;
                     span , i
                     {
                         height: 100%;
@@ -339,7 +334,6 @@ a
                     height: 100%;
                     display: flex;
                     align-items: center;
-                    transition: all 0.4s;
                     .player-head
                     {
                         height: 80%;
@@ -349,6 +343,7 @@ a
                         border-radius: 50%;
                         box-shadow: 0 0 0.2rem black;
                         overflow: hidden;
+                        cursor: pointer;
                         img
                         {
                             max-height: 100%;
@@ -796,14 +791,5 @@ a
             background-color: #f1f1f1;
         }
     }
-}
-.content-effects-enter-from , .content-effects-leave-to
-{
-    opacity: 0;
-    transform: translateX(5rem);
-}
-.content-effects-leave-active
-{
-    position: absolute;
 }
 </style>

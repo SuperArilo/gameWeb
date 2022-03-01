@@ -297,6 +297,10 @@ export default {
         {
             display: none;
         }
+        ::v-deep(.el-dialog__footer)
+        {
+            display: none;
+        }
     }
 }
 @media screen and (min-width:1400px)

@@ -1,7 +1,7 @@
 axios.defaults.withCredentials = false
 const service = axios.create({
     baseURL: 'https://www.itrong.love:1234/api',
-    timeout: 20000
+    timeout: 15000
 })
 service.interceptors.request.use(config => {
     if(localStorage.getItem('token') === null && sessionStorage.getItem('token') === null){
