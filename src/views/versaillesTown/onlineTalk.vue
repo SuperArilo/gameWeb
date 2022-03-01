@@ -1,5 +1,5 @@
 <template>
-    <div class="index-box" :style="{backgroundImage:`url(${indexBg})`}">
+    <div class="index-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
         <div class="talk-div">
             <div class="talk-title">
                 <span>在线聊天</span>
@@ -49,9 +49,6 @@ export default {
     },
     data(){
         return{
-            indexBg: require('@/views/icon/index/index_center.jpg'),
-            test:[
-            ],
             refreshShow: false,
             userWriteContent: '',
             sentToServerStatu: false,
@@ -160,7 +157,7 @@ export default {
             background-position: top;
             background-attachment: fixed;
             background-size: cover;
-            background-image: url('../icon/index/versaillestown/townIndex2.jpg');
+            background-image: url('http://image.superarilo.icu/townIndex2.jpg');
             box-shadow: 0 0 0.3rem black;
             padding: 0.5rem;
             span

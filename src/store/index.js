@@ -3,8 +3,8 @@ export default createStore({
     state:{
         isPhone: null,
         windowScrollValue: null,
-        frsIcon: require('@/views/icon/index/frs.png'),
-        indexBg: require('@/views/icon/index/index_center.jpg'),
+        frsIcon: 'http://image.superarilo.icu/frs.png',
+        indexBg: 'http://image.superarilo.icu/index.jpg',
         userInfo: null,
         serverTeamList:[
             {

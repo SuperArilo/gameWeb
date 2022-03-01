@@ -1,7 +1,7 @@
 <template>
     <div class="index-div">
         <div class="index-center-show">
-            <img class="back-iamge" v-lazy="indexImage"/>
+            <img class="back-iamge" :src="indexImage"/>
             <div class="center-text">
                 <span class="welcome-tips">欢迎来到</span>
                 <h2>凡尔赛小镇</h2>
@@ -9,6 +9,7 @@
                     <span>生存、宠物、RPG、领地、养老</span>
                     <span>Minecraft Java Edition</span>
                     <span>当前服务器版本：1.18.1</span>
+                    <span>服务器地址：mc.superarilo.icu</span>
                 </div>
             </div>
         </div>
@@ -92,7 +93,7 @@
             <div class="play-content-box">
                 <div class="sub-item" v-for="item in playContentList" :key="item.id" :style="this.$store.getters.isPhoneGet ? 'flex-direction: column-reverse;' : item.id % 2 == 0 ? 'flex-direction: row-reverse;' : ''">
                     <div class="picture">
-                        <img v-lazy="item.image"/>
+                        <img :src="item.image"/>
                     </div>
                     <div class="content-describe" :style="this.$store.getters.isPhoneGet ? 'margin-bottom: 1rem;' : item.id % 2 == 0 ? 'margin-right: 1rem;':'margin-left: 1rem;'">
                         <span class="title">{{item.title}}</span>
@@ -143,7 +144,7 @@
             <div class="town-show-scroll">
                 <el-carousel :height="25 + 'rem'">
                     <el-carousel-item v-for="item in bottomPictureList" :key="item.id">
-                        <img v-lazy="item.image"/>
+                        <img :src="item.image"/>
                     </el-carousel-item>
                 </el-carousel>
             </div>
@@ -160,30 +161,30 @@ export default {
     },
     data(){
         return{
-            indexImage: require('@/views/icon/index/versaillestown/townBg.png'),
-            netWorkShow: require('@/views/icon/index/versaillestown/netWork.png'),
-            bbs: require('@/views/icon/index/versaillestown/bbs.png'),
-            safe: require('@/views/icon/index/versaillestown/safe.png'),
-            activity: require('@/views/icon/index/versaillestown/activity.png'),
-            publicWelfare: require('@/views/icon/index/versaillestown/publicWelfare.png'),
-            server: require('@/views/icon/index/versaillestown/server.png'),
-            mcbaike: require('@/views/icon/index/versaillestown/mcbaike.gif'),
+            indexImage: 'http://image.superarilo.icu/townBg.png',
+            netWorkShow: 'http://image.superarilo.icu/icon/netWork.png',
+            bbs: 'http://image.superarilo.icu/icon/bbs.png',
+            safe: 'http://image.superarilo.icu/icon/safe.png',
+            activity: 'http://image.superarilo.icu/icon/activity.png',
+            publicWelfare: 'http://image.superarilo.icu/icon/publicWelfare.png',
+            server: 'http://image.superarilo.icu/icon/server.png',
+            mcbaike: 'http://image.superarilo.icu/icon/mcbaike.gif',
             playContentList:[
                 {
                     id: 1,
-                    image: require('@/views/icon/index/versaillestown/playContent1.png'),
+                    image: 'http://image.superarilo.icu/playContent1.png',
                     title: '基于原版生存',
                     describe: '在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！'
                 },
                 {
                     id: 2,
-                    image: require('@/views/icon/index/versaillestown/playContent2.png'),
+                    image: 'http://image.superarilo.icu/playContent2.png',
                     title: 'RPG等级玩法',
                     describe: '服务器提供RPG升级和技能系统，在这里可以升级刷怪、快速开采、高效种植、和好朋友一起PVP！'
                 },
                 {
                     id: 3,
-                    image: require('@/views/icon/index/versaillestown/playContent3.png'),
+                    image: 'http://image.superarilo.icu/playContent3.png',
                     title: '宠物玩法',
                     describe: '在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！'
                 }
@@ -191,43 +192,43 @@ export default {
             bottomPictureList:[
                 {
                     id: 1,
-                    image: require('@/views/icon/index/versaillestown/show1.png')
+                    image: 'http://image.superarilo.icu/show1.png'
                 },
                 {
                     id: 2,
-                    image: require('@/views/icon/index/versaillestown/show2.png')
+                    image: 'http://image.superarilo.icu/show2.png'
                 },
                 {
                     id: 3,
-                    image: require('@/views/icon/index/versaillestown/show3.png')
+                    image: 'http://image.superarilo.icu/show3.png'
                 },
                 {
                     id: 4,
-                    image: require('@/views/icon/index/versaillestown/show4.png')
+                    image: 'http://image.superarilo.icu/show4.png'
                 },
                 {
                     id: 5,
-                    image: require('@/views/icon/index/versaillestown/show5.png')
+                    image: 'http://image.superarilo.icu/show5.png'
                 },
                 {
                     id: 6,
-                    image: require('@/views/icon/index/versaillestown/show6.png')
+                    image: 'http://image.superarilo.icu/show6.png'
                 },
                 {
                     id: 7,
-                    image: require('@/views/icon/index/versaillestown/show7.png')
+                    image: 'http://image.superarilo.icu/show7.png'
                 },
                 {
                     id: 8,
-                    image: require('@/views/icon/index/versaillestown/show8.png')
+                    image: 'http://image.superarilo.icu/show8.png'
                 },
                 {
                     id: 9,
-                    image: require('@/views/icon/index/versaillestown/show9.png')
+                    image: 'http://image.superarilo.icu/show9.png'
                 },
                 {
                     id: 10,
-                    image: require('@/views/icon/index/versaillestown/show10.png')
+                    image: 'http://image.superarilo.icu/show10.png'
                 }
             ],
             serverTeamHeadList:[]

@@ -29,7 +29,7 @@
                             </transition>
                         </div>
                     </div>
-                    <img v-lazy="item.mediaHttpUrl" @click="userChoicePicture(item.id,item.mediaHttpUrl)"/>
+                    <img :src="item.mediaHttpUrl" @click="userChoicePicture(item.id,item.mediaHttpUrl)"/>
                     <span class="file-name">{{item.mediaName}}</span>
                 </div>
             </transition-group>

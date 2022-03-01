@@ -23,12 +23,18 @@
             </div>
             <div class="sub-item">
                 <div class="links">
-                    <span class="title">简介</span>
+                    <span class="title">技术驱动</span>
+                    <div class="show-logo">
+                        <img src="http://image.superarilo.icu/sloganBlue.png"/>
+                    </div>
+                    <div class="show-logo">
+                        <img src="http://image.superarilo.icu/tyy.png"/>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="bottom-link">
-            <span>Copyriht © SuperArilo 2021. All rights reserved</span>
+            <span>Copyriht © SuperArilo 2022. All rights reserved</span>
             <a href="https://beian.miit.gov.cn/" target="_blank">备案号：蜀ICP备2021010843号</a>
         </div>
     </div>
@@ -70,6 +76,8 @@ export default {
                 }
                 i
                 {
+                    width: 1.8rem;
+                    justify-content: center;
                     font-size: 1rem;
                 }
                 span
@@ -109,6 +117,21 @@ export default {
                 text-align: center;
                 font-size: 0.7rem;
                 color: #ffffff;
+                letter-spacing: 0.15rem;
+                font-weight: bold;
+            }
+            .show-logo
+            {
+                width: 100%;
+                height: 1.8rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img
+                {
+                    max-height: 60%;
+                    height: 60%;
+                }
             }
         }
     }

@@ -91,37 +91,37 @@ export default {
                 {
                     id: 0,
                     title: '首页',
-                    icon: require('@/views/icon/index/home.png'),
+                    icon: 'http://image.superarilo.icu/menu//home.png',
                     path: ''
                 },
                 {
                     id: 1,
                     title: '动态',
-                    icon: require('@/views/icon/index/dynamic.png'),
+                    icon: 'http://image.superarilo.icu/menu/dynamic.png',
                     path: 'dynamic'
                 },
                 {
                     id: 2,
                     title: '留言',
-                    icon: require('@/views/icon/index/iMessage.png'),
+                    icon: 'http://image.superarilo.icu/menu/iMessage.png',
                     path: 'message'
                 },
                 {
                     id: 3,
                     title: '与服务器在线聊天',
-                    icon: require('@/views/icon/index/onlineTalk.png'),
+                    icon: 'http://image.superarilo.icu/menu/onlineTalk.png',
                     path: 'onlinetalk'
                 },
                 {
                     id: 4,
                     title: '玩家信息',
-                    icon: require('@/views/icon/index/player.png'),
+                    icon: 'http://image.superarilo.icu/menu/player.png',
                     path: 'player'
                 },
                 {
                     id: 5,
                     title: '自助申请白名单',
-                    icon: require('@/views/icon/index/rule.png'),
+                    icon: 'http://image.superarilo.icu/menu/rule.png',
                     path: 'applicationwhitelist'
                 }
             ],
@@ -573,12 +573,14 @@ a
                         max-height: 100%;
                         display: flex;
                         align-items: center;
-                        font-size: 0.7rem;
                     }
                     span
                     {
+                        font-size: 0.72rem;
                         margin-left: 0.5rem;
-                        letter-spacing: 0.05rem;
+                        letter-spacing: 0.1rem;
+                        font-weight: bold;
+                        color: rgb(49, 49, 49);
                     }
                 }
                 .menu-list

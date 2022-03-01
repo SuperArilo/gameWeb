@@ -1,7 +1,7 @@
 <template>
     <div class="error-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
         <div class="center-box">
-            <img src="./icon/index/error.jpg"/>
+            <img src="http://image.superarilo.icu/error.jpg"/>
         </div>
         <footer-bottom/>
     </div>

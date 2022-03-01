@@ -90,7 +90,7 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-image: url('../icon/index/versaillestown/player/playerBg.jpg');
+        background-image: url('http://image.superarilo.icu/playerBg.jpg');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
