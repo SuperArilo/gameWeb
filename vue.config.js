@@ -21,20 +21,20 @@ const cdn = {
     },
     // cdn的css链接
     css: [
-        'https://unpkg.com/element-plus/dist/index.css',
-        'https://unpkg.com/animate.css',
+        'https://unpkg.com/element-plus@2.0.4/dist/index.css',
+        'https://unpkg.com/animate.css@4.1.1/animate.css',
         'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css'
     ],
     // cdn的js链接
     js: [
-        'https://unpkg.com/vue@next',
-        'https://unpkg.com/vuex@4',
-        'https://unpkg.com/jquery',
-        'https://unpkg.com/element-plus',
-        'https://unpkg.com/vue-router@4',
+        'https://unpkg.com/vue@3.2.31/dist/vue.global.js',
+        'https://unpkg.com/vuex@4.0.2/dist/vuex.global.js',
+        'https://unpkg.com/jquery@3.6.0/dist/jquery.js',
+        'https://unpkg.com/element-plus@2.0.4/dist/index.full.js',
+        'https://unpkg.com/vue-router@4.0.13/dist/vue-router.global.js',
         'https://cdn.jsdelivr.net/npm/axios@0.24.0/dist/axios.min.js',
         'https://cdn.jsdelivr.net/npm/qs@6.10.3/dist/qs.js',
-        'https://unpkg.com/wangeditor'
+        'https://unpkg.com/wangeditor@4.7.12/dist/wangEditor.min.js'
     ]
 }
  

@@ -17,24 +17,6 @@
                     <div class="player-notice-sum-box">
                         <i class="fas fa-bullhorn" @click="openNoticeWindow = true"/>
                         <span class="span-notice-sum">99+</span>
-                        <transition name="el-zoom-in-top">
-                            <div class="notice-drop-menu" v-if="openNoticeWindow" @mouseleave="openNoticeWindow = false">
-                                <div class="drop-menu-title">
-                                    <span class="left-title-span">通知</span>
-                                    <div class="right-box">
-                                        <span class="sub-box">标记已读</span>
-                                    </div>
-                                </div>
-                                <div class="drop-notice-content">
-                                    <div class="drop-notice-sub-item" v-for="item in playerNoticeContent" :key="item.id">
-                                        <div class="left-text">
-                                            <span>{{item.content}}</span>
-                                        </div>
-                                        <i class="far fa-square"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </transition>
                     </div>
                     <div class="logout" @click="playerLogout">
                         <span>注销</span>
@@ -78,7 +60,7 @@
 </template>
 <script>
 import { ElNotification , ElMessageBox , ElMessage } from 'element-plus'
-import { userLognState , userLogOut , userNoticeGet } from '@/util/api.js'
+import { userLognState , userLogOut } from '@/util/api.js'
 export default {
     data(){
         return{
@@ -122,15 +104,16 @@ export default {
                 }
             ],
             openNoticeWindow: false,
-            playerNoticeContent: []
         }
     },
-    async beforeCreate(){
+    mounted(){
+        window.addEventListener('resize',this.windowWidth)
+        this.windowWidth()
+        window.addEventListener('scroll', this.scrollValue,true)
         if(localStorage.getItem('token')){
             userLognState().then(resq => {
                 if(resq.flag){
                     this.$store.commit('userInfoSet', resq.data)
-                    this.playerNoticeGet()
                 } else {
                     ElNotification({title: '提示',message: resq.message ,type: 'warning'})
                     this.$store.commit('userInfoSet',null)
@@ -145,7 +128,6 @@ export default {
             userLognState().then(resq => {
                 if(resq.flag){
                     this.$store.commit('userInfoSet', resq.data)
-                    this.playerNoticeGet()
                 } else {
                     ElNotification({title: '提示',message: resq.message ,type: 'warning'})
                     this.$store.commit('userInfoSet',null)
@@ -157,13 +139,6 @@ export default {
                 sessionStorage.removeItem('token')
             })
         }
-    },
-    created(){
-        window.addEventListener('resize',this.windowWidth)
-        this.windowWidth()
-    },
-    mounted(){
-        window.addEventListener('scroll', this.scrollValue,true)
     },
     methods:{
         windowWidth(){
@@ -199,17 +174,6 @@ export default {
             }).catch(() => {
             })
         },
-        playerNoticeGet(){
-            userNoticeGet({receiver: this.$store.getters.userInfoGet.uid}).then(resq => {
-                if(resq.code === 200){
-                    this.playerNoticeContent = resq.data.list
-                } else {
-                    ElMessage.error('获取玩家通知消息发生错误！' + resq.message)
-                }
-            }).catch(err => {
-                ElMessage.error('获取玩家通知消息发生错误！' + err)
-            })
-        }
     },
     unmounted(){
         window.removeEventListener('scroll', this.scrollValue,true)
@@ -250,7 +214,7 @@ a
 }
 ::-webkit-scrollbar-thumb
 {
-    background-color: rgb(172, 172, 172);
+    background-color: rgb(79, 130, 241);
 }
 #app
 {
@@ -272,7 +236,7 @@ a
             position: fixed;
             z-index: 1000;
             justify-content: space-between;
-            box-shadow: 0 0 0.2rem black;
+            box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.6);
             .left-func
             {
                 height: 100%;
@@ -336,7 +300,9 @@ a
                     align-items: center;
                     .player-head
                     {
-                        height: 80%;
+                        height: 1.8rem;
+                        width: 1.8rem;
+                        min-width: 1.8rem;
                         display: flex;
                         align-items: center;
                         border: solid 0.04rem #99a2aa;
@@ -397,100 +363,6 @@ a
                             top: 0;
                             right: 0;
                             margin: 0.1rem 0.5rem;
-                        }
-                        .notice-drop-menu
-                        {
-                            width: 12rem;
-                            display: flex;
-                            overflow: hidden;
-                            align-content: flex-start;
-                            flex-wrap: wrap;
-                            position: absolute;
-                            top: 2.2rem;
-                            left: -6rem;
-                            box-shadow: 0 0.05rem 0.3rem rgba(0, 0, 0, 0.5);
-                            border-radius: 0.15rem;
-                            .drop-menu-title
-                            {
-                                width: 100%;
-                                height: 1.5rem;
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                padding: 0 0.5rem;
-                                background-color: #ffffff;
-                                border-bottom: solid 0.05rem darkgray;
-                                .right-box , .left-title-span
-                                {
-                                    height: 100%;
-                                    display: flex;
-                                    align-items: center;
-                                }
-                                .left-title-span
-                                {
-                                    font-size: 0.6rem;
-                                }
-                                .right-box
-                                {
-                                    .sub-box
-                                    {
-                                        height: 1rem;
-                                        display: flex;
-                                        align-items: center;
-                                        padding: 0 0.5rem;
-                                        border-radius: 0.15rem;
-                                        border: solid 0.05rem darkgray;
-                                        font-size: 0.55rem;
-                                        background-color: rgb(240,240,240);
-                                        cursor: pointer;
-                                        transition: all 0.3s;
-                                    }
-                                    .sub-box:hover
-                                    {
-                                        color: red;
-                                    }
-                                }
-                            }
-                            .drop-notice-content
-                            {
-                                width: 100%;
-                                min-height: 8rem;
-                                display: flex;
-                                align-content: flex-start;
-                                flex-wrap: wrap;
-                                background-color: rgb(240,240,240);
-                                .drop-notice-sub-item
-                                {
-                                    width: 100%;
-                                    height: 1.2rem;
-                                    display: flex;
-                                    justify-content: space-between;
-                                    padding: 0 0.5rem;
-                                    cursor: pointer;
-                                    .left-text
-                                    {
-                                        width: 80%;
-                                        height: 100%;
-                                        display: flex;
-                                        align-items: center;
-                                        span
-                                        {
-                                            font-size: 0.6rem;
-                                            text-overflow: ellipsis;
-                                            overflow: hidden;
-                                            white-space: nowrap;
-                                        }
-                                    }
-                                    i
-                                    {
-                                        height: 100%;
-                                        font-size: 0.7rem;
-                                        display: flex;
-                                        align-items: center;
-                                        color: rgb(112, 112, 112);
-                                    }
-                                }
-                            }
                         }
                     }
                     .logout

@@ -53,7 +53,8 @@ export default {
             userWriteContent: '',
             sentToServerStatu: false,
             onlineTalkUrl: 'wss://www.itrong.love:1234/api/onlinetalk/',
-            websock: null
+            websock: null,
+            test: ''
         }
     },
     created(){

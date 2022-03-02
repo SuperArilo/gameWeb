@@ -92,7 +92,7 @@
             </div>
             <div class="play-content-box">
                 <div class="sub-item" v-for="item in playContentList" :key="item.id" :style="this.$store.getters.isPhoneGet ? 'flex-direction: column-reverse;' : item.id % 2 == 0 ? 'flex-direction: row-reverse;' : ''">
-                    <div class="picture">
+                    <div class="picture" @click="previewImg($event)">
                         <img :src="item.image"/>
                     </div>
                     <div class="content-describe" :style="this.$store.getters.isPhoneGet ? 'margin-bottom: 1rem;' : item.id % 2 == 0 ? 'margin-right: 1rem;':'margin-left: 1rem;'">
@@ -155,6 +155,8 @@
 <script>
 import { ElMessage } from 'element-plus'
 import FooterBottom from '@/components/footerBottom.vue'
+import { showImages } from 'vue-img-viewr'
+import 'vue-img-viewr/styles/index.css'
 export default {
     components:{
         FooterBottom
@@ -174,19 +176,19 @@ export default {
                     id: 1,
                     image: 'http://image.superarilo.icu/playContent1.png',
                     title: '基于原版生存',
-                    describe: '在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！'
+                    describe: '我们保留了Minecraft最原始的生存冒险，让玩家感受和体验最纯正的玩法。在保证原版玩法不变的基础上，扩展新玩法。增加用于探险和冒险的资源世界，并且世界版本为1.18，拥有洞穴和高山。'
                 },
                 {
                     id: 2,
                     image: 'http://image.superarilo.icu/playContent2.png',
                     title: 'RPG等级玩法',
-                    describe: '服务器提供RPG升级和技能系统，在这里可以升级刷怪、快速开采、高效种植、和好朋友一起PVP！'
+                    describe: '服务器提供RPG升级和技能系统，并且有多种技能可供使用，右边计分板实时显示您当前的魔法量，在这里可以升级刷怪、快速开采、高效种植、和好朋友一起PVP！'
                 },
                 {
                     id: 3,
                     image: 'http://image.superarilo.icu/playContent3.png',
                     title: '宠物玩法',
-                    describe: '在保证原版玩法不变的的基础上，扩展新玩法。服务器所有使用的插件都来源于开源社区！'
+                    describe: '服务器提供Minecraft原有生物的捕捉和抚养功能，您可以在系统商店里购买新宠物，也可以去野外捕捉宠物。您还可以召唤您的宠物来协助你战斗、帮助您拾取东西、给您提供信标的效果等等！'
                 }
             ],
             bottomPictureList:[
@@ -231,7 +233,8 @@ export default {
                     image: 'http://image.superarilo.icu/show10.png'
                 }
             ],
-            serverTeamHeadList:[]
+            serverTeamHeadList:[],
+            imageList:[]
         }   
     },
     created(){
@@ -270,6 +273,12 @@ export default {
             }).catch(subErr => {
                 ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subErr)
             })
+        },
+        previewImg(e){
+            this.imageList.push($(e.target).attr('src'))
+            showImages({urls: this.imageList, index: 0, onClose: () => {
+                this.imageList = []
+            }})
         },
     }
 }
@@ -467,6 +476,7 @@ export default {
                     border-radius: 0.2rem;
                     overflow: hidden;
                     box-shadow: 0 0 0.1rem black;
+                    cursor: pointer;
                     img
                     {
                         width: 100%;
@@ -495,6 +505,7 @@ export default {
                     {
                         margin-top: 0.5rem;
                         font-size: 0.65rem;
+                        letter-spacing: 0.05rem;
                         color: rgb(65, 65, 65);
                     }
                 }

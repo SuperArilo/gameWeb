@@ -173,13 +173,12 @@ import footerBottom from '@/components/footerBottom.vue'
 import dynamicDetailComment from '@/components/dynamic/dynamicDetailComment.vue'
 import { dynamicDetailGet , dynamicCommentGet } from '@/util/api.js'
 import { ElMessage } from 'element-plus'
-import ImgViewr, { showImages } from 'vue-img-viewr'
+import { showImages } from 'vue-img-viewr'
 import 'vue-img-viewr/styles/index.css'
 export default {
     components:{
         dynamicDetailComment,
-        footerBottom,
-        ImgViewr
+        footerBottom
     },
     data(){
         return{
