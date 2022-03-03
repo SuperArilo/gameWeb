@@ -39,6 +39,9 @@ const cdn = {
 }
  
 module.exports = {
+    devServer:{
+        port: 80
+    },
     lintOnSave: false,
     publicPath: '/',
     productionSourceMap: false,
