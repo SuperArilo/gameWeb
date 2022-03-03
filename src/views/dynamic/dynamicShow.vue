@@ -482,7 +482,7 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            padding: 0.5rem 0.5rem;
+            padding: 0.5rem 1rem;
             transition: all 0.5s;
             margin: 0.5rem 0;
             border-radius: 0.2rem;
@@ -491,20 +491,13 @@ export default {
                 width: 100%;
                 display: flex;
                 justify-content: space-between;
-                align-items: flex-start;
+                align-items: center;
                 .title
                 {
-                    padding: 0.5rem 0 0 0.5rem;
                     text-align: left;
                     font-size: 0.75rem;
                     letter-spacing: 0.05rem;
-                    transition: all 0.3s;
-                    cursor: pointer;
                     word-break: break-all;
-                }
-                .title:hover
-                {
-                    color: darkslateblue;
                 }
                 .user-head
                 {
@@ -529,7 +522,6 @@ export default {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    margin: 0 0.3rem 0 0.3rem;
                     i
                     {
                         font-size: 0.7rem;
@@ -550,6 +542,10 @@ export default {
                 {
                     text-decoration: underline;
                 }
+                .dy-sub-item:nth-child(2) , .dy-sub-item:nth-child(3) , .dy-sub-item:nth-child(4) , .dy-sub-item:nth-child(5)
+                {
+                    margin-left: 0.3rem;
+                }
             }
             .dy-introduction
             {
@@ -560,7 +556,7 @@ export default {
                 text-align: left;
                 word-break: break-all;
                 font-size: 0.62rem;
-                padding: 0.5rem;
+                margin: 0.5rem 0;
                 letter-spacing: 0.01rem;
             }
             .bottom-buttom
@@ -569,7 +565,6 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 0 0.5rem;
                 .func-box
                 {
                     height: 2rem;
@@ -577,11 +572,15 @@ export default {
                     align-items: center;
                     i
                     {
-                        height: 100%;
                         display: flex;
                         align-items: center;
                         font-size: 0.7rem;
                         margin: 0 0.3rem;
+                        cursor: pointer;
+                    }
+                    i:nth-child(1)
+                    {
+                        margin-left: 0;
                     }
                 }
                 .buttom

@@ -776,6 +776,7 @@ export default {
             align-items: center;
             background-color: #ffffff;
             transition: all 0.3s;
+            margin: 0.5rem 0;
             span , i
             {
                 height: 100%;
