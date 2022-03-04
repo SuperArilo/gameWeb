@@ -80,6 +80,7 @@
                         <div class="func-box">
                             <i class="far fa-star"/>
                             <i class="fas fa-exclamation-triangle"/>
+                            <i v-if="this.$store.getters.userInfoGet === null ? false : this.$store.getters.userInfoGet.uid === item.uid ? true:false " class="fas fa-trash-alt"/>
                         </div>
                         <span class="buttom" @click="detailsRouterfunc(item.id)">跃迁</span>
                     </div>
