@@ -15,7 +15,7 @@
                     </div>
                     <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
                     <div class="player-notice-sum-box">
-                        <i class="fas fa-bullhorn" @click="openNoticeWindow = true"/>
+                        <i class="fas fa-bullhorn" @click="this.$router.push('/player/notice')"/>
                         <span class="span-notice-sum">99+</span>
                     </div>
                     <div class="logout" @click="playerLogout">
@@ -103,7 +103,6 @@ export default {
                     path: 'applicationwhitelist'
                 }
             ],
-            openNoticeWindow: false,
         }
     },
     mounted(){

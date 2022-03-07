@@ -208,8 +208,12 @@ export default {
     },
     methods:{
         OpenBackComment(id){
-            this.OpenBackCommentShow =! this.OpenBackCommentShow
-            this.OpenBackCommentId = id
+            if(this.OpenBackCommentId === id){
+                this.OpenBackCommentShow =! this.OpenBackCommentShow
+            } else{
+                this.OpenBackCommentId = id
+                this.OpenBackCommentShow = true
+            }
         },
         backRouter(){
             this.$router.push('/dynamic')

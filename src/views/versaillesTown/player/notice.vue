@@ -6,17 +6,29 @@
                 <i class="fas fa-bell"/>
             </div>
             <div class="notice-content">
-                <div class="title-func-menu">
-                    <span class="sub-menu">已读</span>
-                    <span class="sub-menu">删除</span>
-                    <i v-if="this.noticeChoiceList.length !== this.noticeContent.length" class="far fa-square" @click="choiceAll"/>
-                    <i v-else class="fas fa-check-square" @click="choiceAllCancel"/>
+                <div class="table-title" :style="[this.$store.getters.isPhoneGet ? 'width: auto;':'width:100%;']">
+                    <div class="check-box">
+                        <i :class="noticeChoiceList.length === 0 ? 'far fa-square':noticeContent.length > noticeChoiceList.length ? 'fas fa-minus-square':noticeChoiceList.length === noticeContent.length ? 'fas fa-check-square':'fas fa-minus-square'" @click="isCancelAndAll"/>
+                    </div>
+                    <span class="table-title-show-title" :style="[this.$store.getters.isPhoneGet ? 'width: 14rem;min-width:14rem;':'width: 60%;']">标题内容</span>
+                    <span class="table-title-show-title" :style="[this.$store.getters.isPhoneGet ? 'width: 10rem;min-width: 10rem;':'width: 40%;']">发布时间</span>
+                    <span class="table-title-class-title">类型</span>
                 </div>
-                <div class="notice-sub-content">
-                    <div class="notice-sub-item" v-for="item in noticeContent" :key="item.id">
-                        <span>{{item.content}}</span>
-                        <i v-if="this.noticeChoiceList.indexOf(item.id) === -1" class="far fa-square" @click="choiceNoticeAdd(item.id)"/>
-                        <i v-else class="fas fa-check-square" @click="choiceNoticeRemove(item.id)"/>
+                <div class="notice-list" :style="[this.$store.getters.isPhoneGet ? 'width: auto;':'width:100%;']">
+                    <div class="sub-notice-list" v-for="item in noticeContent" :key="item.id">
+                        <div class="top-notice-simple">
+                            <div class="sub-check-box">
+                                <i class="far" :class="[noticeChoiceList.indexOf(item.id) === -1 ? 'fa-square':'fa-check-square']" @click="choiceNoticeCheckBox(item.id)"/>
+                            </div>
+                            <span class="sub-notice-title sub-notice-title-no-read" :style="[this.$store.getters.isPhoneGet ? 'width: 14rem;min-width:14rem;':'width: 60%;']" style="cursor: pointer;" @click="openNoticeContent(item.id)">{{item.title}}</span>
+                            <span class="sub-notice-title sub-notice-title-no-read" :style="[this.$store.getters.isPhoneGet ? 'width: 10rem;min-width: 10rem;':'width: 40%;']">{{item.createTime}}</span>
+                            <span class="sub-notice-class sub-notice-title-no-read">{{item.class}}</span>
+                        </div>
+                        <el-collapse-transition>
+                            <div v-if="isOpenChoiceNoticeContent && choiceNoticeIndex === item.id">
+                                <div class="bottom-notice-main-content render-by-edit" v-html="item.content"/>
+                            </div>
+                        </el-collapse-transition>
                     </div>
                 </div>
             </div>
@@ -35,57 +47,57 @@ export default {
         return{
             noticeContent:[
                 {
+                    id: 0,
+                    title: '测试标题',
+                    content: '<p>测试内容</p>',
+                    createTime: '2022-2-10',
+                    class: '系统通知'
+                },
+                {
                     id: 1,
-                    content: '测试1'
+                    title: '测试标题',
+                    content: '<p>测试内容</p>',
+                    createTime: '2022-2-15',
+                    class: '系统通知'
                 },
                 {
                     id: 2,
-                    content: '测试2'
-                },
-                {
-                    id: 3,
-                    content: '测试3'
-                },
-                {
-                    id: 4,
-                    content: '测试4'
-                },
-                {
-                    id: 5,
-                    content: '测试4'
-                },
-                {
-                    id: 6,
-                    content: '测试4'
-                },
-                {
-                    id: 7,
-                    content: '测试4'
-                },
-                {
-                    id: 8,
-                    content: '测试4'
+                    title: '测试标题',
+                    content: '<p>测试内容</p>',
+                    createTime: '2022-2-8',
+                    class: '系统通知'
                 }
             ],
+            choiceNoticeIndex: null,
+            isOpenChoiceNoticeContent: false,
             noticeChoiceList:[]
         }
     },
     methods:{
-        choiceNoticeAdd(id){
-            this.noticeChoiceList.unshift(id)
+        openNoticeContent(id){
+            if(this.choiceNoticeIndex === id){
+                this.isOpenChoiceNoticeContent =! this.isOpenChoiceNoticeContent
+            } else{
+                this.choiceNoticeIndex = id
+                this.isOpenChoiceNoticeContent = true
+            }
         },
-        choiceNoticeRemove(id){
-            this.noticeChoiceList.splice(this.noticeChoiceList.findIndex(item => item === id),1)
+        choiceNoticeCheckBox(id){
+            let index = this.noticeChoiceList.indexOf(id)
+            if(index === -1){
+                this.noticeChoiceList.push(id)
+            } else {
+                this.noticeChoiceList.splice(index,1)
+            }
         },
-        choiceAll(){
-            this.noticeContent.forEach(key => {
-                if(this.noticeChoiceList.indexOf(key.id) === -1){
-                    this.noticeChoiceList.unshift(key.id)
-                }
-            })
-        },
-        choiceAllCancel(){
-            this.noticeChoiceList = []
+        isCancelAndAll(){
+            if(this.noticeChoiceList.length === 0){
+                this.noticeContent.forEach(item => {
+                    this.noticeChoiceList.push(item.id)
+                })
+            } else {
+                this.noticeChoiceList = []
+            }
         }
     }
 }
@@ -133,89 +145,118 @@ export default {
         .notice-content
         {
             width: 100%;
+            height: 20rem;
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            border-radius: 0.3rem;
-            overflow: hidden;
-            border: solid 0.04rem rgb(133, 133, 133);
-            .title-func-menu
+            border: 0.08rem solid #E1E6EB;
+            overflow-x: overlay;
+            .table-title
             {
-                width: 100%;
-                height: 1.5rem;
+                height: 1.6rem;
                 display: flex;
-                justify-content: flex-end;
+                justify-content: flex-start;
                 align-items: center;
-                background-color: rgb(240, 240, 240);
-                box-shadow: 0 0 0.2rem black;
-                .sub-menu
+                .check-box
                 {
-                    width: 3rem;
-                    height: 1.2rem;
+                    width: 2.5rem;
+                    min-width: 2.5rem;
+                    height: 100%;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    border: solid 0.05rem darkgray;
-                    border-radius: 0.1rem;
-                    font-size: 0.55rem;
-                    cursor: pointer;
-                    margin: 0 0.3rem;
-                }
-                .sub-menu:hover
-                {
-                    color: #3399ff;
-                }
-                i
-                {
-                    height: 100%;
-                    font-size: 0.8rem;
-                    display: flex;
-                    align-items: center;
-                    margin: 0 0.5rem;
-                }
-            }
-            .notice-sub-content
-            {
-                width: 100%;
-                display: flex;
-                align-content: flex-start;
-                flex-wrap: wrap;
-                .notice-sub-item
-                {
-                    width: 100%;
-                    height: 1.5rem;
-                    padding: 0 0.5rem;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    border-radius: 0.3rem;
-                    margin: 0.3rem 0;
-                    cursor: pointer;
-                    span
-                    {
-                        height: 100%;
-                        line-height: 1.5rem;
-                        font-size: 0.6rem;
-                        min-width: 0;
-                        max-width: 60%;
-                        text-overflow: ellipsis;
-                        white-space: nowrap; 
-                        overflow: hidden;
-                        transition: all 0.3s;
-                    }
+                    background-color: #F5F6FA;
                     i
                     {
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        font-size: 0.8rem;
+                        color: rgb(56, 56, 56);
+                        cursor: pointer;
+                        font-size: 0.7rem;
                     }
-                    span:hover
+                }
+                .table-title-show-title , .table-title-class-title
+                {
+                    height: 100%;
+                    background-color: #F5F6FA;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    color: #999;
+                    font-size: 0.62rem;
+                    white-space: nowrap;
+
+                }
+                .table-title-class-title
+                {
+                    width: 6rem;
+                    min-width: 6rem;
+                }
+            }
+            .notice-list
+            {
+                width: 100%;
+                .sub-notice-list
+                {
+                    width: inherit;
+                    .top-notice-simple
                     {
-                        text-decoration: underline;
+                        width: inherit;
+                        height: 1.5rem;
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                        .sub-check-box
+                        {
+                            width: 2.5rem;
+                            min-width: 2.5rem;
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            i
+                            {
+                                color: rgb(56, 56, 56);
+                                cursor: pointer;
+                                font-size: 0.7rem;
+                            }
+                        }
+                        .sub-notice-title , .sub-notice-class
+                        {
+                            height: 100%;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            font-size: 0.58rem;
+                            white-space: nowrap;
+                            min-width: 0;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                        }
+                        .sub-notice-class
+                        {
+                            width: 6rem;
+                            min-width: 6rem;
+                        }
+                        .sub-notice-title-no-read
+                        {
+                            color: #394fca;
+                        }
+                    }
+                    .bottom-notice-main-content
+                    {
+                        width: inherit;
+                        padding: 0.5rem 1rem;
+                        background-color: rgba(0, 0, 0, 0.03);
                     }
                 }
             }
+            .notice-list::-webkit-scrollbar
+            {
+                width: 0.3rem;
+            }
+        }
+        .notice-content::-webkit-scrollbar
+        {
+            height: 0.4rem;
         }
         .line
         {
