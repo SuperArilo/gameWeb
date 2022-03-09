@@ -1,6 +1,6 @@
 <template>
     <div class="main-container">
-        <nav class="top-nav">
+        <nav class="top-nav-on-mobile" v-if="this.$store.getters.isPhoneGet">
             <div class="left-func">
                 <i class="fas fa-bars" @click="openMenu =! openMenu" :style="openMenu ? 'color: rgb(173, 173, 173);':''"/>
             </div>
@@ -13,10 +13,9 @@
                     <div class="player-head" @click="this.$router.push('/player')">
                         <img :src="this.$store.getters.userInfoGet.userhead"/>
                     </div>
-                    <span class="player-name">{{this.$store.getters.userInfoGet.nickname}}</span>
-                    <div class="player-notice-sum-box">
-                        <i class="fas fa-bullhorn" @click="this.$router.push('/player/notice')"/>
-                        <span class="span-notice-sum">99+</span>
+                    <div class="user-notice">
+                        <span class="show-text">消息:</span>
+                        <span class="notice-num">12</span>
                     </div>
                     <div class="logout" @click="playerLogout">
                         <span>注销</span>
@@ -25,8 +24,29 @@
                 </div>
             </div>
         </nav>
-        <div class="change-content">
-            <div class="change-left-menu" :style="[!openMenu ? 'width: 0;':'width: 14rem;']" @mouseleave="openMenu = false">
+        <nav class="top-nav-on-pc" v-else>
+            <div class="nav-icon">
+                <img :src="this.$store.getters.frsIconGet"/>
+            </div>
+            <div class="nav-menu-list">
+                <span class="sub-nav-item" v-for="item in navMenuList" :key="item.id" @mouseenter="menuIndex = item.id" @click="menuFunc(item.id,item.path)">{{item.title}}</span>
+            </div>
+            <div class="nav-user-box" v-if="this.$store.getters.userInfoGet !== null">
+                <img class="user-head" @click="this.$router.push('/player')" :src="this.$store.getters.userInfoGet.userhead"/>
+                <div class="user-notice">
+                    <span class="show-text">消息:</span>
+                    <span class="notice-num">12</span>
+                </div>
+                <div class="nav-is-logined-func">
+                    <i class="fas fa-sign-out-alt login-out" @click="playerLogout"/>
+                </div>
+            </div>
+            <div class="nav-not-login" v-else>
+                <span class="nav-buttom login-button" @click="this.$router.push('/login')">登录</span>
+            </div>
+        </nav>
+        <div class="change-content" :style="[this.$store.getters.isPhoneGet ? 'margin-top: 2rem;':'']">
+            <div v-if="this.$store.getters.isPhoneGet" class="change-left-menu" :style="[!openMenu ? 'width: 0;':'width: 14rem;']" @mouseleave="openMenu = false">
                 <div class="server-info">
                     <img :src="this.$store.getters.frsIconGet"/>
                     <span>凡尔赛小镇</span>
@@ -65,6 +85,7 @@ export default {
     data(){
         return{
             openMenu: false,
+            menuIndex: 0,
             navMenuList:[
                 {
                     id: 0,
@@ -86,7 +107,7 @@ export default {
                 },
                 {
                     id: 3,
-                    title: '与服务器在线聊天',
+                    title: '在线聊天',
                     icon: 'http://image.superarilo.icu/menu/onlineTalk.png',
                     path: 'onlinetalk'
                 },
@@ -98,7 +119,7 @@ export default {
                 },
                 {
                     id: 5,
-                    title: '自助申请白名单',
+                    title: '白名单',
                     icon: 'http://image.superarilo.icu/menu/rule.png',
                     path: 'applicationwhitelist'
                 }
@@ -225,22 +246,158 @@ a
         align-content: flex-start;
         flex-wrap: wrap;
         position: relative;
-        .top-nav
+        .top-nav-on-pc , .top-nav-on-mobile
         {
             width: 100%;
-            height: 2.2rem;
-            background-color: #3d6cd1;
+            height: 2rem;
             display: flex;
-            padding-left: 0.5rem;
             position: fixed;
             z-index: 1000;
-            justify-content: space-between;
-            box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.6);
-            .left-func
+            .user-notice
             {
-                height: 100%;
+                height: inherit;
                 display: flex;
                 align-items: center;
+                margin: 0 0.5rem;
+                .show-text
+                {
+                    height: inherit;
+                    display: flex;
+                    align-items: center;
+                    font-size: 0.56rem;
+                    white-space: nowrap;
+                    color: #ffffff;
+                }
+                .notice-num
+                {
+                    padding: 0.1rem 0.2rem;
+                    background-color: #252933;
+                    font-size: 0.52rem;
+                    color: #ffffff;
+                    font-weight: bold;
+                    border-radius: 0.2rem;
+                }
+            }
+        }
+        .top-nav-on-pc
+        {
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-bottom: solid 0.05rem rgba(255, 255, 255, 0.1);
+            transition: background 0.3s;
+            .nav-icon
+            {
+                width: 1.6rem;
+                min-width: 1.6rem;
+                height: 1.6rem;
+                margin-right: 1.5rem;
+                img
+                {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .nav-menu-list
+            {
+                height: inherit;
+                display: flex;
+                align-items: center;
+                margin: 0 1rem;
+                .sub-nav-item
+                {
+                    padding: 0 1.2rem;
+                    height: inherit;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 0.64rem;
+                    color: #ffffff;
+                    letter-spacing: 0.02rem;
+                    cursor: pointer;
+                }
+                .sub-nav-item:hover
+                {
+                    color: #3399ff;
+                }
+            }
+            .nav-user-box
+            {
+                height: inherit;
+                display: flex;
+                align-items: center;
+                .user-head
+                {
+                    width: 1.6rem;
+                    height: 1.6rem;
+                    min-width: 1.6rem;
+                    border-radius: 50%;
+                    cursor: pointer;
+                }
+                .nav-is-logined-func
+                {
+                    height: inherit;
+                    display: flex;
+                    align-items: center;
+                    .login-out
+                    {
+                        height: 1rem;
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.8rem;
+                        cursor: pointer;
+                        color: #ffffff;
+                        transition: color 0.3s;
+                        margin: 0 0.5rem;
+                    }
+                    .login-out:hover
+                    {
+                        color: #3d6cd1;
+                    }
+                }
+            }
+            .nav-not-login
+            {
+                height: inherit;
+                display: flex;
+                align-items: center;
+                .nav-buttom
+                {
+                    border-radius: 0.2rem;
+                    padding: 0.2rem 0.4rem;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                }
+                .login-button
+                {
+                    font-size: 0.52rem;
+                    color: #ffffff;
+                    background-color: #3d6cd1;
+                }
+                .login-button:hover
+                {
+                    background-color: #252933;
+                    color: #ffffff;
+                }
+            }
+        }
+        .top-nav-on-pc:hover
+        {
+            background-color: rgb(61, 61, 61);
+        }
+        .top-nav-on-mobile
+        {
+            padding-left: 0.5rem;
+            background-color: #3d6cd1;
+            justify-content: space-between;
+            .left-func , .right-func
+            {
+                height: inherit;
+                display: flex;
+                align-items: center;
+            }
+            .left-func
+            {
                 i
                 {
                     height: 100%;
@@ -254,9 +411,6 @@ a
             }
             .right-func
             {
-                height: 100%;
-                display: flex;
-                align-items: center;
                 .login
                 {
                     width: 4rem;
@@ -299,9 +453,9 @@ a
                     align-items: center;
                     .player-head
                     {
-                        height: 1.8rem;
-                        width: 1.8rem;
-                        min-width: 1.8rem;
+                        height: 1.6rem;
+                        width: 1.6rem;
+                        min-width: 1.6rem;
                         display: flex;
                         align-items: center;
                         border: solid 0.04rem #99a2aa;
@@ -312,56 +466,6 @@ a
                         img
                         {
                             max-height: 100%;
-                        }
-                    }
-                    .player-name
-                    {
-                        height: 100%;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: 0.56rem;
-                        margin: 0 0.5rem;
-                        min-width: 3rem;
-                        color: #ffffff;
-                    }
-                    .player-notice-sum-box
-                    {
-                        height: 100%;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width: 3rem;
-                        position: relative;
-                        i
-                        {
-                            font-size: 0.8rem;
-                            cursor: pointer;
-                        }
-                        .span-notice-sum , i
-                        {
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            transition: all 0.3s;
-                            color: #ffffff;
-                        }
-                        .span-notice-sum
-                        {
-                            height: auto;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            min-width: 0.8rem;
-                            min-height: 0.8rem;
-                            border-radius: 50%;
-                            background-color: red;
-                            font-size: 0.5rem;
-                            padding: 0.1rem;
-                            position: absolute;
-                            top: 0;
-                            right: 0;
-                            margin: 0.1rem 0.5rem;
                         }
                     }
                     .logout
@@ -408,7 +512,6 @@ a
             display: flex;
             justify-content: flex-start;
             align-items: flex-start;
-            margin-top: 2.2rem;
             .change-left-menu
             {
                 overflow: hidden;
@@ -517,11 +620,11 @@ a
                 justify-content: center;
                 .router_animate-enter-active
                 {
-                    animation: fadeInLeft 0.8s;
+                    animation: slideInLeft 0.6s;
                 }
                 .router_animate-leave-active
                 {
-                    animation: fadeOutRight 0.8s;
+                    animation: slideOutRight 0.6s;
                 }
             }
         }

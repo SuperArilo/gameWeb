@@ -8,7 +8,7 @@
                 <div class="describe">
                     <span>生存、宠物、RPG、领地、养老</span>
                     <span>Minecraft Java Edition</span>
-                    <span>当前服务器版本：1.18.1</span>
+                    <span>服务器支持版本：1.17 ~ 最新版本</span>
                     <span>服务器地址：mc.superarilo.icu</span>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="content-describe" :style="this.$store.getters.isPhoneGet ? 'margin-bottom: 1rem;' : item.id % 2 == 0 ? 'margin-right: 1rem;':'margin-left: 1rem;'">
                         <span class="title">{{item.title}}</span>
-                        <span class="content">{{item.describe}}</span>
+                        <span class="content" :style="[this.$store.getters.isPhoneGet ? 'text-align: center;':'text-align: left;']">{{item.describe}}</span>
                     </div>
                 </div>
             </div>
@@ -493,13 +493,13 @@ export default {
                     .title , .content
                     {
                         width: 100%;
-                        text-align: center;
                         letter-spacing: 0.05rem;
                     }
                     .title
                     {
                         font-size: 0.8rem;
                         font-weight: bold;
+                        text-align: center;
                     }
                     .content
                     {

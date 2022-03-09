@@ -22,7 +22,7 @@
                             </div>
                             <span class="sub-notice-title sub-notice-title-no-read" :style="[this.$store.getters.isPhoneGet ? 'width: 14rem;min-width:14rem;':'width: 60%;']" style="cursor: pointer;" @click="openNoticeContent(item.id)">{{item.title}}</span>
                             <span class="sub-notice-title sub-notice-title-no-read" :style="[this.$store.getters.isPhoneGet ? 'width: 10rem;min-width: 10rem;':'width: 40%;']">{{item.createTime}}</span>
-                            <span class="sub-notice-class sub-notice-title-no-read">{{item.class}}</span>
+                            <span class="sub-notice-class sub-notice-title-no-read">系统通知</span>
                         </div>
                         <el-collapse-transition>
                             <div v-if="isOpenChoiceNoticeContent && choiceNoticeIndex === item.id">
@@ -32,46 +32,45 @@
                     </div>
                 </div>
             </div>
-            <el-pagination style="margin: 0.5rem 0;" background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet"/>
+            <div class="notice-function-box">
+                <div class="button" :class="[noticeChoiceList.length === 0 ? 'no-choice':'default']" @click="delNotice">
+                    <span>删除</span>
+                </div>
+                <div class="button" :class="[noticeChoiceList.length === 0 ? 'no-choice':'default']">
+                    <span>标记已读</span>
+                </div>
+            </div>
+            <el-pagination background layout="prev, pager, next" :total="1000" :small="this.$store.getters.isPhoneGet"/>
         </div>
         <footer-bottom/>
     </div>
 </template>
 <script>
 import footerBottom from '@/components/footerBottom.vue'
+import { userNoticeGet } from '@/util/api.js'
+import { ElMessageBox, ElMessage } from 'element-plus'
 export default {
     components:{
         footerBottom
     },
     data(){
         return{
-            noticeContent:[
-                {
-                    id: 0,
-                    title: '测试标题',
-                    content: '<p>测试内容</p>',
-                    createTime: '2022-2-10',
-                    class: '系统通知'
-                },
-                {
-                    id: 1,
-                    title: '测试标题',
-                    content: '<p>测试内容</p>',
-                    createTime: '2022-2-15',
-                    class: '系统通知'
-                },
-                {
-                    id: 2,
-                    title: '测试标题',
-                    content: '<p>测试内容</p>',
-                    createTime: '2022-2-8',
-                    class: '系统通知'
-                }
-            ],
+            noticeContent:[],
             choiceNoticeIndex: null,
             isOpenChoiceNoticeContent: false,
             noticeChoiceList:[]
         }
+    },
+    created(){
+        userNoticeGet({receiver: this.$store.getters.userInfoGet.uid}).then(resq => {
+            if(resq.code === 200){
+                this.noticeContent = resq.data.list
+            } else {
+                ElMessage.error(resq.message)
+            }
+        }).catch(err => {
+            ElMessage.error(err)
+        })
     },
     methods:{
         openNoticeContent(id){
@@ -98,6 +97,12 @@ export default {
             } else {
                 this.noticeChoiceList = []
             }
+        },
+        delNotice(){
+            ElMessageBox.confirm('确认删除所选消息？','警告',{confirmButtonText: '确认',cancelButtonText: '取消',type: 'warning',}).then(() => {
+                ElMessage.success('删除成功！')
+            }).catch(() => {
+            })
         }
     }
 }
@@ -145,7 +150,7 @@ export default {
         .notice-content
         {
             width: 100%;
-            height: 20rem;
+            min-height: 10rem;
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
@@ -257,6 +262,49 @@ export default {
         .notice-content::-webkit-scrollbar
         {
             height: 0.4rem;
+        }
+        .notice-function-box
+        {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 0.5rem 0;
+            .button
+            {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: solid 0.05rem #ddd;
+                border-radius: 0.15rem;
+                padding: 0.2rem 0.65rem;
+                margin-right: 0.5rem;
+                span
+                {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    font-size: 0.5rem;
+                }
+            }
+            .default
+            {
+                cursor: pointer;
+                background-color: #F7F7F7;
+                span
+                {
+                    color: #333;
+                }
+            }
+            .no-choice
+            {
+                cursor: not-allowed;
+                background-color: rgba(175, 175, 175, 0.24);
+                span
+                {
+                    color: rgb(170, 170, 170);
+                }
+            }
         }
         .line
         {

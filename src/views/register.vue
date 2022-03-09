@@ -303,7 +303,7 @@ export default {
                     transition: all 0.3s;
                     border-radius: 0.8rem;
                     cursor: pointer;
-                    box-shadow: 0 0 0.1rem black;
+                    border: solid 0.05rem rgba(0, 0, 0, 0.2);
                     span , i
                     {
                         height: 100%;

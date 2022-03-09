@@ -85,7 +85,7 @@ export default {
     .top-player-div , .loading-box
     {
         width: 100%;
-        height: 10rem;
+        height: 12rem;
         display: flex;
         flex-direction: column;
         align-items: center;
