@@ -90,7 +90,7 @@ export default {
                     ElMessage.error('获取留言发生错误！ ' + resq.message)
                 }
             }).catch(err => {
-                ElMessage.error('获取留言发生错误！ ' + err)
+                ElMessage.error(err.message)
             })
         },
         sendToServer(){

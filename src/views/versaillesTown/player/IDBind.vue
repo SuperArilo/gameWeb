@@ -5,7 +5,7 @@
                 <span>当前状态</span>
                 <i class="fas fa-archive"/>
             </div>
-            <div class="now-status">
+            <div class="now-status" v-if="this.$store.getters.userInfoGet !== null && this.$store.getters.userInfoGet.hasOwnProperty('javaMcId')">
                 <div class="player-now-status">
                     <div class="name-show">
                         <span>MC Java ID</span>
@@ -30,7 +30,16 @@
                 </div>
                 <span class="button" @click="unbind">解除绑定</span>
             </div>
-            <div class="public-title">
+            <div class="is-no-player" v-else>
+                <div class="sub-user-tips">
+                    <span>您当前没有绑定任何角色哦</span>
+                    <i class="far fa-dizzy"/>
+                </div>
+                <div class="sub-user-tips">
+                    <span class="add-whitelist-button" @click="this.$router.push('/applicationwhitelist')">点击这去申请白名单...</span>
+                </div>
+            </div>
+            <div class="public-title" v-if="this.$store.getters.userInfoGet !== null && this.$store.getters.userInfoGet.hasOwnProperty('javaMcId')">
                 <span>自助修改</span>
                 <i class="fas fa-diagnoses"/>
             </div>
@@ -41,6 +50,7 @@
 <script>
 import footerBottom from '@/components/footerBottom.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { mcWhitelistRemove } from '@/util/api.js'
 export default {
     components:{
         footerBottom
@@ -48,11 +58,15 @@ export default {
     data(){
         return{
             playerHead: '',
-            playerSkin: ''
+            playerSkin: '',
+            isUserHaveJavaId: false,
         }
     },
     created(){
-        this.mojangApi(this.$store.getters.userInfoGet.javaMcId)
+        if(this.$store.getters.userInfoGet !== null && this.$store.getters.userInfoGet.hasOwnProperty('javaMcId')){
+            this.isUserHaveJavaId = true
+            this.mojangApi(this.$store.getters.userInfoGet.javaMcId)
+        }
     },
     methods:{
         async mojangApi(userName,UUID){
@@ -64,7 +78,7 @@ export default {
                     ElMessage.error('获取玩家的信息出错,请稍后重试! ' + resq.statusText)
                 }
             }).catch(err => {
-                ElMessage.error('获取玩家的信息出错,请稍后重试! ' + err)
+                ElMessage.error(err.message)
             })
         },
         arrayBufferToBase64(Buffer){
@@ -84,7 +98,7 @@ export default {
                     ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
                 }
             }).catch(subErr => {
-                ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subErr)
+                ElMessage.error(err.message)
             })
         },
         getBodyRenders(uuid){
@@ -95,21 +109,33 @@ export default {
                     ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
                 }
             }).catch(subErr => {
-                ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subErr)
+                ElMessage.error(err.message)
             })
         },
         unbind(){
             ElMessageBox.confirm('这将会取消绑定状态，此操作不可撤销！', '提示', {confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning', }).then(() => {
-                ElMessage({
-                    type: 'success',
-                    message: '操作成功',
+                mcWhitelistRemove().then(resq => {
+                    if(resq.code === 200){
+                        ElMessage.success(resq.message)
+                        this.$store.commit('removeJavaMcId')
+                    } else {
+                        ElMessage.error(resq.message)
+                    }
+                }).catch(err => {
+                    ElMessage.error(err.message)
                 })
             }).catch(() => {
-                ElMessage({
-                    type: 'info',
-                    message: '操作取消',
-                })
             })
+        }
+    },
+    computed:{
+        returnNewUserInfo(){
+            return this.$store.getters.userInfoGet
+        }
+    },
+    watch:{
+        returnNewUserInfo(nV , oV){
+            this.mojangApi(nV.javaMcId)
         }
     }
 }
@@ -226,6 +252,10 @@ export default {
                     }
                 }
             }
+            .player-now-status:nth-child(2)
+            {
+                min-height: 162px;
+            }
             .button
             {
                 width: 4rem;
@@ -244,6 +274,45 @@ export default {
             .button:hover
             {
                 background-color: rgb(247, 137, 137);
+            }
+        }
+        .is-no-player
+        {
+            width: 100%;
+            height: 15rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            align-content: center;
+            .sub-user-tips
+            {
+                width: 100%;
+                height: 1.5rem;
+                display: flex;
+                justify-content: center;
+                span , i
+                {
+                    height: inherit;
+                    display: flex;
+                    align-items: center;
+                }
+                span
+                {
+                    font-size: 0.65rem;
+                    text-align: center;
+                }
+                i
+                {
+                    font-size: 0.8rem;
+                    margin-left: 1rem;
+                }
+                .add-whitelist-button
+                {
+                    color: red;
+                    font-size: 0.6rem;
+                    cursor: pointer;
+                }
             }
         }
         .line

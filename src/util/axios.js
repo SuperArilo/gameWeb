@@ -1,6 +1,7 @@
 axios.defaults.withCredentials = false
 const service = axios.create({
     baseURL: 'https://www.itrong.love:1234/api',
+    // baseURL: 'https://www.itrong.love/api',
     timeout: 15000
 })
 service.interceptors.request.use(config => {
@@ -16,12 +17,17 @@ service.interceptors.request.use(config => {
         return config
     }
 }, error => {
-    return Promise.reject(error)
+    return Promise.reject(error.response.data)
 })
 service.interceptors.response.use( response => {
         return Promise.resolve(response.data)
     }, error => {
-        return Promise.reject(error)
+        if(error.response){
+            return Promise.reject(error.response.data)
+        } else {
+            error.message = '网络错误!'
+            return Promise.reject(error)
+        }
     }
 )
 export default service

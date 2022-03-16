@@ -70,7 +70,7 @@ export default {
                 this.isGetMediaFileWorkNow = false
             }
         }).catch(err => {
-            ElMessage.error('获取媒体文件出错，请稍后重试！' + err)
+            ElMessage.error(err.message)
         })
     },
     methods:{
@@ -108,7 +108,7 @@ export default {
                             this.isUploadToServerWorkNow = false
                         }
                     }).catch(err => {
-                        ElMessage.error('上传图片过程中发生错误！ ' + err)
+                        ElMessage.error(err.message)
                         this.isUploadToServerWorkNow = false
                     })
                 }
@@ -130,7 +130,7 @@ export default {
                         ElMessage.error(resq.message)
                     }
                 }).catch(err => {
-                    ElMessage.error('请求发生错误！ ' + err)
+                    ElMessage.error(err.message)
                 })
             }).catch(err => {
             })
@@ -158,7 +158,7 @@ export default {
                             ElMessage.error(resq.message)
                         }
                     }).catch(err => {
-                        ElMessage.error('请求发生错误！ ' + err)
+                        ElMessage.error(err.message)
                     })
                     this.isDeleteByMultipleWorkNow = false
                 }).catch(err => {

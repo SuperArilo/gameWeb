@@ -140,7 +140,7 @@ export default {
                     localStorage.removeItem('token')
                 }
             }).catch(err => {
-                ElNotification({title: '错误',message: '用户状态验证接口出错！' + err,type: 'error'})
+                ElNotification({title: '错误',message: err.message,type: 'error'})
                 this.$store.commit('userInfoSet',null)
                 localStorage.removeItem('token')
             })

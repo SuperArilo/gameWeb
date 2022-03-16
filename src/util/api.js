@@ -177,3 +177,19 @@ export const userNoticeGet = (params) => {
         }
     })
 }
+//用户申请游戏白名单
+export const mcWhitelistAdd = (query) => {
+    return request({
+        url: '/user/whitelist',
+        method: 'post',
+        data: query
+    })
+}
+//用户白名单解绑
+export const mcWhitelistRemove = () => {
+    return request({
+        url: '/user/updateWhitelist',
+        method: 'post',
+        // data: query
+    })
+}

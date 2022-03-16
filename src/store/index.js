@@ -18,20 +18,10 @@ export default createStore({
                 className: '管理员',
             },
             {
-                uid: 103,
-                javaMcId: 'Single__290',
-                className: '管理员',
-            },
-            {
                 uid: 104,
                 javaMcId: 'SGJC2374',
                 className: '管理员',
             },
-            {
-                uid: 105,
-                javaMcId: 'aom4399',
-                className: '管理员',
-            }
         ]
     },
     getters:{
@@ -51,6 +41,12 @@ export default createStore({
         },
         userInfoSet(state,value){
             state.userInfo = value
+        },
+        addJavaMcId(state,value){
+            state.userInfo['javaMcId'] = value
+        },
+        removeJavaMcId(state){
+            delete state.userInfo.javaMcId
         }
     },
     actions:{

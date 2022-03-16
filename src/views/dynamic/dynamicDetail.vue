@@ -203,7 +203,7 @@ export default {
                 ElMessage.error('获取详情发生错误！ ' + resq.message)
             }
         }).catch(err => {
-            ElMessage.error('获取详情发生错误！ ' + err)
+            ElMessage.error(err.message)
         })
     },
     methods:{
@@ -228,7 +228,7 @@ export default {
                 }
                 this.isChangeParentCommentWorkNow = false
             }).catch(err => {
-                ElMessage.error('获取评论发生错误！ ' + err)
+                ElMessage.error(err.message)
                 this.isChangeParentCommentWorkNow = false
             })
         },

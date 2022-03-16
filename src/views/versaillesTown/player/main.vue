@@ -14,11 +14,11 @@
                     <span>注册时间</span>
                 </div>
                 <div class="sub-item">
-                    <span>{{this.$store.getters.userInfoGet === null ? '':this.$store.getters.userInfoGet.className}}</span>
-                    <span>{{this.$store.getters.userInfoGet === null ? '':this.$store.getters.userInfoGet.uid}}</span>
-                    <span>Arilo007</span>
+                    <span>{{this.$store.getters.userInfoGet === null ? '' : this.$store.getters.userInfoGet.className}}</span>
+                    <span>{{this.$store.getters.userInfoGet === null ? '' : this.$store.getters.userInfoGet.uid}}</span>
+                    <span>{{this.$store.getters.userInfoGet === null ? '加载中...' : this.$store.getters.userInfoGet.javaMcId ? this.$store.getters.userInfoGet.javaMcId : '未绑定'}}</span>
                     <span>114514</span>
-                    <span>{{this.$store.getters.userInfoGet === null ? '':this.$store.getters.userInfoGet.registertime}}</span>
+                    <span>{{this.$store.getters.userInfoGet === null ? '' : this.$store.getters.userInfoGet.registertime}}</span>
                 </div>
             </div>
             <span class="line"></span>

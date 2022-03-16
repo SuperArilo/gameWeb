@@ -158,7 +158,7 @@ export default {
             }
         }).catch(err => {
             this.firstRequestIsWorkNow = false
-            ElMessage({showClose: true, message: '请求动态发生错误，请稍后重试！' + err, type: 'error', center: false})
+            ElMessage.error(err.message)
         })
     },
     methods:{
@@ -237,7 +237,7 @@ export default {
                     ElMessage({ showClose: true, message: resq.message, type: 'warning',})
                 }
             }).catch(err => {
-                ElMessage({showClose: true, message: '请求标签发生错误，请稍后重试！' + err, type: 'error', center: false})
+                ElMessage.error(err.message)
             })
         },
         sendToServer(){
@@ -251,7 +251,7 @@ export default {
                     this.dyAllLoading = false
                 }
             }).catch(err => {
-                ElMessage({showClose: true, message: '请求动态发生错误，请稍后重试！' + err, type: 'error', center: false})
+                ElMessage.error(err.message)
                 this.dyAllLoading = false
             })
         }

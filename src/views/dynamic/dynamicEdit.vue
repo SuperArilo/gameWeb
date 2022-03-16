@@ -126,7 +126,7 @@ export default {
                         ElMessage.error('获取标签发生错误 ' + resq.message)
                     }
                 }).catch(err => {
-                    ElMessage.error('获取标签发生错误 ' + err)
+                    ElMessage.error(err.message)
 
                 })
             } else {
@@ -178,7 +178,7 @@ export default {
                                 this.isDyPublishWorkNow = false
                             }
                         }).catch(err => {
-                            ElMessage.error('请求发生错误！ ' + err)
+                            ElMessage.error(err.message)
                             this.isDyPublishWorkNow = false
                         })
                     }

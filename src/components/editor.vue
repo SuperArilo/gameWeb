@@ -78,7 +78,7 @@ export default {
                     ElMessage.error(resq.message)
                 }
             }).catch(err => {
-                ElMessage.error('上传图片过程中发生错误！ ' + err)
+                ElMessage.error(err.message)
             })
         }
         editor.create()

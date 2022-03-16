@@ -94,7 +94,7 @@ export default {
                     resq.data.forEach(item => {
                         editor.cmd.do( 'insertHTML', `<img src="${item.mediaHttpUrl}" width="100"/>`)
                     })
-                    ElMessage({type: 'success', message: resq.message})
+                    ElMessage.success(resq.message)
                 } else {
                     ElMessage.error(resq.message)
                 }
@@ -126,13 +126,13 @@ export default {
                         this.$emit('commentStatus', true)
                         this.editor.txt.clear()
                         this.isSendToServerWorkNow = false
-                        ElMessage({message: resq.message, type: 'success'})
+                        ElMessage.success(resq.message)
                     } else {
                         ElMessage.error('提交评论发生错误！' + resq.message)
                         this.isSendToServerWorkNow = false
                     }
                 }).catch(err => {
-                    ElMessage.error('提交评论发生错误！' + err)
+                    ElMessage.error(err.message)
                     this.isSendToServerWorkNow = false
                 })
             }

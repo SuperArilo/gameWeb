@@ -94,7 +94,7 @@ export default {
                                 },1000)
                             }
                         }).catch(err => {
-                            ElMessage.error('发送邮箱验证码时候发生错误！ ' + err)
+                            ElMessage.error(err.message)
                         })
                     }
                 } else {
@@ -121,7 +121,7 @@ export default {
                     ElMessage.error(resq.message)
                 }
             }).catch(err => {
-                ElMessage.error('获取验证码发生错误！ ' + err)
+                ElMessage.error(err.message)
             })
         },
         checkMail(mail){
@@ -147,7 +147,7 @@ export default {
                                     this.isSendToServerRegisterWorkNow = false
                                 }
                             }).catch(err => {
-                                ElMessage.error('注册时发生错误！ ' + err)
+                                ElMessage.error(err.message)
                                 this.CAPTCHACode = ''
                                 this.isSendToServerRegisterWorkNow = false
                             })

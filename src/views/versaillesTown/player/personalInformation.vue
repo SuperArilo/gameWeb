@@ -104,7 +104,7 @@ export default {
                         }
                         this.isSendToServerWorkNow = false
                     }).catch(err => {
-                        ElMessage.error('请求过程中发生错误！' + err)
+                        ElMessage.error(err.message)
                         this.isSendToServerWorkNow = false
                     })
                 } else {

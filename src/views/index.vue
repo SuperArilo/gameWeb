@@ -1,7 +1,7 @@
 <template>
     <div class="index-div">
         <div class="index-center-show">
-            <img class="back-iamge" :src="indexImage"/>
+            <!-- <img class="back-iamge" :src="indexImage"/> -->
             <div class="center-text">
                 <span class="welcome-tips">欢迎来到</span>
                 <h2>凡尔赛小镇</h2>
@@ -92,7 +92,7 @@
             </div>
             <div class="play-content-box">
                 <div class="sub-item" v-for="item in playContentList" :key="item.id" :style="this.$store.getters.isPhoneGet ? 'flex-direction: column-reverse;' : item.id % 2 == 0 ? 'flex-direction: row-reverse;' : ''">
-                    <div class="picture" @click="previewImg($event)">
+                    <div class="picture" @click="playContentPreviewImg($event)">
                         <img :src="item.image"/>
                     </div>
                     <div class="content-describe" :style="this.$store.getters.isPhoneGet ? 'margin-bottom: 1rem;' : item.id % 2 == 0 ? 'margin-right: 1rem;':'margin-left: 1rem;'">
@@ -142,9 +142,9 @@
                 <span class="english-inf">Screenshot appreciate</span>
             </div>
             <div class="town-show-scroll">
-                <el-carousel :height="25 + 'rem'">
-                    <el-carousel-item v-for="item in bottomPictureList" :key="item.id">
-                        <img :src="item.image"/>
+                <el-carousel :height="35 + 'rem'">
+                    <el-carousel-item v-for="(item,index) in bottomPictureList" :key="index">
+                        <img :src="item" @click="screenshotAppreciatePreviewImg(index)"/>
                     </el-carousel-item>
                 </el-carousel>
             </div>
@@ -163,7 +163,6 @@ export default {
     },
     data(){
         return{
-            indexImage: 'http://image.superarilo.icu/townBg.png',
             netWorkShow: 'http://image.superarilo.icu/icon/netWork.png',
             bbs: 'http://image.superarilo.icu/icon/bbs.png',
             safe: 'http://image.superarilo.icu/icon/safe.png',
@@ -191,50 +190,9 @@ export default {
                     describe: '服务器提供Minecraft原有生物的捕捉和抚养功能，您可以在系统商店里购买新宠物，也可以去野外捕捉宠物。您还可以召唤您的宠物来协助你战斗、帮助您拾取东西、给您提供信标的效果等等！'
                 }
             ],
-            bottomPictureList:[
-                {
-                    id: 1,
-                    image: 'http://image.superarilo.icu/show1.png'
-                },
-                {
-                    id: 2,
-                    image: 'http://image.superarilo.icu/show2.png'
-                },
-                {
-                    id: 3,
-                    image: 'http://image.superarilo.icu/show3.png'
-                },
-                {
-                    id: 4,
-                    image: 'http://image.superarilo.icu/show4.png'
-                },
-                {
-                    id: 5,
-                    image: 'http://image.superarilo.icu/show5.png'
-                },
-                {
-                    id: 6,
-                    image: 'http://image.superarilo.icu/show6.png'
-                },
-                {
-                    id: 7,
-                    image: 'http://image.superarilo.icu/show7.png'
-                },
-                {
-                    id: 8,
-                    image: 'http://image.superarilo.icu/show8.png'
-                },
-                {
-                    id: 9,
-                    image: 'http://image.superarilo.icu/show9.png'
-                },
-                {
-                    id: 10,
-                    image: 'http://image.superarilo.icu/show10.png'
-                }
-            ],
+            bottomPictureList: ['http://image.superarilo.icu/show1.png', 'http://image.superarilo.icu/show2.png','http://image.superarilo.icu/show3.png' , 'http://image.superarilo.icu/show4.png' , 'http://image.superarilo.icu/show5.png' ,'http://image.superarilo.icu/show6.png' , 'http://image.superarilo.icu/show7.png' , 'http://image.superarilo.icu/show8.png' , 'http://image.superarilo.icu/show9.png' , 'http://image.superarilo.icu/show10.png'],
             serverTeamHeadList:[],
-            imageList:[]
+            playContentImageList:[]
         }   
     },
     created(){
@@ -251,7 +209,7 @@ export default {
                     ElMessage.error('获取玩家的信息出错,请稍后重试! ' + resq.statusText)
                 }
             }).catch(err => {
-                ElMessage.error('获取玩家的信息出错,请稍后重试! ' + err)
+                ElMessage.error(err.message)
             })
         },
         arrayBufferToBase64(Buffer){
@@ -271,15 +229,18 @@ export default {
                     ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
                 }
             }).catch(subErr => {
-                ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subErr)
+                ElMessage.error(err.message)
             })
         },
-        previewImg(e){
-            this.imageList.push($(e.target).attr('src'))
-            showImages({urls: this.imageList, index: 0, onClose: () => {
-                this.imageList = []
+        playContentPreviewImg(e){
+            this.playContentImageList.push($(e.target).attr('src'))
+            showImages({urls: this.playContentImageList, index: 0, onClose: () => {
+                this.playContentImageList = []
             }})
         },
+        screenshotAppreciatePreviewImg(index){
+            showImages({urls: this.bottomPictureList, index: index, onClose: () => {}})
+        }
     }
 }
 </script>
@@ -298,7 +259,11 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        position: relative;
+        background-repeat: no-repeat;
+        background-position: bottom;
+        background-size: cover;
+        background-attachment: fixed;
+        background-image: url('http://image.superarilo.icu/townBg.png');
         .back-iamge
         {
             width: 100%;
@@ -312,13 +277,12 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
-            z-index: 10;
             border-radius: 0.2rem;
             .welcome-tips
             {
                 font-size: 1.2rem;
                 color: #ffffff;
+                text-shadow: 0 0 0.05rem #000000;
                 letter-spacing: 0.3rem;
             }
             h2
@@ -327,6 +291,7 @@ export default {
                 font-size: 2.2rem;
                 text-align: center;
                 color: #ffffff;
+                text-shadow: 0 0 0.05rem #000000;
                 font-weight: 400;
                 letter-spacing: 0.3rem;
             }
@@ -338,9 +303,10 @@ export default {
                 span
                 {
                     font-size: 0.85rem;
-                    color: #c2c2c2;
+                    color: #ffffff;
                     text-align: center;
                     margin: 0.1rem 0;
+                    text-shadow: 0 0 0.05rem #000000;
                 }
             }
         }
@@ -552,11 +518,18 @@ export default {
             width: 100%;
             position: relative;
             margin-top: 2rem;
+            ::v-deep(.el-carousel__item)
+            {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
             img
             {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                cursor: pointer;
             }
         }
     }

@@ -76,7 +76,7 @@ export default {
                     ElMessage.error(resq.message)
                 }
             }).catch(err => {
-                ElMessage.error('获取验证码出错！' + err)
+                ElMessage.error(err.message)
             })
         },
         checkMail(mail){
@@ -106,7 +106,7 @@ export default {
                                             sessionStorage.removeItem('token')
                                         }
                                     }).catch(err => {
-                                        ElNotification({title: '错误',message: '用户状态验证接口出错！' + err,type: 'error'})
+                                        ElNotification({title: '错误',message: err.message + err,type: 'error'})
                                         this.$store.commit('userInfoSet',null)
                                         sessionStorage.removeItem('token')
                                     })
@@ -120,7 +120,7 @@ export default {
                                 this.userLoginWorkNow = false
                             }
                         }).catch(err => {
-                            ElMessage.error('登录过程中发生错误！ ' + err)
+                            ElMessage.error(err.message)
                             this.CAPTCHACode = ''
                             this.getVerification()
                             this.userLoginWorkNow = false

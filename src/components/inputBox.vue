@@ -1,7 +1,9 @@
 <template>
     <div class="input-box">
         <span :class="[{'span-style-actie' : spanStyleAdd},{'span-move-active' : spanStyleAdd || modelValue !== ''}]">{{this.title}}</span>
-        <input v-model="modelValue" :type="inputType" :maxlength="this.length" @input="handleInput" @focus="spanStyleAdd = true" @blur="spanStyleAdd = false" :style="modelValue === '' ? 'background-color: transparent;':''"/>
+        <form>
+            <input v-model="modelValue" :type="inputType" :maxlength="this.length" @input="handleInput" @focus="spanStyleAdd = true" @blur="spanStyleAdd = false" :style="modelValue === '' ? 'background-color: transparent;':''" autocomplete/>
+        </form>
     </div>
 </template>
 <script>
@@ -34,6 +36,10 @@ export default {
     align-items: flex-end;
     flex-wrap: wrap;
     justify-content: flex-start;
+    form
+    {
+        width: 100%;
+    }
     input
     {
         width: 100%;
