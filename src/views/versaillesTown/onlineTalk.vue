@@ -9,16 +9,18 @@
             <div class="talk-content" ref="talkContent" @scroll="talkContentScroll">
                 <i class="fas fa-circle-notch refresh" :class="refreshShow ? 'refresh-is-loaded fa-spin':''" />
                 <transition-group name="list">
-                    <div v-for="(item,index) in test" :key="index" :class="this.$store.getters.userInfoGet.uid === item.uid ? 'user-message-item-right' : 'user-message-item-left'">
+                    <div v-for="(item,index) in chatContent" :key="index" :class="this.$store.getters.userInfoGet === null ? 'user-message-item-left' : this.$store.getters.userInfoGet.uid === item.uid ? 'user-message-item-right' : 'user-message-item-left'">
+                    <!-- <div v-for="(item,index) in chatContent" :key="index" :class="this.$store.getters.userInfoGet.uid === item.uid ? 'user-message-item-right' : 'user-message-item-left'"> -->
                         <div class="user-head">
-                            <img :src="this.$store.getters.userInfoGet.userHead"/>
+                            <img :src="item.type === 'minecraft' ? item.userhead : this.$store.getters.userInfoGet !== null ? this.$store.getters.userInfoGet.userhead : ''"/>
                         </div>
                         <div class="user-name-and-message">
-                            <div class="user-name-box" :style="this.$store.getters.userInfoGet.uid === item.uid ? 'flex-flow: row-reverse;' : 'flex-flow: row;'">
-                                <span :style="this.$store.getters.userInfoGet.uid === item.uid ? 'margin-left:0.5rem;' : 'margin-right:0.5rem;'">{{item.userName}}</span>
-                                <span>MC Java ID：{{item.MCJAVAId}}</span>
+                            <div class="user-name-box" :style="this.$store.getters.userInfoGet === null ? 'flex-flow: row;':this.$store.getters.userInfoGet.uid === item.uid ? 'flex-flow: row-reverse;' : 'flex-flow: row;'">
+                                <!-- <span :style="this.$store.getters.userInfoGet.uid === item.uid ? 'margin-left:0.5rem;' : 'margin-right:0.5rem;'">{{item.nickname}}</span> -->
+                                <span :style="this.$store.getters.userInfoGet === null ? 'margin-right:0.5rem;':this.$store.getters.userInfoGet.uid === item.uid ? 'margin-left:0.5rem;' : 'margin-right:0.5rem;'">{{item.nickname}}</span>
+                                <span>MC ID：{{item.mcJavaId}}</span>
                             </div>
-                            <span class="user-message">{{item.content}}</span>
+                            <span class="user-message">{{item.message}}</span>
                         </div>
                     </div>
                 </transition-group>
@@ -27,7 +29,7 @@
                 <div class="talk-edit-func">
                     <i class="fas fa-smile-wink"/>
                 </div>
-                <textarea v-model="userWriteContent" class="talk-text" @keyup.enter.exact="sentToServer" @keyup.shift="addLang" onkeydown="if (event.keyCode === 13) event.preventDefault();"/>
+                <textarea v-model="userWriteContent" class="talk-text"/>
                 <div class="talk-submit">
                     <span class="button-clear" @click="userWriteContent = ''">清空</span>
                     <div class="button-confirm" @click="sentToServer">
@@ -52,15 +54,13 @@ export default {
             refreshShow: false,
             userWriteContent: '',
             sentToServerStatu: false,
-            onlineTalkUrl: 'wss://www.itrong.love:1234/api/onlinetalk/',
+            onlineTalkUrl: 'ws://localhost:3090/api/onlinetalk/',
             websock: null,
-            test: ''
+            chatContent: []
         }
     },
     created(){
-        // if(this.$store.getters.userInfoGet !== null){
-        //     this.initWebSocket()
-        // }
+        this.initWebSocket()
     },
     onMounted(){
         this.scrollToBottom()
@@ -74,23 +74,24 @@ export default {
                 },2000)
             }
         },
-        addLang(){
-            this.userWriteContent = this.userWriteContent + '\n'
-        },
         sentToServer(){
-            // if(!this.sentToServerStatu){
-            //     this.sentToServerStatu = true
-            //     if(this.userWriteContent === ''){
-            //         ElNotification({title: '提示',message: '发送的信息不能为空！',type: 'info'})
-            //         this.sentToServerStatu = false
-            //         return
-            //     }
-            //     let sendToServer = {uid: this.$store.getters.userInfoGet.uid,MCJAVAId: this.$store.getters.userInfoGet.javaMcId,userName: this.$store.getters.userInfoGet.userName,uuid: this.$store.getters.userInfoGet.mcUUID,content: this.userWriteContent,fromGame: false}
-            //     this.websock.send(JSON.stringify(sendToServer))
-            //     this.sentToServerStatu = false
-            //     this.scrollToBottom()
-            //     this.userWriteContent = ''
-            // }
+            if(!this.sentToServerStatu){
+                this.sentToServerStatu = true
+                if(this.$store.getters.userInfoGet !== null){
+                    if(this.userWriteContent === ''){
+                        ElNotification({title: '提示',message: '发送的信息不能为空！',type: 'info'})
+                        this.sentToServerStatu = false
+                        return
+                    }
+                    let messageContent = {uid: this.$store.getters.userInfoGet.uid, mcJavaId: this.$store.getters.userInfoGet.javaMcId, nickname: this.$store.getters.userInfoGet.nickname,  message: this.userWriteContent, type: 'web'}
+                    this.websock.send(JSON.stringify(messageContent))
+                    this.sentToServerStatu = false
+                    this.scrollToBottom()
+                    this.userWriteContent = ''
+                } else {
+                    ElMessage.info('您还未登陆！')
+                }
+            }
         },
         scrollToBottom(){
             this.$nextTick(()=>{
@@ -98,14 +99,14 @@ export default {
             })
         },
         async initWebSocket(){
-            this.websock = new WebSocket(this.onlineTalkUrl + this.$store.getters.userInfoGet.uid)
+            this.websock = new WebSocket(this.onlineTalkUrl + (sessionStorage.getItem('token') !== null ? sessionStorage.getItem('token') : localStorage.getItem('token') !== null ? localStorage.getItem('token') : 'null'))
             this.websock.onmessage = this.websocketOnMessage
             this.websock.onopen = this.websocketOnOpen
             this.websock.onerror = this.websocketOnError
             this.websock.onclose = this.websocketClose
         },
         websocketOnMessage(message){
-            this.test = this.test.concat(JSON.parse(message.data))
+            this.chatContent = this.chatContent.concat(JSON.parse(message.data))
             console.log(JSON.parse(message.data))
             this.scrollToBottom()
         },
@@ -113,15 +114,13 @@ export default {
             ElNotification({title: '在线聊天',message: '连接服务器成功！',type: 'success'})            
         },
         websocketOnError(){
-            ElMessage.error('连接到服务器出错！')
+            ElMessage.error('连接到服务器出错！，此功能尚未开发完成！！！')
         },
         websocketClose(){
         }
     },
     unmounted() {
-        // if(this.$store.getters.userInfoGet !== null){
-        //     this.websock.close()
-        // }
+        this.websock.close()
     },
 }
 </script>

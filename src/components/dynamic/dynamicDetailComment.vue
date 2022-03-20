@@ -99,7 +99,7 @@ export default {
                     ElMessage.error(resq.message)
                 }
             }).catch(err => {
-                ElMessage.error('上传图片过程中发生错误！ ' + err)
+                ElMessage.error(err)
             })
         }
         editor.create()
@@ -128,7 +128,7 @@ export default {
                         this.isSendToServerWorkNow = false
                         ElMessage.success(resq.message)
                     } else {
-                        ElMessage.error('提交评论发生错误！' + resq.message)
+                        ElMessage.error(resq.message)
                         this.isSendToServerWorkNow = false
                     }
                 }).catch(err => {

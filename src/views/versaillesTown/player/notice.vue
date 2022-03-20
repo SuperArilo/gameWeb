@@ -62,15 +62,9 @@ export default {
         }
     },
     created(){
-        userNoticeGet({receiver: this.$store.getters.userInfoGet.uid}).then(resq => {
-            if(resq.code === 200){
-                this.noticeContent = resq.data.list
-            } else {
-                ElMessage.error(resq.message)
-            }
-        }).catch(err => {
-            ElMessage.error(err.message)
-        })
+        if(this.$store.getters.userInfoGet !== null){
+            this.userGetNoticeFunc(this.$store.getters.userInfoGet.uid)
+        }
     },
     methods:{
         openNoticeContent(id){
@@ -105,6 +99,27 @@ export default {
                 }).catch(() => {
                 })
             }
+        },
+        userGetNoticeFunc(uid){
+            userNoticeGet({receiver: uid}).then(resq => {
+                if(resq.code === 200){
+                    this.noticeContent = resq.data.list
+                } else {
+                    ElMessage.error(resq.message)
+                }
+            }).catch(err => {
+                ElMessage.error(err.message)
+            })
+        }
+    },
+    computed:{
+        checkUserInfo(){
+            return this.$store.getters.userInfoGet
+        }
+    },
+    watch:{
+        checkUserInfo(nV, oV){
+            this.userGetNoticeFunc(nV.uid)
         }
     }
 }

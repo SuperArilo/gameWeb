@@ -132,35 +132,40 @@ export default {
             if(!this.isSendToServerRegisterWorkNow){
                 this.isSendToServerRegisterWorkNow = true
                 if(this.eMail !== '' && this.userPwd !== '' && this.userPwdAgain !== '' && this.eMailPwd !== '' && this.CAPTCHACode !== ''){
-                    if(this.checkMail(this.eMail)){
-                        if(this.userPwd === this.userPwdAgain){
-                            this.isSendToServerRegisterWorkNow = true
-                            userRegister({mail: this.eMail,password: this.userPwd,confirm: this.userPwdAgain,mailVerifyCode: this.eMailPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
-                                if(resq.flag){
-                                    ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {
-                                        this.$router.push('/login')
-                                    }})
-                                    this.CAPTCHACode = ''
-                                } else {
-                                    ElMessage({message: resq.message,type: 'warning'})
+                    if(this.userPwd.length > 7){
+                        if(this.checkMail(this.eMail)){
+                            if(this.userPwd === this.userPwdAgain){
+                                this.isSendToServerRegisterWorkNow = true
+                                userRegister({mail: this.eMail,password: this.userPwd,confirm: this.userPwdAgain,mailVerifyCode: this.eMailPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
+                                    if(resq.flag){
+                                        ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {
+                                            this.$router.push('/login')
+                                        }})
+                                        this.CAPTCHACode = ''
+                                    } else {
+                                        ElMessage.warning(resq.message)
+                                        this.CAPTCHACode = ''
+                                        this.isSendToServerRegisterWorkNow = false
+                                    }
+                                }).catch(err => {
+                                    ElMessage.error(err.message)
                                     this.CAPTCHACode = ''
                                     this.isSendToServerRegisterWorkNow = false
-                                }
-                            }).catch(err => {
-                                ElMessage.error(err.message)
-                                this.CAPTCHACode = ''
+                                })
+                            } else {
+                                ElMessage.warning('两次输入的密码不一致，请检查！')
                                 this.isSendToServerRegisterWorkNow = false
-                            })
+                            }
                         } else {
-                            ElMessage({message: '两次输入的密码不一致，请检查！',type: 'warning'})
+                            ElMessage.warning('邮箱不合法！请重新确认')
                             this.isSendToServerRegisterWorkNow = false
                         }
-                    } else {
-                        ElMessage({message: '邮箱不合法！请重新确认',type: 'warning'})
+                    } else{
+                        ElMessage.warning('密码太短啦！！')
                         this.isSendToServerRegisterWorkNow = false
                     }
                 } else {
-                    ElMessage({message: '填写的信息有空白，请检查！',type: 'warning'})
+                    ElMessage.warning('填写的信息有空白，请检查！')
                     this.isSendToServerRegisterWorkNow = false
                 }
             }
