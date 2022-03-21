@@ -11,39 +11,42 @@
             </div>
             <div class="show-message-div">
                 <span class="title-span">留言合集</span>
-                <transition-group name="list">
+                <transition name="list">
                     <div class="message-empty" v-if="this.messageContent.length === 0">
                         <span>当前没有留言哦！</span>
                         <i class="fas fa-inbox"/>
                     </div>
-                </transition-group>
-                <div class="message-content" v-if="this.messageContent.length !== 0" v-loading="this.messageContent.length === 0">
-                    <transition-group name="list">
-                        <div class="sub-message-item" v-for="item in messageContent" :key="item.id">
-                            <div class="left-head" v-if="!this.$store.getters.isPhoneGet">
-                                <img :src="item.user.userhead"/>
-                            </div>
-                            <div class="right-content" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 1rem;', {borderLeft: `solid 0.2rem ${item.user.classColor}`,borderRight: `solid 0.2rem ${item.user.classColor}`}]">
-                                <div v-if="this.$store.getters.isPhoneGet" class="mobile-box">
-                                    <div class="user-head">
-                                        <img :src="item.user.userhead"/>
-                                    </div>
-                                    <span class="user-name">{{item.user.nickname}}</span>
+                </transition>
+                <transition name="list">
+                    <div class="message-content" v-if="this.messageContent.length !== 0" v-loading="this.messageContent.length === 0">
+                        <transition-group name="list">
+                            <div class="sub-message-item" v-for="item in messageContent" :key="item.id">
+                                <div class="left-head" v-if="!this.$store.getters.isPhoneGet">
+                                    <img :src="item.user.userhead"/>
                                 </div>
-                                <div class="show-content render-by-edit" v-html="item.content" @click="previewImg($event)"></div>
-                                <div class="show-who">
-                                    <div v-if="!this.$store.getters.isPhoneGet">
-                                        <span>{{item.user.nickname}} 留言</span>
+                                <div class="right-content" :style="[this.$store.getters.isPhoneGet ? '':'margin-left: 1rem;', {borderLeft: `solid 0.2rem ${item.user.classColor}`,borderRight: `solid 0.2rem ${item.user.classColor}`}]">
+                                    <div v-if="this.$store.getters.isPhoneGet" class="mobile-box">
+                                        <div class="user-head">
+                                            <img :src="item.user.userhead"/>
+                                        </div>
+                                        <span class="user-name">{{item.user.nickname}}</span>
                                     </div>
-                                    <div>
-                                        <i class="far fa-calendar-alt"></i>
-                                        <span style="margin-left: 0.3rem;">{{item.createTime}}</span>
+                                    <div class="show-content render-by-edit" v-html="item.content" @click="previewImg($event)"></div>
+                                    <div class="show-who">
+                                        <div v-if="!this.$store.getters.isPhoneGet">
+                                            <span>{{item.user.nickname}} 留言</span>
+                                        </div>
+                                        <div>
+                                            <i class="far fa-calendar-alt"></i>
+                                            <span style="margin-left: 0.3rem;">{{item.createTime}}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </transition-group>
-                </div>
+                        </transition-group>
+                    </div>
+                </transition>
+                
             </div>
             <el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalCount" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;" v-if="this.messageContent.length !== 0"/>
         </div>
@@ -211,20 +214,12 @@ export default {
             .message-content
             {
                 width: 100%;
-                min-height: 12rem;
+                min-height: 10rem;
                 display: flex;
                 align-content: flex-start;
                 flex-wrap: wrap;
                 position: relative;
-                .list-enter-from , .list-leave-to
-                {
-                    opacity: 0;
-                    transform: translateY(1rem);
-                }
-                .list-leave-active
-                {
-                    position: absolute;
-                }
+                transition: all 0.4s;
                 .sub-message-item
                 {
                     width: 100%;
@@ -232,7 +227,7 @@ export default {
                     justify-content: space-between;
                     align-items: flex-start;
                     margin: 0.5rem 0;
-                    transition: all 0.3s;
+                    transition: all 0.4s;
                     .left-head
                     {
                         width: 2.5rem;
@@ -326,6 +321,7 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                transition: all 0.4s;
                 span , i
                 {
                     height: 100%;
@@ -340,6 +336,15 @@ export default {
                 {
                     font-size: 0.8rem;
                 }
+            }
+            .list-enter-from , .list-leave-to
+            {
+                opacity: 0;
+                transform: translateY(1rem);
+            }
+            .list-leave-active
+            {
+                position: absolute;
             }
         }
     }

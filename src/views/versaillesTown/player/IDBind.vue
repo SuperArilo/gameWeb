@@ -43,6 +43,7 @@
                 <span>自助修改</span>
                 <i class="fas fa-diagnoses"/>
             </div>
+            <p>敬请期待...</p>
         </div>
         <footer-bottom/>
     </div>

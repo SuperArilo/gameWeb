@@ -80,7 +80,7 @@
                         <div class="func-box">
                             <i class="far fa-star"/>
                             <i class="fas fa-exclamation-triangle"/>
-                            <i v-if="this.$store.getters.userInfoGet === null ? false : this.$store.getters.userInfoGet.uid === item.uid ? true:false " class="fas fa-trash-alt"/>
+                            <i v-if="this.$store.getters.userInfoGet === null ? false : this.$store.getters.userInfoGet.uid === item.uid ? true:false " class="fas fa-trash-alt" @click="delOwerDy()"/>
                         </div>
                         <span class="buttom" @click="detailsRouterfunc(item.id)">跃迁</span>
                     </div>
@@ -94,7 +94,7 @@
     </div>
 </template>
 <script>
-import { ElMessage } from 'element-plus'
+import { ElMessage , ElMessageBox } from 'element-plus'
 import { dynamicGet , dynamicTagsGet } from '@/util/api.js'
 import footerBottom from '@/components/footerBottom.vue'
 export default {
@@ -253,6 +253,12 @@ export default {
             }).catch(err => {
                 ElMessage.error(err.message)
                 this.dyAllLoading = false
+            })
+        },
+        delOwerDy(){
+            ElMessageBox.confirm('这将会删除您所发的动态！', ' 提示', { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning'}).then(() => {
+                ElMessage.success('删除成功！（假的，还没开发呢！）')
+            }).catch(() => {
             })
         }
     }
@@ -434,7 +440,7 @@ export default {
     .dy-content
     {
         width: 100%;
-        min-height: 12rem;
+        min-height: 18rem;
         padding: 0 1rem;
         display: flex;
         align-content: flex-start;
@@ -578,10 +584,15 @@ export default {
                         font-size: 0.7rem;
                         margin: 0 0.3rem;
                         cursor: pointer;
+                        transition: color 0.2s;
                     }
                     i:nth-child(1)
                     {
                         margin-left: 0;
+                    }
+                    i:nth-child(3):hover
+                    {
+                        color: red;
                     }
                 }
                 .buttom

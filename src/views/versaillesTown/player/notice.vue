@@ -26,7 +26,7 @@
                         </div>
                         <el-collapse-transition>
                             <div v-if="isOpenChoiceNoticeContent && choiceNoticeIndex === item.id">
-                                <div class="bottom-notice-main-content render-by-edit" v-html="item.content"/>
+                                <div ref="playerNoticeByOne" class="bottom-notice-main-content render-by-edit" v-html="item.content" @click="previewImg($event)"/>
                             </div>
                         </el-collapse-transition>
                     </div>
@@ -49,6 +49,8 @@
 import footerBottom from '@/components/footerBottom.vue'
 import { userNoticeGet } from '@/util/api.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { showImages } from 'vue-img-viewr'
+import 'vue-img-viewr/styles/index.css'
 export default {
     components:{
         footerBottom
@@ -58,7 +60,8 @@ export default {
             noticeContent:[],
             choiceNoticeIndex: null,
             isOpenChoiceNoticeContent: false,
-            noticeChoiceList:[]
+            noticeChoiceList:[],
+            showImageList: []
         }
     },
     created(){
@@ -110,6 +113,20 @@ export default {
             }).catch(err => {
                 ElMessage.error(err.message)
             })
+        },
+        previewImg(e){
+            if($(e.target).attr('src') !== undefined){
+                let imageIndex
+                $(this.$refs.playerNoticeByOne).find('img').each((index,item) => {
+                    if($(item).attr('src') === $(e.target).attr('src')){
+                        imageIndex = index
+                    }
+                    this.showImageList.push($(item).attr('src'))
+                })
+                showImages({urls: this.showImageList,index: imageIndex, onClose: () => {
+                    this.showImageList = []
+                }})
+            }
         }
     },
     computed:{

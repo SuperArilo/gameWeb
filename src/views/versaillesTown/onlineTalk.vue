@@ -142,7 +142,6 @@ export default {
         align-content: flex-start;
         justify-content: center;
         flex-wrap: wrap;
-        background-color: #ffffffb9;
         overflow: hidden;
         .talk-title
         {
@@ -153,13 +152,8 @@ export default {
             align-items: center;
             align-content: center;
             flex-wrap: wrap;
-            background-repeat: no-repeat;
-            background-position: top;
-            background-attachment: fixed;
-            background-size: cover;
-            background-image: url('http://image.superarilo.icu/townIndex2.jpg');
-            box-shadow: 0 0 0.3rem black;
             padding: 0.5rem;
+            background-color: #ffffffb9;
             span
             {
                 width: 100%;
@@ -168,6 +162,7 @@ export default {
                 letter-spacing: 0.05rem;
                 color: #ffffff;
                 text-align: center;
+                text-shadow: 0 0 0.1rem black;
             }
             span:nth-child(1)
             {
@@ -181,7 +176,7 @@ export default {
             span:nth-child(3)
             {
                 font-size: 0.6rem;
-                color: #cacaca;
+                color: #000000;
             }
         }
         .talk-content
@@ -193,6 +188,7 @@ export default {
             flex-wrap: wrap;
             overflow-y: scroll;
             overflow-x: hidden;
+            background-color: rgba(250, 250, 250 , 0.9);
             .refresh
             {
                 width: 100%;
@@ -332,7 +328,6 @@ export default {
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
-            background-color: #ffffff;
             .talk-edit-func
             {
                 width: 100%;

@@ -110,7 +110,7 @@ export default {
             .title
             {
                 width: 100%;
-                height: 1.8rem;
+                height: 2rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;

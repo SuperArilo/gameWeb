@@ -90,9 +90,9 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-image: url('http://image.superarilo.icu/playerBg.jpg');
+        background-image: url('http://image.superarilo.icu/playerBg.png');
         background-repeat: no-repeat;
-        background-position: center;
+        background-position: top;
         background-size: cover;
     }
     .top-player-div
@@ -108,17 +108,19 @@ export default {
         }
         .player-name
         {
-            font-size: 0.68rem;
+            font-size: 0.75rem;
             color: #272727;
             margin: 1rem 0;
-            letter-spacing: 0.02rem;
+            letter-spacing: 0.05rem;
             font-weight: bold;
+            text-shadow: 0 0 0.1rem #ffffff;
         }
         .play-introduce
         {
             max-width: 60%;
             text-align: center;
             font-size: 0.6rem;
+            text-shadow: 0 0 0.1rem #ffffff;
         }
     }
     .loading-box
