@@ -1,10 +1,15 @@
 <template>
     <div class="index-box" :style="{backgroundImage:`url(${this.$store.getters.indexBgGet})`}">
-        <div class="talk-div">
+        <div class="talk-div" :style="this.$store.getters.isPhoneGet ? '':'border-radius: 0.5rem;'">
             <div class="talk-title">
-                <span>在线聊天</span>
-                <span>与在服务器里游玩的小伙伴一起聊天吧！</span>
-                <span>连接可能会有稍许延迟，这是正常现象，请注意语言规范</span>
+                <div class="left-tips">
+                    <span class="title-span">在线聊天</span>
+                    <span class="des-span" style="margin: 0.5rem 0;">与在服务器里游玩的小伙伴一起聊天吧！</span>
+                    <span class="des-span">连接可能会有稍许延迟，这是正常现象，请注意语言规范</span>
+                </div>
+                <div class="right-image">
+                    <img :src="this.onlineTalkImage"/>
+                </div>
             </div>
             <div class="talk-content" ref="talkContent" @scroll="talkContentScroll">
                 <i class="fas fa-circle-notch refresh" :class="refreshShow ? 'refresh-is-loaded fa-spin':''" />
@@ -51,6 +56,7 @@ export default {
     },
     data(){
         return{
+            onlineTalkImage: 'http://image.superarilo.icu/onlineTalk.gif',
             refreshShow: false,
             userWriteContent: '',
             sentToServerStatu: false,
@@ -60,7 +66,7 @@ export default {
         }
     },
     created(){
-        this.initWebSocket()
+        // this.initWebSocket()
     },
     onMounted(){
         this.scrollToBottom()
@@ -120,7 +126,7 @@ export default {
         }
     },
     unmounted() {
-        this.websock.close()
+        // this.websock.close()
     },
 }
 </script>
@@ -148,35 +154,40 @@ export default {
             width: 100%;
             height: 8rem;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            align-content: center;
-            flex-wrap: wrap;
-            padding: 0.5rem;
-            background-color: #ffffffb9;
-            span
+            background-color: rgba(126, 170, 204, 1);
+            .left-tips
             {
                 width: 100%;
+                height: 100%;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
-                letter-spacing: 0.05rem;
-                color: #ffffff;
-                text-align: center;
-                text-shadow: 0 0 0.1rem black;
+                padding: 0 1rem;
+                .title-span
+                {
+                    font-size: 1.2rem;
+                    color: #ffffff;
+                    letter-spacing: 0.1rem;
+                }
+                .des-span
+                {
+                    font-size: 0.6rem;
+                    color: #000000;
+                    letter-spacing: 0.05rem;
+                }
             }
-            span:nth-child(1)
+            .right-image
             {
-                font-size: 1.2rem;
-            }
-            span:nth-child(2)
-            {
-                font-size: 0.7rem;
-                margin: 0.5rem 0;
-            }
-            span:nth-child(3)
-            {
-                font-size: 0.6rem;
-                color: #000000;
+                min-width: 8rem;
+                height: 8rem;
+                img
+                {
+                    height: 100%;
+                    width: 100%;
+                    min-height: 100%;
+                }
             }
         }
         .talk-content

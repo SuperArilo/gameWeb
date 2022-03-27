@@ -1,7 +1,6 @@
 <template>
     <div class="index-div">
         <div class="index-center-show">
-            <!-- <img class="back-iamge" :src="indexImage"/> -->
             <div class="center-text">
                 <span class="welcome-tips">欢迎来到</span>
                 <h2>凡尔赛小镇</h2>
@@ -14,83 +13,85 @@
             </div>
         </div>
         <div class="index-describe">
-            <div class="title-item">
-                <span class="why-inf">为什么选择我们的服务器</span>
-                <span class="line"></span>
-                <span class="english-inf">Why choose our server?</span>
-            </div>
-            <div class="col-des-div">
-                <el-row>
-                    <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                        <div class="item-div">
-                            <div class="show-div">
-                                <span style="background-color: #87CEEB;" class="first">低延迟</span>
-                                <img :src="netWorkShow"/>
+            <div class="sub-describe">
+                <div class="title-item">
+                    <span class="why-inf">为什么选择我们的服务器</span>
+                    <span class="line"></span>
+                    <span class="english-inf">Why choose our server?</span>
+                </div>
+                <div class="col-des-div">
+                    <el-row>
+                        <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                            <div class="item-div">
+                                <div class="show-div">
+                                    <span style="background-color: #87CEEB;" class="first">低延迟</span>
+                                    <img :src="netWorkShow"/>
+                                </div>
+                                <span class="introduce-span">服务器归属于天翼云，依靠天翼云强大的运算能力，为服务器保驾护航，提供极低的延迟</span>
                             </div>
-                            <span class="introduce-span">服务器归属于天翼云，依靠天翼云强大的运算能力，为服务器保驾护航，提供极低的延迟</span>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                        <div class="item-div">
-                            <div class="show-div">
-                                <span class="first" style="background-color: #8470FF;">论坛</span>
-                                <img :src="bbs"/>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                            <div class="item-div">
+                                <div class="show-div">
+                                    <span class="first" style="background-color: #8470FF;">论坛</span>
+                                    <img :src="bbs"/>
+                                </div>
+                                <span class="introduce-span">我们有一群善良友好的老玩家指引你游玩！后面会开放论坛互动，敬请期待吧！</span>
                             </div>
-                            <span class="introduce-span">我们有一群善良友好的老玩家指引你游玩！后面会开放论坛互动，敬请期待吧！</span>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                        <div class="item-div">
-                            <div class="show-div">
-                                <span class="first" style="background-color: #32CD32">加密</span>
-                                <img :src="safe"/>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                            <div class="item-div">
+                                <div class="show-div">
+                                    <span class="first" style="background-color: #32CD32">加密</span>
+                                    <img :src="safe"/>
+                                </div>
+                                <span class="introduce-span">服务器和数据库为独立运行，全程HTTPS加密连接，保护所有玩家的隐私安全！</span>
                             </div>
-                            <span class="introduce-span">服务器和数据库为独立运行，全程HTTPS加密连接，保护所有玩家的隐私安全！</span>
-                        </div>
-                    </el-col>
-                    <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
-                </el-row>
-            </div>
-            <div class="col-des-div">
-                <el-row>
-                    <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                        <div class="item-div">
-                            <div class="show-div">
-                                <span style="background-color: #FF4500;" class="first">活动</span>
-                                <img :src="activity"/>
+                        </el-col>
+                        <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
+                    </el-row>
+                </div>
+                <div class="col-des-div">
+                    <el-row>
+                        <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                            <div class="item-div">
+                                <div class="show-div">
+                                    <span style="background-color: #FF4500;" class="first">活动</span>
+                                    <img :src="activity"/>
+                                </div>
+                                <span class="introduce-span">我们会在某些传统的日子发放福利，进行游戏活动！</span>
                             </div>
-                            <span class="introduce-span">我们会在某些传统的日子发放福利，进行游戏活动！</span>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                        <div class="item-div">
-                            <div class="show-div">
-                                <span class="first" style="background-color: #CDB5CD;">公益</span>
-                                <img :src="publicWelfare"/>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                            <div class="item-div">
+                                <div class="show-div">
+                                    <span class="first" style="background-color: #CDB5CD;">公益</span>
+                                    <img :src="publicWelfare"/>
+                                </div>
+                                <span class="introduce-span">服务器是完全公益性质！所有玩家都是平等的！</span>
                             </div>
-                            <span class="introduce-span">服务器是完全公益性质！所有玩家都是平等的！</span>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                        <div class="item-div">
-                            <div class="show-div">
-                                <span class="first" style="background-color: #3CB371">稳定线上</span>
-                                <img :src="server"/>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                            <div class="item-div">
+                                <div class="show-div">
+                                    <span class="first" style="background-color: #3CB371">稳定线上</span>
+                                    <img :src="server"/>
+                                </div>
+                                <span class="introduce-span">服务器与数据库稳定运行24小时不间断！</span>
                             </div>
-                            <span class="introduce-span">服务器与数据库稳定运行24小时不间断！</span>
-                        </div>
-                    </el-col>
-                    <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
-                </el-row>
-            </div>
-            <div class="title-item">
-                <span class="why-inf">服务器玩法内容</span>
-                <span class="line"></span>
-                <span class="english-inf">Play content</span>
+                        </el-col>
+                        <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
+                    </el-row>
+                </div>
             </div>
             <div class="play-content-box">
+                <div class="title-item">
+                    <span class="why-inf">服务器玩法内容</span>
+                    <span class="line"></span>
+                    <span class="english-inf">Play content</span>
+                </div>
                 <div class="sub-item" v-for="item in playContentList" :key="item.id" :style="this.$store.getters.isPhoneGet ? 'flex-direction: column-reverse;' : item.id % 2 == 0 ? 'flex-direction: row-reverse;' : ''">
                     <div class="picture" @click="playContentPreviewImg($event)">
                         <img :src="item.image"/>
@@ -101,52 +102,58 @@
                     </div>
                 </div>
             </div>
-            <div class="title-item">
-                <span class="why-inf">为服务器点赞吧！</span>
-                <span class="line"></span>
-                <span class="english-inf">Like server now!</span>
-            </div>
-            <div class="col-des-div">
-                <el-row>
-                    <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                        <div class="like-link-div">
-                            <img :src="mcbaike"/>
-                            <a href="https://play.mcmod.cn/sv20185883.html" target="_block">点击投票</a>
-                        </div>
-                    </el-col>
-                    <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
-                    </el-col>
-                    <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
-                </el-row>
-            </div>
-            <div class="title-item">
-                <span class="why-inf">服务器管理团队</span>
-                <span class="line"></span>
-                <span class="english-inf">Server management team</span>
-            </div>
-            <div class="col-server-team">
-                <div class="sub-item" v-for="item in serverTeamHeadList" :key="item.id">
-                    <div class="head">
-                        <img :src="item.head"/>
-                    </div>
-                    <span class="name">{{item.name}}</span>
-                    <span class="class">{{item.className}}</span>
+            <div class="sub-describe">
+                <div class="title-item">
+                    <span class="why-inf">为服务器点赞吧！</span>
+                    <span class="line"></span>
+                    <span class="english-inf">Like server now!</span>
+                </div>
+                <div class="col-des-div">
+                    <el-row>
+                        <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                            <div class="like-link-div">
+                                <img :src="mcbaike"/>
+                                <a href="https://play.mcmod.cn/sv20185883.html" target="_block">点击投票</a>
+                            </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="8" :md="8" :lg="6" :xl="6">
+                        </el-col>
+                        <el-col :xs="0" :sm="0" :md="0" :lg="3" :xl="3"></el-col>
+                    </el-row>
                 </div>
             </div>
-            <div class="title-item">
-                <span class="why-inf">截图欣赏</span>
-                <span class="line"></span>
-                <span class="english-inf">Screenshot appreciate</span>
+            <div class="sub-describe">
+                <div class="title-item">
+                    <span class="why-inf">服务器管理团队</span>
+                    <span class="line"></span>
+                    <span class="english-inf">Server management team</span>
+                </div>
+                <div class="col-server-team">
+                    <div class="sub-item" v-for="item in serverTeamHeadList" :key="item.id">
+                        <div class="head">
+                            <img :src="item.head"/>
+                        </div>
+                        <span class="name">{{item.name}}</span>
+                        <span class="class">{{item.className}}</span>
+                    </div>
+                </div>
             </div>
-            <div class="town-show-scroll">
-                <el-carousel :height="35 + 'rem'">
-                    <el-carousel-item v-for="(item,index) in bottomPictureList" :key="index">
-                        <img :src="item" @click="screenshotAppreciatePreviewImg(index)"/>
-                    </el-carousel-item>
-                </el-carousel>
+            <div class="sub-describe">
+                <div class="title-item">
+                    <span class="why-inf">截图欣赏</span>
+                    <span class="line"></span>
+                    <span class="english-inf">Screenshot appreciate</span>
+                </div>
+                <div class="town-show-scroll">
+                    <el-carousel :height="35 + 'rem'">
+                        <el-carousel-item v-for="(item,index) in bottomPictureList" :key="index">
+                            <img :src="item" @click="screenshotAppreciatePreviewImg(index)"/>
+                        </el-carousel-item>
+                    </el-carousel>
+                </div>
             </div>
         </div>
         <footer-bottom/>
@@ -319,6 +326,10 @@ export default {
         justify-content: center;
         align-items: flex-start;
         flex-wrap: wrap;
+        .sub-describe
+        {
+            width: 100%;
+        }
         .title-item
         {
             width: 100%;
