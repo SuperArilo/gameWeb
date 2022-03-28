@@ -271,14 +271,6 @@ export default {
         background-size: cover;
         background-attachment: fixed;
         background-image: url('http://image.superarilo.icu/townBg.png');
-        .back-iamge
-        {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            z-index: 1;
-            object-fit: cover;
-        }
         .center-text
         {
             display: flex;
@@ -295,11 +287,12 @@ export default {
             h2
             {
                 margin: 1rem 0;
-                font-size: 2.2rem;
+                font-size: 2.5rem;
                 text-align: center;
+                font-family: LockClock;
                 color: #ffffff;
-                text-shadow: 0 0 0.05rem #000000;
                 font-weight: 400;
+                text-shadow: 0 0 0.1rem #000000;
                 letter-spacing: 0.3rem;
             }
             .describe
@@ -309,7 +302,7 @@ export default {
                 align-items: center;
                 span
                 {
-                    font-size: 0.85rem;
+                    font-size: 0.8rem;
                     color: #ffffff;
                     text-align: center;
                     margin: 0.1rem 0;
