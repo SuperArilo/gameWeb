@@ -161,6 +161,8 @@ export default {
         flex-wrap: wrap;
         .user-head
         {
+            width: 3.5rem;
+            min-width: 3.5rem;
             height: 3.5rem;
             min-height: 3.5rem;
             display: flex;
@@ -171,6 +173,7 @@ export default {
             box-shadow: 0 0 0.1rem black;
             img
             {
+                width: 100%;
                 height: 100%;
             }
         }

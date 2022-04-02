@@ -46,7 +46,6 @@
                         </transition-group>
                     </div>
                 </transition>
-                
             </div>
             <el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalCount" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;" v-if="this.messageContent.length !== 0"/>
         </div>
@@ -231,15 +230,18 @@ export default {
                     .left-head
                     {
                         width: 2.5rem;
+                        height: 2.5rem;
                         min-width: 2.5rem;
-                        height: 100%;
                         display: flex;
                         justify-content: center;
                         align-items: flex-start;
+                        border-radius: 50%;
+                        box-shadow: -0.01rem 0.01rem 0.2rem black;
+                        overflow: hidden;
                         img
                         {
-                            border-radius: 50%;
-                            box-shadow: -0.01rem 0.01rem 0.2rem black;
+                            width: 100%;
+                            height: 100%;
                         }
                     }
                     .right-content
@@ -302,7 +304,7 @@ export default {
                                 }
                                 i
                                 {
-                                    font-size: 0.7rem;
+                                    font-size: 0.6rem;
                                 }
                                 span
                                 {

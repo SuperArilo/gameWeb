@@ -131,19 +131,28 @@
                                     </div>
                                     <div class="who-comment">
                                         <div class="is-back-to-who" v-if="item.byReplyUser !== null && this.$store.getters.isPhoneGet === false">
-                                            <span>回复：{{item.byReplyUser.byReplyNickname}}</span>
+                                            <span>回复：</span>
+                                            <span @click="getWhoComment(item)">{{item.byReplyUser.byReplyNickname}}</span>
                                             <span class="user-class" v-if="item.byReplyUser !== null" :style="{backgroundColor: item.byReplyUser.byReplyClassColor}">{{item.byReplyUser.byReplyClassName}}</span>
                                         </div>
                                         <div class="comment-show render-by-edit" v-html="item.replyContent" @click="previewImg($event)"/>
                                     </div>
                                     <div class="function-show">
-                                        <div class="sub-item">
-                                            <i class="far fa-clock"/>
-                                            <span>发表于：{{item.replyTime}}</span>
+                                        <div class="public-now-user-info-and-function">
+                                            <div class="sub-item" v-if="this.dynamicMainContent.uid === item.replyId">
+                                                <i class="fas fa-dice-d6"/>
+                                                <span>楼主</span>
+                                            </div>
+                                            <div class="sub-item">
+                                                <i class="far fa-clock"/>
+                                                <span>发表于：{{item.replyTime}}</span>
+                                            </div>
                                         </div>
-                                        <div class="sub-item" @click="OpenBackComment(item.id)" v-if="this.$store.getters.userInfoGet !== null">
-                                            <i class="fas fa-location-arrow"/>
-                                            <span>回复</span>
+                                        <div class="public-now-user-info-and-function">
+                                            <div class="sub-item" @click="OpenBackComment(item.id)" v-if="this.$store.getters.userInfoGet !== null">
+                                                <i class="fas fa-location-arrow"/>
+                                                <span>回复</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -263,6 +272,9 @@ export default {
                 $('html,body').stop().animate({'scrollTop': $(this.$refs.commentContent)[0].offsetTop},1000)
             }
         },
+        getWhoComment(item){
+            console.log(item)
+        }
     }
 }
 </script>
@@ -348,6 +360,8 @@ export default {
             padding: 0.5rem 0;
             .user-head
             {
+                width: 3.5rem;
+                min-width: 3.5rem;
                 height: 3.5rem;
                 display: flex;
                 justify-content: center;
@@ -357,6 +371,7 @@ export default {
                 box-shadow: 0 0 0.1rem black;
                 img
                 {
+                    width: 100%;
                     height: 100%;
                     max-height: 100%;
                 }
@@ -452,6 +467,7 @@ export default {
                     }
                     span
                     {
+                        letter-spacing: 0.02rem;
                         margin-left: 0.3rem;
                     }
                 }
@@ -468,12 +484,16 @@ export default {
                     margin-bottom: 0.5rem;
                     .user-head
                     {
-                        height: 100%;
+                        height: 2rem;
+                        width: 2rem;
+                        min-width: 2rem;
                         border-radius: 50%;
                         overflow: hidden;
                         box-shadow: 0 0 0.1rem black;
                         img
                         {
+                            width: 100%;
+                            height: 100%;
                             max-height: 100%;
                         }
                     }
@@ -567,11 +587,11 @@ export default {
                     margin: 0.5rem 0;
                     .user-class
                     {
-                        padding: 0.15rem 0.4rem;
+                        padding: 0.12rem 0.3rem;
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        font-size: 0.52rem;
+                        font-size: 0.5rem;
                         border-radius: 0.2rem;
                         color: #ffffff;
                     }
@@ -583,6 +603,8 @@ export default {
                         flex-wrap: wrap;
                         .user-head
                         {
+                            width: 3.5rem;
+                            min-width: 3.5rem;
                             height: 3.5rem;
                             display: flex;
                             justify-content: center;
@@ -592,6 +614,7 @@ export default {
                             box-shadow: 0 0 0.1rem black;
                             img
                             {
+                                width: 100%;
                                 height: 100%;
                                 max-height: 100%;
                             }
@@ -670,12 +693,16 @@ export default {
                                 margin: 0.3rem 0;
                                 .user-head
                                 {
-                                    height: 100%;
+                                    width: 2rem;
+                                    min-width: 2rem;
+                                    height: 2rem;
                                     border-radius: 50%;
                                     overflow: hidden;
                                     box-shadow: 0 0 0.1rem black;
                                     img
                                     {
+                                        width: 2rem;
+                                        height: 2rem;
                                         max-height: 100%;
                                     }
                                 }
@@ -687,10 +714,11 @@ export default {
                                     font-size: 0.58rem;
                                     text-align: center;
                                     margin: 0 0.5rem;
+                                    white-space: nowrap;
                                 }
                                 .user-class
                                 {
-                                    padding: 0.15rem 0.4rem;
+                                    padding: 0.1rem 0.3rem;
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
@@ -701,10 +729,10 @@ export default {
                             }
                             .right-back-who
                             {
-                                height: 100%;
                                 display: flex;
                                 align-items: center;
                                 font-size: 0.6rem;
+                                margin: 0.3rem 0;
                             }
                         }
                         .who-comment
@@ -720,7 +748,7 @@ export default {
                                 display: flex;
                                 justify-content: flex-start;
                                 align-items: center;
-                                font-size: 0.65rem;
+                                font-size: 0.62rem;
                                 padding: 0.5rem 0;
                                 border-bottom: solid 0.05rem rgb(172, 172, 172);
                                 .user-class
@@ -733,7 +761,6 @@ export default {
                                 width: 100%;
                             }
                         }
-                        
                         .function-show
                         {
                             width: 100%;
@@ -741,26 +768,43 @@ export default {
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
-                            .sub-item
+                            .public-now-user-info-and-function
                             {
-                                height: 100%;
+                                height: inherit;
                                 display: flex;
                                 align-items: center;
-                                span , i
+                                .sub-item
                                 {
                                     height: 100%;
                                     display: flex;
                                     align-items: center;
-                                    font-size: 0.6rem;
-                                }
-                                span
-                                {
-                                    margin-left: 0.3rem;
+                                    span , i
+                                    {
+                                        height: 100%;
+                                        display: flex;
+                                        align-items: center;
+                                        font-size: 0.6rem;
+                                    }
+                                    span
+                                    {
+                                        margin-left: 0.3rem;
+                                        white-space: nowrap;
+                                    }
                                 }
                             }
-                            .sub-item:nth-child(2)
+                            .public-now-user-info-and-function:nth-child(1)
                             {
-                                cursor: pointer;
+                                .sub-item
+                                {
+                                    margin-right: 0.5rem;
+                                }
+                            }
+                            .public-now-user-info-and-function:nth-child(2)
+                            {
+                                .sub-item
+                                {
+                                    cursor: pointer;
+                                }
                             }
                         }
                     }
