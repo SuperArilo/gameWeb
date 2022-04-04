@@ -8,11 +8,6 @@ export default createStore({
         userInfo: null,
         serverTeamList:[
             {
-                uid: 11,
-                javaMcId: 'Arilo007',
-                className: '腐竹',
-            },
-            {
                 uid: 102,
                 javaMcId: 'BestStarfish280',
                 className: '管理员',
