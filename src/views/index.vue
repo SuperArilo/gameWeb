@@ -289,7 +289,6 @@ export default {
                 margin: 1rem 0;
                 font-size: 2.5rem;
                 text-align: center;
-                font-family: LockClock;
                 color: #ffffff;
                 font-weight: 400;
                 text-shadow: 0 0 0.1rem #000000;

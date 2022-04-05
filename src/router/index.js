@@ -149,14 +149,6 @@ const routes = [
         }
     },
     {
-        path: '/test',
-        name: 'test',
-        component: () => import('@/views/test.vue'),
-        meta:{
-            title: 'test'
-        }
-    },
-    {
         path: '/:pathMatch(.*)',
         redirect: '/error'
     }
