@@ -105,6 +105,7 @@ export default {
             object-fit: cover;
             border-radius: 50%;
             box-shadow: 0 0 0.2rem black;
+            overflow: hidden;
         }
         .player-name
         {

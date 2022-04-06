@@ -95,7 +95,7 @@ export default {
                                 } else {
                                     sessionStorage.setItem('token',resq.data.token)
                                 }
-                                ElMessageBox.alert(resq.message, '提示', { confirmButtonText: 'OK', callback: () => {
+                                ElMessageBox.alert(resq.message, '提示', { confirmButtonText: '确认', callback: () => {
                                     this.$router.push('/')
                                     userLognState().then(resq => {
                                         if(resq.flag){

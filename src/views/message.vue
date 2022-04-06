@@ -13,8 +13,9 @@
                 <span class="title-span">留言合集</span>
                 <transition name="list">
                     <div class="message-empty" v-if="this.messageContent.length === 0">
-                        <span>当前没有留言哦！</span>
-                        <i class="fas fa-inbox"/>
+                        <span v-if="this.getMessageStatus === false">加载失败！</span>
+                        <span v-else-if="this.messageContent.length === 0 && this.getMessageStatus === true">当前没有留言消息哦！</span>
+                        <i class="fas" :style="[this.getMessageStatus === null ? 'color: #3773f3;':'']" :class="[{'fa-circle-notch fa-spin' : this.getMessageStatus === null}, {'fa-exclamation-triangle' : this.getMessageStatus === false}, {'fa-inbox' : this.messageContent.length === 0 && this.getMessageStatus === true}]"/>
                     </div>
                 </transition>
                 <transition name="list">
@@ -67,12 +68,12 @@ export default {
             pageSize: 8,
             currentPage: 1,
             totalCount: null,
+            getMessageStatus: null,
             isSendToServerWorkNow: false,
             isClearContent: false,
             messageContent: [],
             messageImageList:[],
             linshi: '<blockquote><p><font size="2"><span id="o67hj" style=""></span><b><i>我们所度过的每个平凡的日常，也许就是连续发生的奇迹&nbsp; &nbsp; &nbsp;&nbsp;</i></b></font><img src="https://www.itrong.love:4433/images/2022/02/23/c08551ad11a149e5a6fc9dd4aa4394f3.jpg" width="100" style="font-size: 24px;"/></p><p><font color="#46acc8">欢迎大家在这留下你的脚印</font></p><p><font color="#8baa4a">也欢迎大家提出您的宝贵建议</font></p></blockquote>'
-            
         }
     },
     created(){
@@ -86,12 +87,15 @@ export default {
         getUserMessage(){
             userMessageGet({pageNumber: this.currentPage,pageSize: this.pageSize}).then(resq => {
                 if(resq.code === 200){
+                    this.getMessageStatus = true
                     this.totalCount = resq.data.totalCount
                     this.messageContent = resq.data.list
                 } else {
                     ElMessage.error('获取留言发生错误！ ' + resq.message)
+                    this.getMessageStatus = false
                 }
             }).catch(err => {
+                this.getMessageStatus = false
                 ElMessage.error(err.message)
             })
         },
