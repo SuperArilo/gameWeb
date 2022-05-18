@@ -154,7 +154,7 @@ export default {
                 this.getTags()
             } else {
                 this.firstRequestIsWorkNow = false
-                ElMessage({ showClose: true, message: resq.message, type: 'warning'})
+                ElMessage({message: resq.message, type: 'warning'})
             }
         }).catch(err => {
             this.firstRequestIsWorkNow = false
@@ -234,7 +234,7 @@ export default {
                 if(resq.flag){
                     this.tagList = resq.data
                 } else {
-                    ElMessage({showClose: true, message: resq.message, type: 'warning'})
+                    ElMessage({message: resq.message, type: 'warning'})
                 }
             }).catch(err => {
                 ElMessage({message: err.message, type: 'error'})

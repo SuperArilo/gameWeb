@@ -1,9 +1,9 @@
 import axios from 'axios'
 axios.defaults.withCredentials = false
 const service = axios.create({
-    // baseURL: 'http://www.superarilo.icu:3090/api',
+    baseURL: 'http://www.superarilo.icu:3090/api',
     // baseURL: 'https://www.itrong.love/api',
-    baseURL: 'http://localhost:3090/api',
+    // baseURL: 'http://localhost:3090/api',
     timeout: 10000
 })
 service.interceptors.request.use(config => {
