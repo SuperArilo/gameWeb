@@ -44,7 +44,7 @@
                     </div>
                     <span class="upload-buttom" @click="showUploadWindow =! showUploadWindow">上传图片</span>
                 </div>
-                <my-upload v-model="showUploadWindow" field="headerFile" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" url="http://localhost:3090/api/user/header/upload" :headers="headers" img-format="png"/>
+                <my-upload v-model="showUploadWindow" field="headerFile" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" url="http://www.superarilo.icu:3090/api/user/header/upload" :headers="headers" img-format="png"/>
             </div>
             <span class="line"></span>
         </div>
