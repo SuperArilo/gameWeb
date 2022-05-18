@@ -17,6 +17,11 @@ export default createStore({
                 javaMcId: 'SGJC2374',
                 className: '管理员',
             },
+            {
+                uid: 105,
+                javaMcId: 'Arilo007',
+                className: '腐竹',
+            },
         ]
     },
     getters:{

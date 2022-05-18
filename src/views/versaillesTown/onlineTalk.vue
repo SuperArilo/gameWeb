@@ -95,7 +95,7 @@ export default {
                     this.scrollToBottom()
                     this.userWriteContent = ''
                 } else {
-                    ElMessage.info('您还未登陆！')
+                    ElMessage('您还未登陆！')
                 }
             }
         },
@@ -120,7 +120,7 @@ export default {
             ElNotification({title: '在线聊天',message: '连接服务器成功！',type: 'success'})            
         },
         websocketOnError(){
-            ElMessage.error('连接到服务器出错！，此功能尚未开发完成！！！')
+            ElMessage({message: '连接到服务器出错！，此功能尚未开发完成！！！', type: 'error'})
         },
         websocketClose(){
         }

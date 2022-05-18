@@ -66,11 +66,11 @@ export default {
                 this.imageList = resq.data
                 this.isGetMediaFileWorkNow = false
             } else {
-                ElMessage.error(resq.message)
+                ElMessage({message: resq.message, type: 'error'})
                 this.isGetMediaFileWorkNow = false
             }
         }).catch(err => {
-            ElMessage.error(err.message)
+            ElMessage({message: err.message, type: 'error'})
         })
     },
     methods:{
@@ -99,16 +99,16 @@ export default {
                     }
                     data.append('uid',this.$store.getters.userInfoGet.uid)
                     uploadImage(data).then(resq => {
-                        if(resq.flag){
+                        if(resq.code === 200){
                             ElMessage({type: 'success', message: resq.message})
                             this.imageList = this.imageList.concat(resq.data)
                             this.isUploadToServerWorkNow = false
                         } else {
-                            ElMessage.error(resq.message)
+                            ElMessage({message: resq.message, type: 'error'})
                             this.isUploadToServerWorkNow = false
                         }
                     }).catch(err => {
-                        ElMessage.error(err.message)
+                        ElMessage({message: err.message, type: 'error'})
                         this.isUploadToServerWorkNow = false
                     })
                 }
@@ -122,15 +122,15 @@ export default {
                 sendData.append('uid', this.$store.getters.userInfoGet.uid)
                 sendData.append('mediaIds', ArrayID)
                 deleteImage(sendData).then(resq => {
-                    if(resq.flag){
+                    if(resq.code === 200){
                         ElMessage({type: 'success', message: resq.message})
                         let index = this.imageList.findIndex(item => item.id === id)
                         this.imageList.splice(index, 1)
                     } else {
-                        ElMessage.error(resq.message)
+                        ElMessage({message: resq.message, type: 'error'})
                     }
                 }).catch(err => {
-                    ElMessage.error(err.message)
+                    ElMessage({message: err.message, type: 'error'})
                 })
             }).catch(err => {
             })
@@ -147,18 +147,18 @@ export default {
                     data.append('uid',this.$store.getters.userInfoGet.uid)
                     data.append('mediaIds',this.imageIsHaveIdList)
                     deleteImage(data).then(resq => {
-                        if(resq.flag){
-                            ElMessage({  type: 'success', message: resq.message})
+                        if(resq.code === 200){
+                            ElMessage({type: 'success', message: resq.message})
                             this.imageIsHaveIdList.findIndex(key => {
                                 this.intoEditList.splice(this.intoEditList.findIndex(item => item.id === key), 1)
                                 this.imageList.splice(this.imageList.findIndex(item => item.id === key), 1)
                             })
                             this.imageIsHaveIdList = []
                         } else {
-                            ElMessage.error(resq.message)
+                            ElMessage({message: resq.message, type: 'error'})
                         }
                     }).catch(err => {
-                        ElMessage.error(err.message)
+                        ElMessage({message: err.message, type: 'error'})
                     })
                     this.isDeleteByMultipleWorkNow = false
                 }).catch(err => {

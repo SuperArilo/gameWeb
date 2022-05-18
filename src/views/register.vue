@@ -94,7 +94,7 @@ export default {
                                 },1000)
                             }
                         }).catch(err => {
-                            ElMessage.error(err.message)
+                            ElMessage({message: err.message, type: 'error'})
                         })
                     }
                 } else {
@@ -118,10 +118,10 @@ export default {
                 if(resq.flag){
                     this.CAPTCHACodeImage = resq.data
                 } else {
-                    ElMessage.error(resq.message)
+                    ElMessage({message: resq.message, type: 'error'})
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         checkMail(mail){
@@ -138,34 +138,35 @@ export default {
                                 this.isSendToServerRegisterWorkNow = true
                                 userRegister({mail: this.eMail,password: this.userPwd,confirm: this.userPwdAgain,mailVerifyCode: this.eMailPwd,verifyCode: this.CAPTCHACode,random: this.verificationRandomCode}).then(resq => {
                                     if(resq.flag){
+                                        this.isSendToServerRegisterWorkNow = false
                                         ElMessageBox.alert(resq.message, '提示', { confirmButtonText: '确认', callback: () => {
                                             this.$router.push('/login')
                                         }})
                                         this.CAPTCHACode = ''
                                     } else {
-                                        ElMessage.warning(resq.message)
-                                        this.CAPTCHACode = ''
                                         this.isSendToServerRegisterWorkNow = false
+                                        ElMessage({message: resq.message, type: 'warning'})
+                                        this.CAPTCHACode = ''
                                     }
                                 }).catch(err => {
-                                    ElMessage.error(err.message)
+                                    ElMessage({message: err.message, type: 'error'})
                                     this.CAPTCHACode = ''
                                     this.isSendToServerRegisterWorkNow = false
                                 })
                             } else {
-                                ElMessage.warning('两次输入的密码不一致，请检查！')
+                                ElMessage({message: '两次输入的密码不一致，请检查！', type: 'warning'})
                                 this.isSendToServerRegisterWorkNow = false
                             }
                         } else {
-                            ElMessage.warning('邮箱不合法！请重新确认')
+                            ElMessage({message: '邮箱不合法！请重新确认', type: 'warning'})
                             this.isSendToServerRegisterWorkNow = false
                         }
                     } else{
-                        ElMessage.warning('密码太短啦！！')
+                        ElMessage({message: '密码太短啦！！', type: 'warning'})
                         this.isSendToServerRegisterWorkNow = false
                     }
                 } else {
-                    ElMessage.warning('填写的信息有空白，请检查！')
+                    ElMessage({message: '填写的信息有空白，请检查！', type: 'warning'})
                     this.isSendToServerRegisterWorkNow = false
                 }
             }

@@ -91,12 +91,12 @@ export default {
                     this.totalCount = resq.data.totalCount
                     this.messageContent = resq.data.list
                 } else {
-                    ElMessage.error('获取留言发生错误！ ' + resq.message)
+                    ElMessage({message: '获取留言发生错误！ ' + resq.message, type: 'error'})
                     this.getMessageStatus = false
                 }
             }).catch(err => {
                 this.getMessageStatus = false
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         sendToServer(){
@@ -106,13 +106,13 @@ export default {
                     userSendMessage({content: this.userContent}).then(resq => {
                         if(resq.code === 200){
                             this.isClearContent = true
-                            ElMessage.success(resq.message)
+                            ElMessage({message: resq.message, type: 'success'})
                             this.getUserMessage()
                         }
                         this.isSendToServerWorkNow = false
                     })
                 } else {
-                    ElMessage.info('留言信息为空白哦！')
+                    ElMessage('留言信息为空白哦！')
                     this.isSendToServerWorkNow = false
                 }
             }

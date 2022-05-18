@@ -77,7 +77,7 @@ export default {
         tagInputEnter(e){
             if(e.target.value === '') return
             if(this.noHaveTag.length + this.havedTag.length > 2){
-                ElMessage({message: '标签最多添加3个哦！',type: 'warning',})
+                ElMessage({message: '标签最多添加3个哦！',type: 'warning'})
                 return
             }
             let isHave
@@ -88,7 +88,7 @@ export default {
                 if(key === e.target.value) isHave = true
             })
             if(isHave){
-                ElMessage({message: '添加的标签已经存在了哦！',type: 'warning',})
+                ElMessage({message: '添加的标签已经存在了哦！',type: 'warning'})
             } else {
                 this.noHaveTag = this.noHaveTag.concat({tagContent: e.target.value,tagType: ''})
                 this.tagTemp = this.tagTemp.concat(e.target.value)
@@ -99,7 +99,7 @@ export default {
             if(title === '') return
             if(this.noHaveTag.length + this.havedTag.length > 2){
                 console.log(this.havedTag)
-                ElMessage({message: '标签最多添加3个哦！',type: 'warning',})
+                ElMessage({message: '标签最多添加3个哦！',type: 'warning'})
                 return
             }
             let isHave
@@ -110,7 +110,7 @@ export default {
                 if(key === id) isHave = true
             })
             if(isHave){
-                ElMessage({message: '添加的标签已经存在了哦！',type: 'warning',})
+                ElMessage({message: '添加的标签已经存在了哦！',type: 'warning'})
             } else {
                 this.havedTag = this.havedTag.concat(id)
                 this.tagTemp = this.tagTemp.concat(title)
@@ -123,10 +123,10 @@ export default {
                         this.tagList = resq.data
                         this.showMoreTags = true
                     } else {
-                        ElMessage.error('获取标签发生错误 ' + resq.message)
+                        ElMessage({message: '获取标签发生错误 ' + resq.message, type: 'error'})
                     }
                 }).catch(err => {
-                    ElMessage.error(err.message)
+                    ElMessage({message: err.message, type: 'error'})
 
                 })
             } else {
@@ -174,11 +174,11 @@ export default {
                                 })
                                 this.isDyPublishWorkNow = false
                             } else {
-                                ElMessage.error('请求发生错误！ ' + resq.message)
+                                ElMessage({message: '请求发生错误！ ' + resq.message, type: 'error'})
                                 this.isDyPublishWorkNow = false
                             }
                         }).catch(err => {
-                            ElMessage.error(err.message)
+                            ElMessage({message: err.message, type: 'error'})
                             this.isDyPublishWorkNow = false
                         })
                     }

@@ -154,11 +154,11 @@ export default {
                 this.getTags()
             } else {
                 this.firstRequestIsWorkNow = false
-                ElMessage({ showClose: true, message: resq.message, type: 'warning',})
+                ElMessage({ showClose: true, message: resq.message, type: 'warning'})
             }
         }).catch(err => {
             this.firstRequestIsWorkNow = false
-            ElMessage.error(err.message)
+            ElMessage({message: err.message, type: 'error'})
         })
     },
     methods:{
@@ -234,10 +234,10 @@ export default {
                 if(resq.flag){
                     this.tagList = resq.data
                 } else {
-                    ElMessage({ showClose: true, message: resq.message, type: 'warning',})
+                    ElMessage({showClose: true, message: resq.message, type: 'warning'})
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         sendToServer(){
@@ -247,17 +247,17 @@ export default {
                     this.dyTotal = resq.data.total
                     this.dyAllLoading = false
                 } else {
-                    ElMessage({ showClose: true, message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！', type: 'warning',})
+                    ElMessage({showClose: true, message: '请求数据失败，请刷新页面重试！若问题依旧，请联系管理员！', type: 'warning'})
                     this.dyAllLoading = false
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
                 this.dyAllLoading = false
             })
         },
         delOwerDy(){
             ElMessageBox.confirm('这将会删除您所发的动态！', ' 提示', { confirmButtonText: '确认', cancelButtonText: '取消', type: 'warning'}).then(() => {
-                ElMessage.success('删除成功！（假的，还没开发呢！）')
+                ElMessage({message: '删除成功！（假的，还没开发呢！）', type: 'success'})
             }).catch(() => {
             })
         }

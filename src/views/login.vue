@@ -73,10 +73,10 @@ export default {
                 if(resq.flag){
                     this.CAPTCHACodeImage = resq.data
                 } else {
-                    ElMessage.error(resq.message)
+                    ElMessage({message: resq.message, type: 'error'})
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         checkMail(mail){
@@ -114,13 +114,13 @@ export default {
                                 this.userLoginWorkNow = false
                                 this.CAPTCHACode = ''
                             } else {
-                                ElMessage.error(resq.message)
+                                ElMessage({message: resq.message, type: 'error'})
                                 this.CAPTCHACode = ''
                                 this.getVerification()
                                 this.userLoginWorkNow = false
                             }
                         }).catch(err => {
-                            ElMessage.error(err.message)
+                            ElMessage({message: err.message, type: 'error'})
                             this.CAPTCHACode = ''
                             this.getVerification()
                             this.userLoginWorkNow = false

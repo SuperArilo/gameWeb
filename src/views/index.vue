@@ -213,10 +213,10 @@ export default {
                 if(resq.status === 200){
                     this.getAvatars(resq.data.uuid,javaId,userId,className)
                 } else {
-                    ElMessage.error('获取玩家的信息出错,请稍后重试! ' + resq.statusText)
+                    ElMessage({message: '获取玩家的信息出错,请稍后重试! ' + resq.statusText, type: 'error'})
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         arrayBufferToBase64(Buffer){
@@ -235,8 +235,8 @@ export default {
                 } else {
                     ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
                 }
-            }).catch(subErr => {
-                ElMessage.error(err.message)
+            }).catch(err => {
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         playContentPreviewImg(e){

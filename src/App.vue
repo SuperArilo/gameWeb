@@ -191,7 +191,7 @@ export default {
                         ElNotification({title: '提示',message: resq.message ,type: 'success'})
                     }
                 }).catch(err => {
-                    ElMessage.error('注销登陆过程发生错误！ ' + err)
+                    ElMessage({message: '注销登陆过程发生错误！', type: 'error'})
                 })
             }).catch(() => {
             })

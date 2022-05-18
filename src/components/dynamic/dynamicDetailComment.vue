@@ -95,12 +95,12 @@ export default {
                     resq.data.forEach(item => {
                         editor.cmd.do( 'insertHTML', `<img src="${item.mediaHttpUrl}" width="100"/>`)
                     })
-                    ElMessage.success(resq.message)
+                    ElMessage({message: resq.message, type: 'success'})
                 } else {
-                    ElMessage.error(resq.message)
+                    ElMessage({message: resq.message, type: 'error'})
                 }
             }).catch(err => {
-                ElMessage.error(err)
+                ElMessage({message: err.message, type: 'error'})
             })
         }
         editor.create()
@@ -127,13 +127,13 @@ export default {
                         this.$emit('commentStatus', true)
                         this.editor.txt.clear()
                         this.isSendToServerWorkNow = false
-                        ElMessage.success(resq.message)
+                        ElMessage({message: resq.message, type: 'success'})
                     } else {
-                        ElMessage.error(resq.message)
+                        ElMessage({message: resq.message, type: 'error'})
                         this.isSendToServerWorkNow = false
                     }
                 }).catch(err => {
-                    ElMessage.error(err.message)
+                    ElMessage({message: err.message, type: 'error'})
                     this.isSendToServerWorkNow = false
                 })
             }

@@ -76,10 +76,10 @@ export default {
                     this.getAvatars(resq.data.uuid)
                     this.getBodyRenders(resq.data.uuid)
                 } else {
-                    ElMessage.error('获取玩家的信息出错,请稍后重试! ' + resq.statusText)
+                    ElMessage({message: '获取玩家的信息出错,请稍后重试! ' + resq.statusText, type: 'error'})
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         arrayBufferToBase64(Buffer){
@@ -96,10 +96,10 @@ export default {
                 if(subResq.status === 200){
                     this.playerHead = this.arrayBufferToBase64(subResq.data)
                 } else {
-                    ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
+                    ElMessage({message: '获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText, type: 'error'})
                 }
             }).catch(subErr => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         getBodyRenders(uuid){
@@ -107,10 +107,10 @@ export default {
                 if(subResq.status === 200){
                     this.playerSkin = this.arrayBufferToBase64(subResq.data)
                 } else {
-                    ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
+                    ElMessage({message: '获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText, type: 'error'})
                 }
             }).catch(subErr => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         unbind(){
@@ -120,10 +120,10 @@ export default {
                         ElMessage.success(resq.message)
                         this.$store.commit('removeJavaMcId')
                     } else {
-                        ElMessage.error(resq.message)
+                        ElMessage({message: resq.message, type: 'error'})
                     }
                 }).catch(err => {
-                    ElMessage.error(err.message)
+                    ElMessage({message: err.message, type: 'error'})
                 })
             }).catch(() => {
             })

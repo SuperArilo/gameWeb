@@ -44,7 +44,7 @@
                     </div>
                     <span class="upload-buttom" @click="showUploadWindow =! showUploadWindow">上传图片</span>
                 </div>
-                <my-upload v-model="showUploadWindow" field="headerFile" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" url="https://www.itrong.love:1234/api/user/header/upload" :headers="headers" img-format="png"/>
+                <my-upload v-model="showUploadWindow" field="headerFile" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" url="http://localhost:3090/api/user/header/upload" :headers="headers" img-format="png"/>
             </div>
             <span class="line"></span>
         </div>
@@ -81,14 +81,14 @@ export default {
             this.headers.token = sessionStorage.getItem('token') === null ? (localStorage.getItem('token') !== null ? localStorage.getItem('token') : null) : sessionStorage.getItem('token')
         },
         cropUploadSuccess(jsonData, field){
-            if(jsonData.flag){
-                this.$store.getters.userInfoGet.userhead = jsonData.data.absolutePath
+            if(jsonData.code === 200){
+                // this.$store.getters.userInfoGet.userhead = jsonData.data.absolutePath
             } else {
-                ElMessage.error('上传过程中发生错误！ ' + jsonData.messsage)
+                ElMessage({message: '上传过程中发生错误！ ' + jsonData.messsage, type: 'error'})
             }
         },
         cropUploadFail(status, field){
-            ElMessage.error('上传过程中发生错误！ ' + field)
+            ElMessage({message: '上传过程中发生错误！ ' + field, type: 'error'})
         },
         sendToServer(){
             if(!this.isSendToServerWorkNow){
@@ -96,19 +96,19 @@ export default {
                 if(this.nickName !== '' && this.personalizedSignature !== ''){
                     userModifyInfo({'nickname': this.nickName,'personalizedSignature': this.personalizedSignature}, this.$store.getters.userInfoGet.uid).then(resq => {
                         if(resq.flag){
-                            ElMessage.success(resq.message)
+                            ElMessage({message: resq.message, type: 'success'})
                             this.$store.getters.userInfoGet.nickname = this.nickName
                             this.$store.getters.userInfoGet.personalizedSignature = this.personalizedSignature
                         } else {
-                            ElMessage.error('请求过程中发生错误！' + resq.message)
+                            ElMessage({message: '请求过程中发生错误！' + resq.message, type: 'error'})
                         }
                         this.isSendToServerWorkNow = false
                     }).catch(err => {
-                        ElMessage.error(err.message)
+                        ElMessage({message: err.message, type: 'error'})
                         this.isSendToServerWorkNow = false
                     })
                 } else {
-                    ElMessage.warning('输入的内容有空白！')
+                    ElMessage({message: '输入的内容有空白！', type: 'warning'})
                     this.isSendToServerWorkNow = false
                 }
             }

@@ -46,7 +46,7 @@ export default {
     },
     methods:{
         sendToServerConfirm(){
-            ElMessage.warning('功能暂时停用！可以直接进入服务器')
+            ElMessage({message: '功能暂时停用！可以直接进入服务器', type: 'warning'})
         }
     }
 }

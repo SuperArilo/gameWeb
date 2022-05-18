@@ -209,10 +209,10 @@ export default {
                 this.dynamicMainContent = resq.data
                 this.commentGet()
             } else {
-                ElMessage.error('获取详情发生错误！ ' + resq.message)
+                ElMessage({message: '获取详情发生错误！ ' + resq.message, type: 'error'})
             }
         }).catch(err => {
-            ElMessage.error(err.message)
+            ElMessage({message: err.message, type: 'error'})
         })
     },
     methods:{
@@ -233,11 +233,11 @@ export default {
                     this.commentContent = resq.data.list
                     this.commentTotal = resq.data.total
                 } else {
-                    ElMessage.error('获取评论发生错误！ ' + resq.message)
+                    ElMessage({message: '获取评论发生错误！ ' + resq.message, type: 'error'})
                 }
                 this.isChangeParentCommentWorkNow = false
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
                 this.isChangeParentCommentWorkNow = false
             })
         },

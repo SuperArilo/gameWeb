@@ -1,10 +1,10 @@
 import axios from 'axios'
 axios.defaults.withCredentials = false
 const service = axios.create({
-    baseURL: 'http://www.superarilo.icu:3090/api',
+    // baseURL: 'http://www.superarilo.icu:3090/api',
     // baseURL: 'https://www.itrong.love/api',
-    // baseURL: 'http://localhost/api',
-    timeout: 15000
+    baseURL: 'http://localhost:3090/api',
+    timeout: 10000
 })
 service.interceptors.request.use(config => {
     if(localStorage.getItem('token') === null && sessionStorage.getItem('token') === null){
@@ -19,7 +19,7 @@ service.interceptors.request.use(config => {
         return config
     }
 }, error => {
-    return Promise.reject(error.response.data)
+    return Promise.reject(error)
 })
 service.interceptors.response.use( response => {
         return Promise.resolve(response.data)

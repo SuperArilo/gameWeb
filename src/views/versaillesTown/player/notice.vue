@@ -14,7 +14,7 @@
                     <span class="table-title-show-title" :style="[this.$store.getters.isPhoneGet ? 'width: 10rem;min-width: 10rem;':'width: 40%;']">发布时间</span>
                     <span class="table-title-class-title">类型</span>
                 </div>
-                <div class="notice-list" :style="[this.$store.getters.isPhoneGet ? 'width: auto;':'width:100%;']" v-loading="noticeContent.length === 0">
+                <div class="notice-list" :style="[this.$store.getters.isPhoneGet ? 'width: auto;':'width:100%;']" v-loading="openNoticeContent === ''">
                     <div class="sub-notice-list" v-for="item in noticeContent" :key="item.id">
                         <div class="top-notice-simple">
                             <div class="sub-check-box">
@@ -57,7 +57,7 @@ export default {
     },
     data(){
         return{
-            noticeContent:[],
+            noticeContent: '',
             choiceNoticeIndex: null,
             isOpenChoiceNoticeContent: false,
             noticeChoiceList:[],
@@ -98,7 +98,7 @@ export default {
         delNotice(){
             if(this.noticeChoiceList.length !== 0){
                 ElMessageBox.confirm('确认删除所选消息？','警告',{confirmButtonText: '确认',cancelButtonText: '取消',type: 'warning',}).then(() => {
-                    ElMessage.success('删除成功！')
+                    ElMessage({message: '删除成功！', type: 'success'})
                 }).catch(() => {
                 })
             }
@@ -108,10 +108,10 @@ export default {
                 if(resq.code === 200){
                     this.noticeContent = resq.data.list
                 } else {
-                    ElMessage.error(resq.message)
+                    ElMessage({message: resq.message, type: 'error'})
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         },
         previewImg(e){
@@ -184,7 +184,6 @@ export default {
         .notice-content
         {
             width: 100%;
-            min-height: 10rem;
             display: flex;
             align-content: flex-start;
             flex-wrap: wrap;
@@ -233,6 +232,7 @@ export default {
             .notice-list
             {
                 width: 100%;
+                min-height: 10rem;
                 .sub-notice-list
                 {
                     width: inherit;

@@ -76,10 +76,10 @@ export default {
                     })
                     ElMessage({type: 'success', message: resq.message})
                 } else {
-                    ElMessage.error(resq.message)
+                    ElMessage({message: resq.message, type: 'error'})
                 }
             }).catch(err => {
-                ElMessage.error(err.message)
+                ElMessage({message: err.message, type: 'error'})
             })
         }
         editor.create()
