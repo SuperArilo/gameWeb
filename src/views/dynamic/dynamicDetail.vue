@@ -172,7 +172,7 @@
                     <i class="fas fa-inbox"/>
                 </div>
             </transition>
-            <el-pagination background layout="prev, pager, next" :page-size="8" :total="commentTotal" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
+            <el-pagination v-if="this.commentContent.length !== 0" background layout="prev, pager, next" :page-size="8" :total="commentTotal" @current-change="pageChange" v-model:currentPage="currentPage" :small="this.$store.getters.isPhoneGet" style="margin: 0.5rem 0;"/>
         </div>
         <footer-bottom/>
     </div>

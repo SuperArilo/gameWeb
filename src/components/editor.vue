@@ -18,6 +18,7 @@
 <script>
 import { uploadImage } from '@/util/api.js'
 import mediaFile from '@/components/dynamic/mediaFile.vue'
+import wangEditor from 'wangeditor'
 export default {
     components:{
         mediaFile

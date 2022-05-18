@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { ElNotification } from 'element-plus'
+import $ from 'jquery'
 const routes = [
     {
         path: '/',
@@ -156,10 +157,5 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL), routes
-})
-router.beforeEach((to, from, next) => {
-    window.document.title = to.meta.title
-    $('html,body').stop().animate({'scrollTop': 0})
-    next()
 })
 export default router

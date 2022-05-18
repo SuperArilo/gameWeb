@@ -1,4 +1,5 @@
 import request from '@/util/axios.js'
+import Qs from "query-string"
 //查询动态
 export const dynamicGet = (params) => {
     return request({

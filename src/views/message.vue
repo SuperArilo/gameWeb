@@ -152,6 +152,7 @@ export default {
     background-attachment: fixed;
     background-position: top;
     background-size: cover;
+    background-attachment: fixed;
     .center-top-inf
     {
         display: flex;

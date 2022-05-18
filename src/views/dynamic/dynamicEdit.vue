@@ -204,6 +204,7 @@ export default {
     background-repeat: no-repeat;
     background-position: top;
     background-size: cover;
+    background-attachment: fixed;
     .dy-title-func-div
     {
         width: 100%;

@@ -126,10 +126,12 @@ export default {
             ],
         }
     },
-    mounted(){
-        window.addEventListener('resize',this.windowWidth)
+    created(){
         this.windowWidth()
-        window.addEventListener('scroll', this.scrollValue,true)
+        window.addEventListener('resize',this.windowWidth)
+        window.addEventListener('scroll', this.scrollValue, true)
+    },
+    mounted(){
         if(localStorage.getItem('token')){
             userLognState().then(resq => {
                 if(resq.flag){
@@ -196,7 +198,8 @@ export default {
         },
     },
     unmounted(){
-        window.removeEventListener('scroll', this.scrollValue,true)
+        window.removeEventListener('scroll', this.scrollValue, true)
+        window.removeEventListener('resize', this.windowWidth)
     }
 }
 </script>
@@ -208,8 +211,6 @@ img
 }
 body, html
 {
-    margin: 0;
-    padding: 0;
     height: 100%;
     min-height: 100%;
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
@@ -222,6 +223,8 @@ body, html
 }
 *
 {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 a
@@ -230,7 +233,7 @@ a
 }
 ::-webkit-scrollbar
 {
-    width: 0.4rem;
+    width: 0.3rem;
 }
 ::-webkit-scrollbar-thumb
 {

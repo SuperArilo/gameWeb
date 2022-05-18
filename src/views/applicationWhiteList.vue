@@ -31,7 +31,6 @@
 import inputBox from '@/components/inputBox.vue'
 import footerBottom from '@/components/footerBottom.vue'
 import { ElMessage  } from 'element-plus'
-import { mcWhitelistAdd } from '@/util/api.js'
 export default {
     components: { footerBottom , inputBox },
     data(){
@@ -47,39 +46,7 @@ export default {
     },
     methods:{
         sendToServerConfirm(){
-            if(!this.sendToServerWorkNow){
-                this.sendToServerWorkNow = true
-                if(this.$store.getters.userInfoGet !== null){
-                    if(this.agree){
-                        if(this.McJavaId !== ''){
-                            let data = new FormData()
-                            data.append('javaMcId' , this.McJavaId)
-                            mcWhitelistAdd(data).then(resq => {
-                                if(resq.code === 200){
-                                    ElMessage.success(resq.message)
-                                    this.$store.commit('addJavaMcId', this.McJavaId)
-                                    this.McJavaId = ''
-                                } else {
-                                    ElMessage.error(resq.message)
-                                }
-                                this.sendToServerWorkNow = false
-                            }).catch(err => {
-                                ElMessage.error(err.message)
-                                this.sendToServerWorkNow = false
-                            })
-                        } else {
-                            ElMessage.warning('填写的信息有空白，请检查！')
-                            this.sendToServerWorkNow = false
-                        }
-                    } else {
-                        ElMessage.warning('您尚未同意服务器公约')
-                        this.sendToServerWorkNow = false
-                    }
-                } else {
-                    ElMessage.warning('您还未的登陆！')
-                    this.sendToServerWorkNow = false
-                }
-            }
+            ElMessage.warning('功能暂时停用！可以直接进入服务器')
         }
     }
 }

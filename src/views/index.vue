@@ -267,7 +267,7 @@ export default {
         justify-content: center;
         align-items: center;
         background-repeat: no-repeat;
-        background-position: bottom;
+        background-position: top;
         background-size: cover;
         background-attachment: fixed;
         background-image: url('http://image.superarilo.icu/townBg.png');
