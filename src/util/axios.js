@@ -4,7 +4,7 @@ const service = axios.create({
     baseURL: 'http://www.superarilo.icu:3090/api',
     // baseURL: 'https://www.itrong.love/api',
     // baseURL: 'http://localhost:3090/api',
-    timeout: 10000
+    timeout: 15000
 })
 service.interceptors.request.use(config => {
     if(localStorage.getItem('token') === null && sessionStorage.getItem('token') === null){
