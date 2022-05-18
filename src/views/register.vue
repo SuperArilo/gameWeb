@@ -94,6 +94,7 @@ export default {
                                 },1000)
                             }
                         }).catch(err => {
+                            this.isSendCounted = false
                             ElMessage({message: err.message, type: 'error'})
                         })
                     }
