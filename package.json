@@ -16,7 +16,7 @@
     "jquery": "^3.6.0",
     "query-string": "^7.1.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "vue": "^3.2.33",
+    "vue": "^3.2.34",
     "vue-image-crop-upload": "^3.0.3",
     "vue-img-viewr": "^2.0.8",
     "vue-router": "^4.0.15",

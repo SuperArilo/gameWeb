@@ -152,15 +152,7 @@ const routes = [
     {
         path: '/:pathMatch(.*)',
         redirect: '/error'
-    },
-    {
-        path: '/test',
-        name: '不存在的页面',
-        component: () => import('@/views/indexTem.vue'),
-        meta:{
-            title: '不存在的页面'
-        }
-    },
+    }
 ]
 
 const router = createRouter({history: createWebHistory(process.env.BASE_URL), routes})
