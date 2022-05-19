@@ -1,59 +1,3 @@
-<script setup>
-import { ElMessage } from 'element-plus'
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue'
-import { useStore } from 'vuex'
-import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
-const store = useStore()
-const route = useRoute()
-const router = useRouter()
-const mojangApi = async (javaId,userId,className) => {
-    axios.get('https://api.ashcon.app/mojang/v2/user/' + javaId).then(resq => {
-        if(resq.status === 200){
-            getAvatars(resq.data.uuid,javaId,userId,className)
-        } else {
-            ElMessage({message: '获取玩家的信息出错,请稍后重试! ' + resq.statusText, type: 'error'})
-        }
-    }).catch(err => {
-        ElMessage({message: err.message, type: 'error'})
-    })
-}
-const getAvatars = (uuid,javaId,userId,className) => {
-    axios.get('https://crafatar.com/avatars/' + uuid , { responseType: 'arraybuffer' }).then(subResq => {
-        if(subResq.status === 200){
-            data.serverTeamHeadList.unshift({id: userId,head: arrayBufferToBase64(subResq.data),name: javaId,className: className})
-        } else {
-            ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
-        }
-    }).catch(err => {
-        ElMessage({message: err.message, type: 'error'})
-    })
-}
-const arrayBufferToBase64 = (Buffer) => {
-    let binary = ''
-    let bytes = new Uint8Array(Buffer)
-    let len = bytes.byteLength
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i])
-    }
-    return 'data:image/png;base64,' + window.btoa(binary)
-}
-const data = reactive({
-    serverTeamHeadList: [],
-})
-onBeforeMount(() => {
-    // mojangApi()
-    store.getters.serverTeamListGet.findIndex(item => {
-        mojangApi(item.javaMcId,item.uid,item.className)
-    })
-})
-onMounted(() => {
-})
-watchEffect(()=>{
-})
-// let { } = { ...toRefs(data) } 
-defineExpose({...toRefs(data)})
-</script>
 <template>
     <div class="index-div">
         <div class="index-center-show">
@@ -188,7 +132,7 @@ defineExpose({...toRefs(data)})
                     <span class="english-inf">Server management team</span>
                 </div>
                 <div class="col-server-team">
-                    <div class="sub-item" v-for="item in data.serverTeamHeadList" :key="item.id">
+                    <div class="sub-item" v-for="item in serverTeamHeadList" :key="item.id">
                         <div class="head">
                             <img :src="item.head"/>
                         </div>
@@ -217,11 +161,11 @@ defineExpose({...toRefs(data)})
 </template>
 <script>
 import { ElMessage } from 'element-plus'
+import FooterBottom from '@/components/footerBottom.vue'
 import { showImages } from 'vue-img-viewr'
 import 'vue-img-viewr/styles/index.css'
-import FooterBottom from '@/components/footerBottom.vue'
 export default {
-    components: {
+    components:{
         FooterBottom
     },
     data(){
@@ -254,10 +198,47 @@ export default {
                 }
             ],
             bottomPictureList: ['http://image.superarilo.icu/show1.png', 'http://image.superarilo.icu/show2.png','http://image.superarilo.icu/show3.png' , 'http://image.superarilo.icu/show4.png' , 'http://image.superarilo.icu/show5.png' ,'http://image.superarilo.icu/show6.png' , 'http://image.superarilo.icu/show7.png' , 'http://image.superarilo.icu/show8.png' , 'http://image.superarilo.icu/show9.png' , 'http://image.superarilo.icu/show10.png'],
+            serverTeamHeadList:[],
             playContentImageList:[]
-        }
+        }   
+    },
+    created(){
+        this.$store.getters.serverTeamListGet.findIndex(item => {
+            this.mojangApi(item.javaMcId,item.uid,item.className)
+        })
     },
     methods:{
+        async mojangApi(javaId,userId,className){
+            this.$axios.get('https://api.ashcon.app/mojang/v2/user/' + javaId).then(resq => {
+                if(resq.status === 200){
+                    this.getAvatars(resq.data.uuid,javaId,userId,className)
+                } else {
+                    ElMessage({message: '获取玩家的信息出错,请稍后重试! ' + resq.statusText, type: 'error'})
+                }
+            }).catch(err => {
+                ElMessage({message: err.message, type: 'error'})
+            })
+        },
+        arrayBufferToBase64(Buffer){
+            let binary = ''
+            let bytes = new Uint8Array(Buffer)
+            let len = bytes.byteLength
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return 'data:image/png;base64,' + window.btoa(binary)
+        },
+        getAvatars(uuid,javaId,userId,className){
+            this.$axios.get('https://crafatar.com/avatars/' + uuid , { responseType: 'arraybuffer' }).then(subResq => {
+                if(subResq.status === 200){
+                    this.serverTeamHeadList.unshift({id: userId,head: this.arrayBufferToBase64(subResq.data),name: javaId,className: className})
+                } else {
+                    ElMessage.error('获取玩家的皮肤出错,请稍后重试! ' + subResq.statusText)
+                }
+            }).catch(err => {
+                ElMessage({message: err.message, type: 'error'})
+            })
+        },
         playContentPreviewImg(e){
             this.playContentImageList.push($(e.target).attr('src'))
             showImages({urls: this.playContentImageList, index: 0, onClose: () => {
@@ -270,7 +251,7 @@ export default {
     }
 }
 </script>
-<style scoped lang='scss'>
+<style lang="scss" scoped>
 .index-div
 {
     width: 100%;

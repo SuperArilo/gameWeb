@@ -79,6 +79,7 @@
     </div>
 </template>
 <script>
+import $ from 'jquery'
 import { ElNotification , ElMessageBox , ElMessage } from 'element-plus'
 import { userLognState , userLogOut } from '@/util/api.js'
 export default {

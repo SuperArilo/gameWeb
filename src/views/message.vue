@@ -149,10 +149,8 @@ export default {
     align-items: flex-start;
     flex-wrap: wrap;
     background-repeat: no-repeat;
-    background-attachment: fixed;
     background-position: top;
     background-size: cover;
-    background-attachment: fixed;
     .center-top-inf
     {
         display: flex;
