@@ -1,9 +1,9 @@
 <template>
     <div class="input-box">
         <span :class="[{'span-style-actie' : spanStyleAdd},{'span-move-active' : spanStyleAdd || modelValue !== ''}]">{{this.title}}</span>
-        <form>
+        <label>
             <input v-model="modelValue" :type="inputType" :maxlength="this.length" @input="handleInput" @focus="spanStyleAdd = true" @blur="spanStyleAdd = false" :style="modelValue === '' ? 'background-color: transparent;':''" autocomplete/>
-        </form>
+        </label>
     </div>
 </template>
 <script>
@@ -36,7 +36,7 @@ export default {
     align-items: flex-end;
     flex-wrap: wrap;
     justify-content: flex-start;
-    form
+    label
     {
         width: 100%;
     }

@@ -73,7 +73,7 @@ export default {
             isClearContent: false,
             messageContent: [],
             messageImageList:[],
-            linshi: '<blockquote><p><font size="2"><span id="o67hj" style=""></span><b><i>我们所度过的每个平凡的日常，也许就是连续发生的奇迹&nbsp; &nbsp; &nbsp;&nbsp;</i></b></font><img src="https://www.itrong.love:4433/images/2022/02/23/c08551ad11a149e5a6fc9dd4aa4394f3.jpg" width="100" style="font-size: 24px;"/></p><p><font color="#46acc8">欢迎大家在这留下你的脚印</font></p><p><font color="#8baa4a">也欢迎大家提出您的宝贵建议</font></p></blockquote>'
+            linshi: '<blockquote><p><font size="2"><span id="o67hj" style=""></span><b><i>我们所度过的每个平凡的日常，也许就是连续发生的奇迹&nbsp; &nbsp; &nbsp;&nbsp;</i></b></font><img src="http://image.superarilo.icu/image/20220520103906.jpg" width="100" style="font-size: 24px;"/></p><p><font color="#46acc8">欢迎大家在这留下你的脚印</font></p><p><font color="#8baa4a">也欢迎大家提出您的宝贵建议</font></p></blockquote>'
         }
     },
     created(){

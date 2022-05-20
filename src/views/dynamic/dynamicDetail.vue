@@ -5,7 +5,7 @@
                 <i class="fas fa-chevron-left"/>
                 <span>返回</span>
             </div>
-            <span class="dy-title">标题：{{dynamicMainContent.dynamicTitle}}</span>
+            <span class="dy-title">{{dynamicMainContent.dynamicTitle}}</span>
         </div>
         <div class="dy-top-content" v-loading="dynamicMainContent === ''">
             <div class="user-data-show" v-if="!this.$store.getters.isPhoneGet">
@@ -338,9 +338,11 @@ export default {
             height: 100%;
             display: flex;
             align-items: center;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             text-align: left;
             padding-left: 1rem;
+            letter-spacing: 0.05rem;
+            text-shadow: 0 0 0.1rem #00000010;
         }
     }
     .dy-top-content

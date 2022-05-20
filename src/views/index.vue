@@ -3,7 +3,7 @@
         <div class="index-center-show">
             <div class="center-text">
                 <span class="welcome-tips">欢迎来到</span>
-                <h2>凡尔赛小镇</h2>
+                <h2>凡尔赛小镇（二周目）</h2>
                 <div class="describe">
                     <span>生存、宠物、RPG、领地、养老</span>
                     <span>Minecraft Java Edition</span>
@@ -164,6 +164,7 @@ import { ElMessage } from 'element-plus'
 import FooterBottom from '@/components/footerBottom.vue'
 import { showImages } from 'vue-img-viewr'
 import 'vue-img-viewr/styles/index.css'
+import $ from 'jquery'
 export default {
     components:{
         FooterBottom
@@ -182,7 +183,7 @@ export default {
                     id: 1,
                     image: 'http://image.superarilo.icu/playContent1.png',
                     title: '基于原版生存',
-                    describe: '我们保留了Minecraft最原始的生存冒险，让玩家感受和体验最纯正的玩法。在保证原版玩法不变的基础上，扩展新玩法。增加用于探险和冒险的资源世界，并且世界版本为1.18，拥有洞穴和高山。'
+                    describe: '我们保留了Minecraft最原始的生存冒险，让玩家感受和体验最纯正的玩法。在保证原版玩法不变的基础上，扩展新玩法。增加用于探险和冒险的资源世界，并且世界版本为1.18，拥有洞穴和高山。服务器采用CMI基础插件，满足服务器玩家日常的各种功能需求'
                 },
                 {
                     id: 2,
@@ -197,7 +198,7 @@ export default {
                     describe: '服务器提供Minecraft原有生物的捕捉和抚养功能，您可以在系统商店里购买新宠物，也可以去野外捕捉宠物。您还可以召唤您的宠物来协助你战斗、帮助您拾取东西、给您提供信标的效果等等！'
                 }
             ],
-            bottomPictureList: ['http://image.superarilo.icu/show1.png', 'http://image.superarilo.icu/show2.png','http://image.superarilo.icu/show3.png' , 'http://image.superarilo.icu/show4.png' , 'http://image.superarilo.icu/show5.png' ,'http://image.superarilo.icu/show6.png' , 'http://image.superarilo.icu/show7.png' , 'http://image.superarilo.icu/show8.png' , 'http://image.superarilo.icu/show9.png' , 'http://image.superarilo.icu/show10.png'],
+            bottomPictureList: ['http://image.superarilo.icu/show1.png', 'http://image.superarilo.icu/show2.png','http://image.superarilo.icu/show3.png' , 'http://image.superarilo.icu/show4.png' , 'http://image.superarilo.icu/show5.png' ,'http://image.superarilo.icu/show6.png'],
             serverTeamHeadList:[],
             playContentImageList:[]
         }   
