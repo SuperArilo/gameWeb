@@ -62,7 +62,6 @@ export default {
     background-repeat: no-repeat;
     background-position: top;
     background-size: cover;
-    background-attachment: fixed;
     .center-box
     {
         background-color: rgba(240,240,240,0.6);

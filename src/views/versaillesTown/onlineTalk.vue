@@ -140,7 +140,6 @@ export default {
     flex-wrap: wrap;
     background-repeat: no-repeat;
     background-position: top;
-    background-attachment: fixed;
     background-size: cover;
     .talk-div
     {

@@ -624,11 +624,11 @@ a
                 justify-content: center;
                 .router_animate-enter-active
                 {
-                    animation: slideInLeft 0.6s;
+                    animation: slideInLeft 0.5s;
                 }
                 .router_animate-leave-active
                 {
-                    animation: slideOutRight 0.6s;
+                    animation: slideOutRight 0.5s;
                 }
             }
         }
