@@ -725,7 +725,7 @@ a
     {
         display: block;
         border-left: 0.3rem solid #d0e5f2;
-        padding: 0.15rem 0.3rem;
+        padding: 0.15rem 1rem;
         margin: 0.3rem 0;
         line-height: 2;
         font-size: 100%;

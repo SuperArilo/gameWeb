@@ -184,6 +184,7 @@ import { dynamicDetailGet , dynamicCommentGet } from '@/util/api.js'
 import { ElMessage } from 'element-plus'
 import { showImages } from 'vue-img-viewr'
 import 'vue-img-viewr/styles/index.css'
+import $ from 'jquery'
 export default {
     components:{
         dynamicDetailComment,

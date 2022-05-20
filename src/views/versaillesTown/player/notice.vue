@@ -51,6 +51,7 @@ import { userNoticeGet } from '@/util/api.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { showImages } from 'vue-img-viewr'
 import 'vue-img-viewr/styles/index.css'
+import $ from 'jquery'
 export default {
     components:{
         footerBottom
