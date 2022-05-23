@@ -61,7 +61,8 @@ export default {
     flex-wrap: wrap;
     background-repeat: no-repeat;
     background-position: top;
-    background-size: cover;
+    background-size: 100%;
+    background-attachment: fixed;
     .center-box
     {
         background-color: rgba(240,240,240,0.6);
